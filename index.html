@@ -1,0 +1,738 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  PlayCircle, Search, ChevronLeft, ArrowLeft, Heart, Sparkles, BookOpen, 
+  ChevronRight, CheckCircle2, FileEdit, Share2, Save, Lock, Mail, LogOut, Loader2, KeyRound, User
+} from 'lucide-react';
+
+// ==========================================
+// 1. חיבור סופי לפיירבייס (הגדרות אמת)
+// ==========================================
+import { initializeApp, getApps } from 'firebase/app';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth'; 
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDwiBnuProvzg5wawVzNpKEW0AmIw5-VY8",
+  authDomain: "hadrcot-management.firebaseapp.com",
+  projectId: "hadrcot-management",
+  storageBucket: "hadrcot-management.firebasestorage.app",
+  messagingSenderId: "1070403566876",
+  appId: "1:1070403566876:web:2e3c001468931153390ed9",
+  measurementId: "G-FSTTVJS6ZV"
+};
+
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+// --- נתוני ההדרכות (מעודכן ל-IDs של Invoice4U) ---
+const tutorialsData = [
+  {
+    id: 'personal-growth',
+    title: 'תודעה ושינוי מבפנים',
+    description: 'כאן תמצאי כלים שיעזרו לך ליצור שינוי אמיתי – מבפנים החוצה.',
+    icon: <Sparkles className="text-[#D4AF37]" size={20} />,
+    tutorials: [
+      { id: 56701, title: 'איך לחזק את כח הרצון מבחינה נוירולוגית?', badge: 'נקודת התחלה חשובה', vimeoId: '76979871' },
+      { id: 56702, title: 'המנועים הסודיים של שינוי אמיתי', vimeoId: '76979871' },
+      { id: 56744, title: 'ניהול זמן חכם - תפסיקו לרוץ, ותתחילו לחיות', badge: 'הדרכה מיוחדת', vimeoId: '76979871' },
+      { id: 56704, title: 'שוזרת חוטים חדשים', vimeoId: '76979871' },
+      { id: 56705, title: 'לב שמח - גוף בריא', vimeoId: '76979871' },
+      { id: 56706, title: 'ניקוי חמץ פנימי - מהגוף אל הנפש', vimeoId: '76979871' },
+    ]
+  },
+  {
+    id: 'health',
+    title: 'גוף בריא ואורח חיים מאוזן',
+    description: 'ידע פרקטי לאורח חיים בריא, מזין ומאוזן.',
+    icon: <Heart className="text-[#D4AF37]" size={20} />,
+    tutorials: [
+      { id: 56707, title: 'המדריך המלא לממתיקים', vimeoId: '76979871' },
+      { id: 56708, title: 'חורף בריא - חיזוק מערכת החיסון', vimeoId: '76979871' },
+      { id: 56709, title: 'עיכול של שינוי - מבהלה לביטחון', badge: 'אהוב במיוחד', vimeoId: '76979871' },
+      { id: 56710, title: 'פסח נקי מרעלים', vimeoId: '76979871' },
+    ]
+  }
+];
+
+// ==========================================
+// קומפוננטה 2: מסך התחברות (Login)
+// ==========================================
+const LoginScreen = ({ onLogin, onCancel, isLoading, error }) => {
+  const [emailInput, setEmailInput] = useState('');
+  const [passwordInput, setPasswordInput] = useState(''); 
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (emailInput.trim() && passwordInput.trim()) {
+      onLogin(emailInput.trim(), passwordInput.trim());
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-[#F7F9FA] animate-in fade-in duration-300">
+      <div className="w-full max-w-md bg-white p-10 rounded-[2.5rem] shadow-xl border border-gray-100 text-center relative overflow-hidden">
+        
+        <button onClick={onCancel} className="absolute top-6 left-6 text-gray-400 hover:text-[#1B4D3E] transition-colors">
+          <ChevronRight size={24} />
+        </button>
+
+        <div className="absolute top-0 right-0 w-32 h-32 bg-[#D4AF37]/10 rounded-full blur-3xl -translate-y-10 translate-x-10"></div>
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#1B4D3E]/5 rounded-full blur-3xl translate-y-10 -translate-x-10"></div>
+        
+        <div className="relative z-10 mt-4">
+          <div className="w-16 h-16 bg-[#1B4D3E] rounded-full flex items-center justify-center text-[#D4AF37] font-serif font-bold text-3xl mx-auto mb-6 shadow-md">
+            ר
+          </div>
+          
+          <h1 className="text-3xl font-bold text-[#1B4D3E] mb-2">ברוכה הבאה</h1>
+          <p className="text-[#1B4D3E]/70 mb-8 font-medium">התחברי כדי לגשת להדרכות שרכשת</p>
+
+          <form onSubmit={handleSubmit} className="space-y-5 text-right">
+            <div>
+              <label className="block text-sm font-bold text-[#1B4D3E] mb-2 px-1">כתובת מייל</label>
+              <div className="relative">
+                <input 
+                  type="email" 
+                  value={emailInput}
+                  onChange={(e) => setEmailInput(e.target.value)}
+                  placeholder="name@example.com"
+                  className="w-full p-4 pr-12 bg-[#F7F9FA] border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#D4AF37] transition-all text-[#1B4D3E]"
+                  required
+                  disabled={isLoading}
+                />
+                <Mail className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-bold text-[#1B4D3E] mb-2 px-1">סיסמה</label>
+              <div className="relative">
+                <input 
+                  type="password" 
+                  value={passwordInput}
+                  onChange={(e) => setPasswordInput(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full p-4 pr-12 bg-[#F7F9FA] border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#D4AF37] transition-all text-[#1B4D3E]"
+                  required
+                  disabled={isLoading}
+                />
+                <KeyRound className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+              </div>
+            </div>
+
+            {error && (
+              <div className="bg-red-50 text-red-600 text-sm font-medium p-3 rounded-xl border border-red-100 text-center mt-2">
+                {error}
+              </div>
+            )}
+
+            <button 
+              type="submit" 
+              disabled={isLoading || !emailInput.trim() || !passwordInput.trim()}
+              className="w-full bg-[#1B4D3E] hover:bg-[#153D31] disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-4 rounded-2xl font-bold text-lg shadow-md transition-all flex items-center justify-center gap-2 mt-4"
+            >
+              {isLoading ? (
+                <><Loader2 className="animate-spin" size={20} /> מזהה את המשתמשת...</>
+              ) : (
+                'התחברי למרחב ההדרכות'
+              )}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+// ==========================================
+// קומפוננטה 3: מסך הבית (מרכז ההדרכות)
+// ==========================================
+const TutorialsHub = ({ onSelectTutorial, accessibleTutorialIds, isAuthenticated }) => {
+  const [activeTab, setActiveTab] = useState('all');
+
+  return (
+    <div className="animate-in fade-in duration-500">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        
+        {/* אזור "התחילי מכאן" - צבעוני תמיד */}
+        <section className="mb-12">
+          <div className="bg-white rounded-[2rem] p-6 md:p-8 border border-gray-100 shadow-sm flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-[#D4AF37] opacity-5 rounded-full blur-2xl transform translate-x-10 -translate-y-10"></div>
+            
+            <div 
+              onClick={() => onSelectTutorial(tutorialsData[0].tutorials[1])}
+              className="w-full md:w-1/3 aspect-video bg-[#1B4D3E]/5 rounded-2xl relative overflow-hidden flex items-center justify-center shrink-0 group cursor-pointer"
+            >
+              <div className="absolute inset-0 bg-gradient-to-tr from-[#1B4D3E]/10 to-transparent"></div>
+              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-[#1B4D3E] shadow-md group-hover:scale-105 transition-transform duration-300">
+                  <PlayCircle size={32} strokeWidth={1.5} className="ml-1" />
+              </div>
+            </div>
+
+            <div className="flex-1 z-10">
+              <div className="inline-flex items-center gap-1.5 text-xs font-bold bg-[#D4AF37]/10 text-[#B8962D] px-3 py-1 rounded-full mb-3">
+                <Sparkles size={14} />
+                אם את חדשה – התחילי כאן
+              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-[#1B4D3E] mb-3">
+                המנועים הסודיים של שינוי אמיתי
+              </h2>
+              <p className="text-gray-600 mb-6 max-w-xl leading-relaxed">
+                לפני שמתחילים לשנות תזונה או הרגלים – חשוב להבין מה באמת מניע אותך מבפנים. 
+                ההדרכה הזו תעשה לך סדר, ותיתן לך כלים לשינוי שמחזיק לאורך זמן.
+              </p>
+              <button 
+                onClick={() => onSelectTutorial(tutorialsData[0].tutorials[1])}
+                className="bg-[#1B4D3E] hover:bg-[#153D31] text-white px-6 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all"
+              >
+                אני רוצה להתחיל
+                <ArrowLeft size={18} />
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* טאבים לניווט */}
+        <div className="flex overflow-x-auto hide-scrollbar border-b border-gray-200 mb-8 pb-1">
+          <div className="flex gap-6 min-w-max px-2">
+            <button 
+              onClick={() => setActiveTab('all')}
+              className={`pb-3 text-sm md:text-base font-medium transition-all relative
+                ${activeTab === 'all' ? 'text-[#1B4D3E]' : 'text-gray-500 hover:text-[#1B4D3E]'}
+              `}
+            >
+              כל ההדרכות
+              {activeTab === 'all' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#1B4D3E] rounded-t-full"></span>}
+            </button>
+            
+            {tutorialsData.map(category => (
+              <button 
+                key={category.id}
+                onClick={() => setActiveTab(category.id)}
+                className={`pb-3 text-sm md:text-base font-medium transition-all relative flex items-center gap-2
+                  ${activeTab === category.id ? 'text-[#1B4D3E]' : 'text-gray-500 hover:text-[#1B4D3E]'}
+                `}
+              >
+                {category.title}
+                {activeTab === category.id && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#1B4D3E] rounded-t-full"></span>}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* גריד ההדרכות */}
+        <div className="space-y-16">
+          {tutorialsData
+            .filter(category => activeTab === 'all' || activeTab === category.id)
+            .map((category) => (
+            <section key={category.id}>
+              
+              {activeTab === 'all' && (
+                <div className="flex items-start gap-4 mb-8 relative">
+                  <div className="bg-[#D4AF37]/10 p-3.5 rounded-2xl border border-[#D4AF37]/20 shrink-0 mt-1">
+                    {React.cloneElement(category.icon, { size: 28 })}
+                  </div>
+                  <div className="flex flex-col">
+                    <h3 className="text-2xl md:text-3xl font-bold text-[#1B4D3E] leading-tight tracking-tight">
+                      {category.title}
+                    </h3>
+                    <p className="text-gray-500 text-sm md:text-base mt-1.5 max-w-lg">
+                      {category.description}
+                    </p>
+                    <div className="h-1 w-16 bg-gradient-to-l from-[#D4AF37] to-transparent mt-3 rounded-full"></div>
+                  </div>
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {category.tutorials.map((tutorial) => {
+                  const isLocked = isAuthenticated && !accessibleTutorialIds.includes(tutorial.id);
+                  
+                  return (
+                  <div 
+                    key={tutorial.id} 
+                    onClick={() => onSelectTutorial(tutorial)}
+                    className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col cursor-pointer overflow-hidden hover:border-[#D4AF37]/30"
+                  >
+                    <div className="aspect-[16/9] bg-[#F7F9FA] relative flex items-center justify-center overflow-hidden">
+                      <div className="absolute inset-0 bg-[#1B4D3E]/5 group-hover:bg-transparent transition-colors duration-300"></div>
+                      
+                      <div className={`w-14 h-14 rounded-full backdrop-blur-sm flex items-center justify-center shadow-md z-10 transition-all duration-300
+                        ${isLocked ? 'bg-white/90 text-[#D4AF37]' : 'bg-white/90 text-[#1B4D3E] group-hover:bg-[#1B4D3E] group-hover:text-white group-hover:scale-110'}`}>
+                        {isLocked ? <Lock size={26} strokeWidth={1.5} /> : <PlayCircle size={28} strokeWidth={1.5} className="ml-1" />}
+                      </div>
+                    </div>
+
+                    <div className="p-6 flex-1 flex flex-col justify-between">
+                      <div>
+                        {tutorial.badge && (
+                          <span className="inline-block text-[11px] font-bold px-2.5 py-1 rounded-md mb-3 border bg-[#D4AF37]/10 text-[#B8962D] border-[#D4AF37]/20">
+                            {tutorial.badge}
+                          </span>
+                        )}
+                        <h4 className="text-xl font-bold text-[#1B4D3E] group-hover:text-[#D4AF37] transition-colors leading-snug">
+                          {tutorial.title}
+                        </h4>
+                      </div>
+                      
+                      <div className="mt-6 pt-5 border-t border-gray-100 flex items-center justify-end">
+                        {isLocked ? (
+                          <span className="text-[#D4AF37] text-sm font-bold flex items-center gap-1.5">
+                            <Lock size={16} /> הדרכה נעולה
+                          </span>
+                        ) : (
+                          <button className="bg-[#F7F9FA] text-[#1B4D3E] text-sm font-bold px-5 py-2.5 rounded-full flex items-center gap-2 group-hover:bg-[#1B4D3E] group-hover:text-white transition-all duration-300 shadow-sm">
+                            לצפייה בהדרכה
+                            <ChevronLeft size={16} className="transform translate-x-1 group-hover:translate-x-0 transition-transform duration-300" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )})}
+              </div>
+            </section>
+          ))}
+        </div>
+        
+        <div className="mt-20 text-center border-t border-gray-200 pt-8 pb-4">
+          <p className="text-gray-600 text-base md:text-lg">
+            יש משהו שמעסיק אותך ולא מצאת עליו מענה? <br className="md:hidden" />
+            <button className="text-[#D4AF37] font-bold hover:underline mt-1 md:mt-0">כתבי לי — ואעזור לך למצוא את הדרך שמתאימה לך.</button>
+          </p>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+// ==========================================
+// קומפוננטה 4: מסך ההדרכה הבודדת
+// ==========================================
+const TutorialPage = ({ tutorial, onBack, categoryName, onNext, hasNext, accessibleTutorialIds }) => {
+  const [activeTab, setActiveTab] = useState('notes');
+  const [notes, setNotes] = useState('');
+  const [isSaved, setIsSaved] = useState(false);
+
+  useEffect(() => {
+    setNotes('');
+    setActiveTab('notes');
+  }, [tutorial.id]);
+
+  const handleSaveNotes = () => {
+    setIsSaved(true);
+    setTimeout(() => setIsSaved(false), 3000);
+  };
+
+  return (
+    <div className="animate-in slide-in-from-left-4 duration-300">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
+        
+        <div className="lg:hidden sticky top-20 z-40 bg-[#F7F9FA]/95 backdrop-blur-md py-3 -mx-4 px-4 border-b border-gray-200/60 mb-6 shadow-sm">
+          <button onClick={onBack} className="flex items-center gap-2 text-[#1B4D3E] font-bold hover:text-[#D4AF37] transition-colors">
+            <ChevronRight size={20} />
+            <span>חזרה לכל ההדרכות</span>
+          </button>
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-8">
+          
+          <div className="flex-1 w-full max-w-4xl">
+            
+            <div className="bg-black aspect-video rounded-2xl overflow-hidden relative shadow-md mb-6 border border-gray-200/50">
+              <iframe 
+                src={`https://player.vimeo.com/video/${tutorial.vimeoId || '76979871'}?h=8272103f6e&title=0&byline=0&portrait=0`}
+                className="absolute top-0 left-0 w-full h-full"
+                frameBorder="0" 
+                allow="autoplay; fullscreen; picture-in-picture" 
+                allowFullScreen
+                title={`הדרכה - ${tutorial.title}`}
+              ></iframe>
+            </div>
+
+            <div className="mb-8 text-center flex flex-col items-center">
+              <div className="flex items-center justify-center gap-2 text-sm text-[#D4AF37] font-bold mb-2">
+                <Sparkles size={14} />
+                <span>{categoryName || 'תודעה ושינוי מבפנים'}</span>
+              </div>
+              <h1 className="text-3xl md:text-4xl font-bold text-[#1B4D3E] mb-6 leading-tight text-center">
+                {tutorial.title}
+              </h1>
+              
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 border-b border-gray-200 pb-8 w-full max-w-lg mx-auto">
+                <button className="flex items-center justify-center gap-2 text-[#1B4D3E] font-bold bg-[#E8F0ED] hover:bg-[#1B4D3E] hover:text-white px-8 py-3.5 rounded-full transition-all duration-300 w-full sm:w-auto shadow-sm">
+                  <CheckCircle2 size={22} />
+                  סיימתי את ההדרכה
+                </button>
+                
+                {hasNext && accessibleTutorialIds.includes(tutorial.id + 1) && (
+                  <button onClick={onNext} className="flex items-center justify-center gap-2 text-[#1B4D3E] font-bold bg-white border border-gray-200 hover:border-[#1B4D3E] hover:bg-gray-50 px-8 py-3.5 rounded-full transition-all duration-300 w-full sm:w-auto shadow-sm">
+                    להמשך ההדרכה הבאה
+                    <ChevronLeft size={22} />
+                  </button>
+                )}
+              </div>
+            </div>
+
+            <div className="flex gap-8 border-b border-gray-200 mb-6">
+              <button 
+                onClick={() => setActiveTab('about')}
+                className={`pb-3 text-base font-medium transition-all relative flex items-center gap-2
+                  ${activeTab === 'about' ? 'text-[#1B4D3E]' : 'text-gray-500 hover:text-[#1B4D3E]'}
+                `}
+              >
+                <BookOpen size={18} />
+                מה תקבלי מההדרכה
+                {activeTab === 'about' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#1B4D3E] rounded-t-full"></span>}
+              </button>
+              <button 
+                onClick={() => setActiveTab('notes')}
+                className={`pb-3 text-base font-medium transition-all relative flex items-center gap-2
+                  ${activeTab === 'notes' ? 'text-[#1B4D3E]' : 'text-gray-500 hover:text-[#1B4D3E]'}
+                `}
+              >
+                <FileEdit size={18} />
+                המחברת האישית שלך
+                {activeTab === 'notes' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#1B4D3E] rounded-t-full"></span>}
+              </button>
+            </div>
+
+            <div className="bg-white rounded-[2rem] p-6 md:p-8 border border-gray-100 shadow-sm mb-12">
+              {activeTab === 'about' && (
+                <div className="prose prose-lg text-gray-600 leading-relaxed max-w-none text-right">
+                  <p className="mb-4">
+                    תיאור כללי של ההדרכה: {tutorial.title}. <br/>
+                    כאן יופיע הטקסט המלא שמתאר על מה נלמד בהדרכה הזו, מהם הכלים המרכזיים שנקבל ואיך ניישם אותם בחיי היומיום שלנו.
+                  </p>
+                  <h3 className="text-xl font-bold text-[#1B4D3E] mt-8 mb-4">נקודות מרכזיות:</h3>
+                  <ul className="space-y-2 list-none p-0">
+                    <li className="flex items-start gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] mt-2.5 shrink-0"></div>
+                      <span>הבנת העקרונות הבסיסיים של הנושא.</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] mt-2.5 shrink-0"></div>
+                      <span>כלים פרקטיים ליישום מיידי.</span>
+                    </li>
+                  </ul>
+                </div>
+              )}
+
+              {activeTab === 'notes' && (
+                <div>
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
+                    <div>
+                      <h3 className="text-xl font-bold text-[#1B4D3E]">הסיכום האישי שלך</h3>
+                      <p className="text-sm text-gray-500 mt-1 max-w-xl">
+                        זה המקום שלך לעצור רגע, לכתוב תובנות, ולדייק מה את לוקחת לחיים שלך מההדרכה הזו.
+                      </p>
+                    </div>
+                    <span className="bg-[#E8F0ED] text-[#1B4D3E] text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5 shrink-0">
+                      <FileEdit size={12} />
+                      פרטי וגלוי רק לך
+                    </span>
+                  </div>
+                  
+                  <div className="relative">
+                    <textarea
+                      value={notes}
+                      onChange={(e) => setNotes(e.target.value)}
+                      placeholder="התחילי לכתוב כאן..."
+                      className="w-full min-h-[250px] p-5 bg-[#F7F9FA] border border-gray-200 rounded-2xl focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] outline-none resize-y text-gray-700 leading-relaxed shadow-inner transition-all placeholder:text-gray-400"
+                    ></textarea>
+                  </div>
+                  
+                  <div className="mt-5 flex items-center justify-between">
+                    <div className="text-sm text-gray-500">
+                      {isSaved ? (
+                        <span className="flex items-center gap-1 text-green-600 font-medium fade-in">
+                          <CheckCircle2 size={16} /> הסיכום נשמר בהצלחה!
+                        </span>
+                      ) : (
+                        <span>הסיכום נשמר אוטומטית ביציאה</span>
+                      )}
+                    </div>
+                    
+                    <button 
+                      onClick={handleSaveNotes}
+                      className="bg-[#1B4D3E] hover:bg-[#153D31] text-white px-6 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all shadow-md hover:shadow-lg"
+                    >
+                      <Save size={18} />
+                      שמירת סיכום
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="w-full lg:w-80 shrink-0 hidden lg:block">
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sticky top-24">
+              <h3 className="font-bold text-[#1B4D3E] mb-4 flex items-center gap-2 border-b border-gray-100 pb-3">
+                <Sparkles size={18} className="text-[#D4AF37]" />
+                המשך הסדרה
+              </h3>
+              
+              <div className="space-y-3">
+                <div className="p-3 bg-[#F7F9FA] rounded-xl border border-[#D4AF37]/30 flex gap-3 cursor-default relative">
+                  <div className="absolute right-0 top-0 bottom-0 w-1 bg-[#D4AF37] rounded-r-xl"></div>
+                  <div className="w-10 h-10 rounded-lg bg-[#1B4D3E] flex items-center justify-center text-white shrink-0">
+                    <PlayCircle size={20} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-sm font-bold text-[#1B4D3E] truncate">{tutorial.title}</h4>
+                    <span className="text-xs text-gray-500 mt-0.5 block">מתנגן עכשיו</span>
+                  </div>
+                </div>
+              </div>
+              
+              <button onClick={onBack} className="w-full mt-6 flex justify-center items-center gap-2 text-sm text-[#1B4D3E] font-medium p-3 hover:bg-gray-50 rounded-xl transition-colors border border-gray-200 hover:border-[#D4AF37]/50">
+                <ChevronRight size={16} />
+                חזרה לכל ההדרכות
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  );
+};
+
+// ==========================================
+// קומפוננטת האם - App (מנהלת את המצבים)
+// ==========================================
+export default function App() {
+  const [view, setView] = useState('home'); 
+  const [selectedTutorial, setSelectedTutorial] = useState(null);
+  const [selectedCategoryName, setSelectedCategoryName] = useState('');
+  const [nextTutorial, setNextTutorial] = useState(null);
+  
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+  const [accessibleTutorialIds, setAccessibleTutorialIds] = useState([]);
+  const [authLoading, setAuthLoading] = useState(true);
+  const [loginError, setLoginError] = useState('');
+  const [pendingTutorial, setPendingTutorial] = useState(null); 
+
+  // 1. האזנה אוטומטית להתחברות של פיירבייס
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user && user.email) {
+        const normalizedEmail = user.email.toLowerCase().trim();
+        setUserEmail(normalizedEmail);
+        setIsAuthenticated(true);
+        
+        // משיכת הרשאות מ-Firestore
+        try {
+          const docRef = doc(db, "users", normalizedEmail);
+          const docSnap = await getDoc(docRef);
+          
+          if (docSnap.exists()) {
+            const purchasedStr = docSnap.data().purchased_products || "";
+            const ids = purchasedStr.split(',')
+                          .map(id => Number(id.trim()))
+                          .filter(id => !isNaN(id));
+            
+            setAccessibleTutorialIds(ids);
+
+            // בדיקה אם היא ניסתה להיכנס לסרטון ספציפי לפני שהתחברה
+            setPendingTutorial(currentPending => {
+              if (currentPending) {
+                if (ids.includes(currentPending.id)) {
+                  // נשתמש ב-setTimeout כדי לאפשר לרינדור לקרות לפני המעבר הסטייט
+                  setTimeout(() => proceedToTutorial(currentPending), 0);
+                } else {
+                  setView('home');
+                }
+              }
+              return null; // מנקה את ההדרכה בהמתנה
+            });
+
+          }
+        } catch (err) {
+          console.error("שגיאה בסנכרון נתונים:", err);
+        }
+      } else {
+        setIsAuthenticated(false);
+        setUserEmail('');
+        setAccessibleTutorialIds([]);
+      }
+      setAuthLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // 2. התחברות אמת מול Firebase Auth
+  const handleLoginSubmit = async (email, password) => {
+    setAuthLoading(true);
+    setLoginError('');
+    const normalizedEmail = email.toLowerCase().trim();
+
+    try {
+      await signInWithEmailAndPassword(auth, normalizedEmail, password);
+      // ה-onAuthStateChanged יטפל בשאר הלוגיקה באופן אוטומטי ובמשיכת הנתונים
+      if (!pendingTutorial) {
+         setView('home');
+      }
+    } catch (error) {
+      console.error("Login Error:", error.code);
+      if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
+        setLoginError("המייל או הסיסמה אינם נכונים.");
+      } else if (error.code === 'auth/user-not-found') {
+        setLoginError("לא נמצא משתמש עם המייל הזה.");
+      } else {
+        setLoginError("חלה שגיאה בהתחברות. ודאי שיש חיבור לאינטרנט ונסי שוב.");
+      }
+      setAuthLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    setView('home');
+  };
+
+  const handleSelectTutorial = (tutorial) => {
+    if (!isAuthenticated) {
+      setPendingTutorial(tutorial);
+      setView('login');
+      return;
+    }
+
+    if (!accessibleTutorialIds.includes(tutorial.id)) {
+      return;
+    }
+
+    proceedToTutorial(tutorial);
+  };
+
+  const proceedToTutorial = (tutorial) => {
+    const category = tutorialsData.find(cat => cat.tutorials.some(t => t.id === tutorial.id));
+    
+    setSelectedTutorial(tutorial);
+    setSelectedCategoryName(category ? category.title : '');
+    
+    if (category) {
+      const currentIndex = category.tutorials.findIndex(t => t.id === tutorial.id);
+      if (currentIndex !== -1 && currentIndex < category.tutorials.length - 1) {
+        setNextTutorial(category.tutorials[currentIndex + 1]);
+      } else {
+        setNextTutorial(null);
+      }
+    }
+    
+    setView('tutorial');
+    window.scrollTo(0, 0);
+  };
+
+  const handleNextTutorial = () => {
+    if (nextTutorial) {
+      handleSelectTutorial(nextTutorial);
+    }
+  };
+
+  const handleBackToHome = () => {
+    setView('home');
+    setSelectedTutorial(null);
+    setPendingTutorial(null);
+    window.scrollTo(0, 0);
+  };
+
+  if (authLoading && view !== 'login') {
+    return (
+      <div className="min-h-screen bg-[#F7F9FA] flex flex-col items-center justify-center gap-4">
+         <Loader2 className="animate-spin text-[#D4AF37]" size={48} />
+         <p className="text-[#1B4D3E] font-medium animate-pulse">מתחברת למרחב שלך...</p>
+      </div>
+    );
+  }
+
+  if (view === 'login') {
+    return <LoginScreen 
+             onLogin={handleLoginSubmit} 
+             onCancel={handleBackToHome}
+             isLoading={authLoading} 
+             error={loginError} 
+           />;
+  }
+
+  return (
+    <div dir="rtl" className="min-h-screen font-sans bg-[#F7F9FA] text-[#1B4D3E]">
+      
+      {/* פאנל עליון (Header) */}
+      <header className="bg-white sticky top-0 z-50 border-b border-gray-100 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between relative">
+          
+          <div className="w-1/3 flex items-center">
+            {view === 'tutorial' ? (
+              <button onClick={handleBackToHome} className="hidden lg:flex items-center gap-2 text-gray-500 hover:text-[#1B4D3E] transition-colors text-sm font-medium">
+                <ChevronRight size={18} />
+                חזרה לכל ההדרכות
+              </button>
+            ) : isAuthenticated ? (
+              <button onClick={handleLogout} className="text-gray-400 hover:text-red-500 transition-colors flex items-center gap-1 text-sm font-medium" title="התנתקות">
+                <LogOut size={18} />
+                <span className="hidden sm:inline">יציאה</span>
+              </button>
+            ) : null}
+          </div>
+          
+          <div className="w-1/3 flex justify-center">
+            <div className="cursor-pointer flex flex-col items-center" onClick={handleBackToHome}>
+              <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-[#1B4D3E] whitespace-nowrap">
+                בריאות שבאה מהלב
+              </h1>
+              <p className="text-xs text-[#D4AF37] font-medium hidden md:block mt-0.5">
+                המרחב שלך לצמיחה, רוגע ובריאות אמיתית
+              </p>
+            </div>
+          </div>
+
+          <div className="w-1/3 flex justify-end items-center gap-3">
+            <div className="text-left mr-3 hidden md:block">
+              {isAuthenticated ? (
+                <>
+                  <p className="text-sm font-bold text-[#1B4D3E] truncate max-w-[120px]" title={userEmail}>
+                    {userEmail.split('@')[0]}
+                  </p>
+                  <p className="text-xs text-gray-500">מחוברת כעת</p>
+                </>
+              ) : (
+                <button onClick={() => setView('login')} className="text-sm font-bold text-[#D4AF37] hover:underline">
+                  התחברי למרחב
+                </button>
+              )}
+            </div>
+            <div className="h-10 w-10 rounded-full bg-[#E8F0ED] flex items-center justify-center text-[#1B4D3E] cursor-pointer hover:bg-[#1B4D3E] hover:text-[#D4AF37] transition-colors">
+              {isAuthenticated ? <BookOpen size={18} /> : <User size={18} />}
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {view === 'home' && (
+        <TutorialsHub 
+          onSelectTutorial={handleSelectTutorial} 
+          accessibleTutorialIds={accessibleTutorialIds}
+          isAuthenticated={isAuthenticated}
+        />
+      )}
+      
+      {view === 'tutorial' && selectedTutorial && (
+        <TutorialPage 
+          tutorial={selectedTutorial} 
+          categoryName={selectedCategoryName}
+          onBack={handleBackToHome}
+          onNext={handleNextTutorial}
+          hasNext={!!nextTutorial}
+          accessibleTutorialIds={accessibleTutorialIds}
+        />
+      )}
+
+    </div>
+  );
+}
