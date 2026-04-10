@@ -32,7 +32,7 @@
             margin: 0;
             padding: 0;
             -webkit-tap-highlight-color: transparent;
-            overflow-x: hidden; /* מונע תזוזה של המסך לצדדים במובייל */
+            overflow-x: hidden;
             width: 100%;
         }
         .hide-scrollbar::-webkit-scrollbar {
@@ -121,7 +121,7 @@
         const db = firebase.firestore();
         const auth = firebase.auth();
 
-        // נתוני גיבוי כולל הדמיה ל-pdfUrl הדינמי
+        // נתוני גיבוי במקרה של שגיאת הרשאות או משיכה מגוגל שיטס
         const fallbackTutorialsData = [
           {
             id: 'personal-growth',
@@ -180,7 +180,7 @@
         // ==========================================
         // מסך התחברות (Login)
         // ==========================================
-        const LoginScreen = ({ onLogin, onCancel, isLoading, error, pendingTutorial }) => {
+        const LoginScreen = ({ onLogin, onCancel, isLoading, error, pendingTutorial, clearError }) => {
           const [emailInput, setEmailInput] = useState('');
           const [passwordInput, setPasswordInput] = useState(''); 
 
@@ -197,6 +197,7 @@
             } else {
               setEmailInput(emailInput + domain);
             }
+            if (error && clearError) clearError();
           };
 
           const purchaseUrl = pendingTutorial?.landingPageUrl || 
@@ -224,12 +225,18 @@
 
                   <form onSubmit={handleSubmit} className="space-y-5 text-right">
                     <div>
-                      <label className="block text-sm font-bold text-[#1B4D3E] mb-2 px-1">כתובת מייל</label>
+                      <label className="block text-sm font-bold text-[#1B4D3E] mb-2 px-1" htmlFor="email">כתובת מייל</label>
                       <div className="relative">
                         <input 
                           type="email" 
+                          id="email"
+                          name="email"
+                          autoComplete="username"
                           value={emailInput}
-                          onChange={(e) => setEmailInput(e.target.value)}
+                          onChange={(e) => {
+                            setEmailInput(e.target.value);
+                            if (error && clearError) clearError();
+                          }}
                           placeholder="name@example.com"
                           className="w-full p-4 pr-12 bg-[#F7F9FA] border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#D4AF37] transition-all text-[#2F4858]"
                           required
@@ -255,12 +262,18 @@
                     </div>
 
                     <div>
-                      <label className="block text-sm font-bold text-[#1B4D3E] mb-2 px-1">סיסמה</label>
+                      <label className="block text-sm font-bold text-[#1B4D3E] mb-2 px-1" htmlFor="password">סיסמה</label>
                       <div className="relative">
                         <input 
                           type="password" 
+                          id="password"
+                          name="password"
+                          autoComplete="current-password"
                           value={passwordInput}
-                          onChange={(e) => setPasswordInput(e.target.value)}
+                          onChange={(e) => {
+                            setPasswordInput(e.target.value);
+                            if (error && clearError) clearError();
+                          }}
                           placeholder="••••••••"
                           className="w-full p-4 pr-12 bg-[#F7F9FA] border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#D4AF37] transition-all text-[#2F4858]"
                           required
@@ -365,7 +378,6 @@
                         ) : (
                             <div className="absolute inset-0 bg-gradient-to-tr from-[#1B4D3E]/10 to-transparent"></div>
                         )}
-                        {/* האייקון ממורכז לחלוטין - הוסר ה-ml-1 */}
                         <div className="w-16 h-16 bg-white/95 rounded-full flex items-center justify-center text-[#1B4D3E] shadow-lg group-hover:scale-105 transition-transform duration-300 z-10">
                             <LucideIcon name="play-circle" size={32} className="text-[#1B4D3E]" />
                         </div>
@@ -434,7 +446,7 @@
                   </div>
                 )}
 
-                {/* גריד ההדרכות מבוסס השלווה האורגנית */}
+                {/* גריד ההדרכות */}
                 <div className="space-y-16">
                   {visibleData.map((category) => {
                       const theme = themeConfig[category.id] || themeConfig['personal-growth'];
@@ -480,7 +492,6 @@
                                     <div className={`absolute inset-0 bg-gradient-to-tr ${cardTheme.gradient} transition-all duration-500 ${isLocked ? 'grayscale blur-[2px] opacity-40' : 'opacity-80 group-hover:opacity-100 group-hover:scale-105'}`}></div>
                                   )}
                                   
-                                  {/* Overlay להדגשת המנעול על גבי תמונה קיימת */}
                                   {isLocked && tutorial.imageUrl && <div className="absolute inset-0 bg-black/10"></div>}
                                   
                                   {isLocked ? (
@@ -491,7 +502,6 @@
                                     </div>
                                   ) : (
                                     <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                      {/* האייקון במרכז מושלם - ללא ml-1 */}
                                       <div className="w-16 h-16 bg-white/95 rounded-full flex items-center justify-center shadow-lg transform scale-90 group-hover:scale-100 transition-all duration-300">
                                         <LucideIcon name="play-circle" size={32} className="text-[#1B4D3E]" />
                                       </div>
@@ -555,10 +565,8 @@
           const [isSavingAuto, setIsSavingAuto] = useState(false);
           const [isCompleted, setIsCompleted] = useState(completedTutorials.includes(tutorial.id));
           
-          // Ref לשמירת הערך העדכני של הסיכומים למקרה של יציאה פתאומית
           const notesRef = useRef(notes);
 
-          // חישוב התקדמות עבור סרגל הצד
           const currentCategory = tutorialsData.find(cat => cat.tutorials.some(t => t.id === tutorial.id));
           const categoryTutorials = currentCategory ? currentCategory.tutorials : [];
           const totalInCategory = categoryTutorials.length;
@@ -569,10 +577,8 @@
              notesRef.current = notes;
           }, [notes]);
 
-          // טעינת סיכומים קיימים בכניסה
           useEffect(() => {
             setNotes('');
-            // אם הטאב הנוכחי הוא משאבים, אבל להדרכה הזו אין קובץ מצורף - חוזרים לסיכום
             if (activeTab === 'resources' && !tutorial.pdfUrl) {
                 setActiveTab('notes');
             }
@@ -588,7 +594,6 @@
                }).catch(err => console.error("שגיאה במשיכת סיכומים:", err));
             }
             
-            // פונקציית ניקוי - שמירה אוטומטית ברגע שעוזבים את ההדרכה (Unmount)
             return () => {
                 if (notesRef.current.trim() !== "" && userEmail && db) {
                     db.collection("users").doc(userEmail).collection("notes").doc(tutorial.id.toString()).set({
@@ -599,7 +604,6 @@
             };
           }, [tutorial.id, userEmail, db, completedTutorials]);
 
-          // שמירה אוטומטית כשהמשתמשת מקלידה (Debounce של 1.5 שניות)
           useEffect(() => {
             if (!userEmail || !db) return;
             if (notes === '') return; 
@@ -617,7 +621,6 @@
             return () => clearTimeout(timer);
           }, [notes, userEmail, db, tutorial.id]);
 
-          // שמירה ידנית (נותן חיווי ויזואלי ברור)
           const handleSaveNotes = async () => {
             if (!userEmail || !db) return;
             try {
@@ -633,32 +636,41 @@
             }
           };
 
-          // מכת דופמין - קונפטי ועדכון פיירבייס
+          // מכת דופמין ושינוי מצב כולל ביטול (Toggle)
           const handleCompleteLesson = async () => {
-             if (isCompleted) return;
+             const newCompletedState = !isCompleted;
+             setIsCompleted(newCompletedState);
 
-             setIsCompleted(true);
-             
-             if (window.confetti) {
-                window.confetti({
-                   particleCount: 150,
-                   spread: 80,
-                   origin: { y: 0.6 },
-                   colors: ['#1B4D3E', '#D4AF37', '#94A388', '#C5A18E'],
-                   disableForReducedMotion: true
-                });
+             let newCompletedArray;
+
+             if (newCompletedState) {
+                 if (window.confetti) {
+                    window.confetti({
+                       particleCount: 150,
+                       spread: 80,
+                       origin: { y: 0.6 },
+                       colors: ['#1B4D3E', '#D4AF37', '#94A388', '#C5A18E'],
+                       disableForReducedMotion: true
+                    });
+                 }
+                 newCompletedArray = [...completedTutorials, tutorial.id];
+             } else {
+                 newCompletedArray = completedTutorials.filter(id => id !== tutorial.id);
              }
+             
+             setCompletedTutorials(newCompletedArray);
 
-             // עדכון ה-State המקומי מיד כדי שה-V יופיע מיד בגלריה
-             const newCompleted = [...completedTutorials, tutorial.id];
-             setCompletedTutorials(newCompleted);
-
-             // סימון הדרכה כ"הושלמה" ב-Firebase
              if (userEmail && db) {
                  try {
-                     await db.collection("users").doc(userEmail).set({
-                         completed_tutorials: firebase.firestore.FieldValue.arrayUnion(tutorial.id)
-                     }, { merge: true });
+                     if (newCompletedState) {
+                         await db.collection("users").doc(userEmail).set({
+                             completed_tutorials: firebase.firestore.FieldValue.arrayUnion(tutorial.id)
+                         }, { merge: true });
+                     } else {
+                         await db.collection("users").doc(userEmail).set({
+                             completed_tutorials: firebase.firestore.FieldValue.arrayRemove(tutorial.id)
+                         }, { merge: true });
+                     }
                  } catch (e) {
                      console.error("Error saving complete status", e);
                  }
@@ -673,8 +685,6 @@
                   
                   <div className="flex-1 w-full max-w-4xl">
                     
-                    {/* נגן וימאו - תוקן למובייל עם touch-action והגנות מעקב */}
-                    {/* נוספו גם הגדרות כותרת ופורטרט כדי לוודא ניקיון מוחלט */}
                     <div className="bg-black aspect-video rounded-2xl overflow-hidden relative shadow-[0_10px_30px_rgba(0,0,0,0.1)] mb-6 border border-black/10">
                       <iframe 
                         src={`https://player.vimeo.com/video/${tutorial.vimeoId ? tutorial.vimeoId.toString().trim() : '76979871'}?${tutorial.vimeoHash ? `h=${tutorial.vimeoHash.toString().trim()}&` : ''}color=1B4D3E&title=0&byline=0&portrait=0&badge=0&dnt=1`}
@@ -697,16 +707,13 @@
                       </h1>
                       
                       <div className="flex flex-col sm:flex-row items-center justify-center gap-4 border-b border-gray-200 pb-8 w-full max-w-lg mx-auto">
+                        {/* כפתור אישור שמקבל עכשיו אפשרות לביטול */}
                         <button 
                           onClick={handleCompleteLesson}
-                          disabled={isCompleted}
-                          className={`flex items-center justify-center gap-2 font-bold px-8 py-3.5 rounded-full transition-all duration-300 w-full sm:w-auto shadow-sm ${isCompleted ? 'bg-[#94A388] text-white cursor-default' : 'bg-[#E8F0ED] text-[#1B4D3E] hover:bg-[#1B4D3E] hover:text-white cursor-pointer'}`}
+                          className={`flex items-center justify-center gap-2 font-bold px-8 py-3.5 rounded-full transition-all duration-300 w-full sm:w-auto shadow-sm ${isCompleted ? 'bg-[#94A388] text-white hover:bg-opacity-80' : 'bg-[#E8F0ED] text-[#1B4D3E] hover:bg-[#1B4D3E] hover:text-white'}`}
                         >
-                          {isCompleted ? (
-                             <><LucideIcon name="check-circle" size={22} className="animate-in zoom-in duration-300" /> הושלם בהצלחה!</>
-                          ) : (
-                             <><LucideIcon name="check-circle" size={22} /> סיימתי את ההדרכה</>
-                          )}
+                          <LucideIcon name="check-circle" size={22} className={isCompleted ? "animate-in zoom-in duration-300" : ""} />
+                          {isCompleted ? 'הושלם (לחצי לביטול)' : 'סיימתי את ההדרכה'}
                         </button>
                         
                         {hasNext && accessibleTutorialIds.includes(tutorial.id + 1) && (
@@ -716,14 +723,8 @@
                           </button>
                         )}
                       </div>
-                      {isCompleted && (
-                        <p className="text-[#94A388] font-bold mt-4 animate-in fade-in zoom-in duration-500">
-                          כל הכבוד! צעד נוסף וחשוב לבריאות שלך.
-                        </p>
-                      )}
                     </div>
 
-                    {/* טאבים משודרגים */}
                     <div className="flex overflow-x-auto hide-scrollbar gap-8 border-b border-gray-200 mb-6">
                       <button 
                         onClick={() => setActiveTab('about')}
@@ -746,7 +747,6 @@
                         {activeTab === 'notes' && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#1B4D3E] rounded-t-full"></span>}
                       </button>
                       
-                      {/* הטאב מופיע דינמית רק אם יש pdfUrl מוגדר להדרכה זו */}
                       {tutorial.pdfUrl && (
                         <button 
                           onClick={() => setActiveTab('resources')}
@@ -791,10 +791,6 @@
                                 זה המקום שלך לעצור רגע, לכתוב תובנות, ולדייק מה את לוקחת לחיים שלך מההדרכה הזו.
                               </p>
                             </div>
-                            <span className="bg-[#E8F0ED] text-[#1B4D3E] text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5 shrink-0">
-                              <LucideIcon name="cloud" size={12} />
-                              נשמר בענן האישי שלך
-                            </span>
                           </div>
                           
                           <div className="relative">
@@ -810,7 +806,7 @@
                             <div className="text-sm text-gray-500">
                               {isSaved ? (
                                 <span className="flex items-center gap-1 text-green-600 font-medium">
-                                  <LucideIcon name="check-circle" size={16} /> הסיכום נשמר באופן יזום!
+                                  <LucideIcon name="check-circle" size={16} /> הסיכום נשמר בהצלחה!
                                 </span>
                               ) : isSavingAuto ? (
                                 <span className="flex items-center gap-1 text-gray-400">
@@ -826,13 +822,12 @@
                               className="bg-[#1B4D3E] hover:bg-[#153D31] text-white px-6 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all shadow-md hover:shadow-lg"
                             >
                               <LucideIcon name="save" size={18} />
-                              שמירה ידנית
+                              שמירה
                             </button>
                           </div>
                         </div>
                       )}
 
-                      {/* משאבים להורדה נטען מקישור בגוגל שיטס */}
                       {activeTab === 'resources' && tutorial.pdfUrl && (
                         <div>
                           <h3 className="text-xl font-bold text-[#1B4D3E] mb-2">חומרים נלווים להדרכה</h3>
@@ -859,7 +854,6 @@
                   <div className="w-full lg:w-80 shrink-0 hidden lg:block">
                     <div className="bg-white rounded-2xl border border-gray-100 shadow-[0_10px_30px_rgba(0,0,0,0.03)] p-5 sticky top-24">
                       
-                      {/* מנגנון מד התקדמות */}
                       <div className="mb-6">
                          <div className="flex justify-between items-center text-sm font-bold text-[#1B4D3E] mb-2">
                              <span>התקדמות בקטגוריה</span>
@@ -919,9 +913,8 @@
           const [searchQuery, setSearchQuery] = useState(''); 
           
           const [tutorialsData, setTutorialsData] = useState([]);
-          const [isKeyboardOpen, setIsKeyboardOpen] = useState(false); // סטייט חדש לזיהוי מקלדת
+          const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
-          // מניעת הסתרת שדות טקסט במובייל - העלמת תפריט תחתון בזמן הקלדה
           useEffect(() => {
             const handleFocusIn = (e) => {
               if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
@@ -995,6 +988,7 @@
               setTutorialsData(finalData);
 
             } catch (error) {
+              console.log("שגיאה במשיכת הנתונים מהגוגל שיטס. טוען נתוני גיבוי מקומיים...", error);
               setTutorialsData(fallbackTutorialsData);
             } finally {
               setCatalogLoading(false);
@@ -1003,6 +997,11 @@
 
           useEffect(() => {
             fetchCatalog();
+
+            auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+              .catch((error) => {
+                console.error("שגיאה בהגדרת זיכרון התחברות:", error);
+              });
 
             const unsubscribe = auth.onAuthStateChanged(async (user) => {
               if (user && user.email) {
@@ -1016,13 +1015,12 @@
                   
                   if (docSnap.exists) {
                     const data = docSnap.data();
-                    
                     const purchasedStr = data.purchased_products || "";
                     const ids = purchasedStr.split(',')
                                   .map(id => Number(id.trim()))
                                   .filter(id => !isNaN(id));
-                    setAccessibleTutorialIds(ids);
                     
+                    setAccessibleTutorialIds(ids);
                     setCompletedTutorials(data.completed_tutorials || []);
 
                     const name = data.firstName || data.name || normalizedEmail.split('@')[0];
@@ -1087,7 +1085,6 @@
                  setView('home');
               }
             } catch (error) {
-              console.log("התחברות נכשלה:", error.code); 
               if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
                 setLoginError("המייל או הסיסמה אינם נכונים. (או שהמשתמש עדיין לא נוצר במערכת)");
               } else if (error.code === 'auth/user-not-found') {
@@ -1165,6 +1162,7 @@
                      isLoading={authLoading} 
                      error={loginError}
                      pendingTutorial={pendingTutorial}
+                     clearError={() => setLoginError('')}
                    />;
           }
 
@@ -1190,7 +1188,6 @@
                   
                   <div className="w-1/3 flex justify-center">
                     <div className="cursor-pointer flex flex-col items-center" onClick={handleBackToHome}>
-                      {/* הלוגו הרשמי - במידה ונופל נחליף לטקסט */}
                       <img src="logo.jpg.png" alt="לוגו המרחב של רבקה" className="h-8 md:h-10 w-auto mb-1 object-contain" onError={(e) => { e.target.onerror = null; e.target.style.display='none'; e.target.nextSibling.style.display='block'; }} />
                       <div className="hidden">
                         <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-[#1B4D3E] whitespace-nowrap">
@@ -1277,7 +1274,6 @@
                 />
               )}
 
-              {/* תפריט מובייל תחתון */}
               <nav className={`md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 justify-around items-center h-[72px] z-50 pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.05)] ${isKeyboardOpen ? 'hidden' : 'flex'}`}>
                 <button onClick={handleBackToHome} className={`flex flex-col items-center justify-center w-full h-full ${view === 'home' ? 'text-[#1B4D3E]' : 'text-gray-400 hover:text-[#1B4D3E]'}`}>
                   <LucideIcon name="library" size={22} />
