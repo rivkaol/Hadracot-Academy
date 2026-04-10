@@ -338,16 +338,17 @@
         const TutorialsHub = ({ tutorialsData, onSelectTutorial, accessibleTutorialIds, isAuthenticated, searchQuery, completedTutorials, lastWatchedTutorial }) => {
           const [activeTab, setActiveTab] = useState('all');
 
-          // סינון חכם לפי החיפוש והטאב הפעיל
+          // סינון חכם לפי החיפוש והטאב הפעיל (בטוח מפני שגיאות טקסט)
           const visibleData = useMemo(() => {
             return tutorialsData.map(category => {
               if (activeTab !== 'all' && activeTab !== category.id) return null;
               
-              const query = searchQuery.toLowerCase();
-              const filteredTutorials = category.tutorials.filter(tutorial => 
-                tutorial.title.toLowerCase().includes(query) || 
-                (tutorial.description && tutorial.description.toLowerCase().includes(query))
-              );
+              const query = (searchQuery || '').toLowerCase();
+              const filteredTutorials = category.tutorials.filter(tutorial => {
+                const titleStr = tutorial.title ? String(tutorial.title).toLowerCase() : '';
+                const descStr = tutorial.description ? String(tutorial.description).toLowerCase() : '';
+                return titleStr.includes(query) || descStr.includes(query);
+              });
 
               if (filteredTutorials.length === 0) return null;
               return { ...category, tutorials: filteredTutorials };
@@ -979,6 +980,7 @@
                 const formattedTutorial = {
                   ...tutorial,
                   id: Number(tutorial.id),
+                  title: tutorial.title ? String(tutorial.title) : 'הדרכה ללא שם',
                   imageUrl: tutorial.imageUrl || null,
                   pdfUrl: tutorial.pdfUrl || null,
                   pdfTitle: tutorial.pdfTitle || 'קובץ מצורף'
