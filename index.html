@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>בריאות שבאה מהלב | רבקה הולצברג</title>
     
+    <!-- הכנת חיבורים לטעינה מהירה יותר (Preconnect) -->
+    <link rel="preconnect" href="https://script.google.com">
+    <link rel="preconnect" href="https://firestore.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
     <!-- React & Babel -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -446,7 +452,7 @@
                   </div>
                 )}
 
-                {/* גריד ההדרכות */}
+                {/* גריד ההדרכות מבוסס השלווה האורגנית */}
                 <div className="space-y-16">
                   {visibleData.map((category) => {
                       const theme = themeConfig[category.id] || themeConfig['personal-growth'];
@@ -492,6 +498,7 @@
                                     <div className={`absolute inset-0 bg-gradient-to-tr ${cardTheme.gradient} transition-all duration-500 ${isLocked ? 'grayscale blur-[2px] opacity-40' : 'opacity-80 group-hover:opacity-100 group-hover:scale-105'}`}></div>
                                   )}
                                   
+                                  {/* Overlay להדגשת המנעול על גבי תמונה קיימת */}
                                   {isLocked && tutorial.imageUrl && <div className="absolute inset-0 bg-black/10"></div>}
                                   
                                   {isLocked ? (
@@ -707,7 +714,6 @@
                       </h1>
                       
                       <div className="flex flex-col sm:flex-row items-center justify-center gap-4 border-b border-gray-200 pb-8 w-full max-w-lg mx-auto">
-                        {/* כפתור אישור שמקבל עכשיו אפשרות לביטול */}
                         <button 
                           onClick={handleCompleteLesson}
                           className={`flex items-center justify-center gap-2 font-bold px-8 py-3.5 rounded-full transition-all duration-300 w-full sm:w-auto shadow-sm ${isCompleted ? 'bg-[#94A388] text-white hover:bg-opacity-80' : 'bg-[#E8F0ED] text-[#1B4D3E] hover:bg-[#1B4D3E] hover:text-white'}`}
@@ -935,12 +941,20 @@
           }, []);
 
           const fetchCatalog = async () => {
+            // 1. נסיון לטעון מזיכרון המטמון (Cache) לטעינה מיידית
+            const cachedCatalog = localStorage.getItem('cached_catalog');
+            if (cachedCatalog) {
+                setTutorialsData(JSON.parse(cachedCatalog));
+                setCatalogLoading(false);
+            }
+
             try {
               const response = await fetch("https://script.google.com/macros/s/AKfycbwcU0zaYy02fKkgbG7nuV-nxpy8PghAshJ__eFO6Zt_NNPSqoGn4Zr156jeD5XAobwK/exec", { redirect: "follow" });
               const catalog = await response.json();
 
               if (!catalog || catalog.length === 0) {
-                  setTutorialsData(fallbackTutorialsData);
+                  if (!cachedCatalog) setTutorialsData(fallbackTutorialsData);
+                  setCatalogLoading(false);
                   return;
               }
 
@@ -985,11 +999,14 @@
               });
 
               const finalData = Object.values(categoriesMap).filter(cat => cat.tutorials.length > 0);
+              
+              // 2. שמירת הנתונים המעודכנים למטמון
+              localStorage.setItem('cached_catalog', JSON.stringify(finalData));
               setTutorialsData(finalData);
 
             } catch (error) {
-              console.log("שגיאה במשיכת הנתונים מהגוגל שיטס. טוען נתוני גיבוי מקומיים...", error);
-              setTutorialsData(fallbackTutorialsData);
+              console.log("שגיאה במשיכת הנתונים מהגוגל שיטס. משתמש בזיכרון המטמון או בנתוני הגיבוי...", error);
+              if (!cachedCatalog) setTutorialsData(fallbackTutorialsData);
             } finally {
               setCatalogLoading(false);
             }
@@ -997,6 +1014,22 @@
 
           useEffect(() => {
             fetchCatalog();
+
+            // 1. טעינה אופטימית של פרטי המשתמש מהמטמון
+            const cachedUser = localStorage.getItem('cached_user_data');
+            if (cachedUser) {
+                try {
+                    const data = JSON.parse(cachedUser);
+                    setUserEmail(data.email);
+                    setUserName(data.name);
+                    setAccessibleTutorialIds(data.ids);
+                    setCompletedTutorials(data.completed);
+                    setIsAuthenticated(true);
+                    setAuthLoading(false); // מבטל טעינה מיידית
+                } catch (e) {
+                    console.error("שגיאה בקריאת מטמון משתמש", e);
+                }
+            }
 
             auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
               .catch((error) => {
@@ -1020,11 +1053,20 @@
                                   .map(id => Number(id.trim()))
                                   .filter(id => !isNaN(id));
                     
-                    setAccessibleTutorialIds(ids);
-                    setCompletedTutorials(data.completed_tutorials || []);
-
+                    const completed = data.completed_tutorials || [];
                     const name = data.firstName || data.name || normalizedEmail.split('@')[0];
+
+                    setAccessibleTutorialIds(ids);
+                    setCompletedTutorials(completed);
                     setUserName(name);
+
+                    // שמירה למטמון לפעם הבאה
+                    localStorage.setItem('cached_user_data', JSON.stringify({
+                        email: normalizedEmail,
+                        name: name,
+                        ids: ids,
+                        completed: completed
+                    }));
 
                     if (data.last_watched) {
                        setLastWatchedTutorial(data.last_watched);
@@ -1056,6 +1098,7 @@
                 setAccessibleTutorialIds([]);
                 setCompletedTutorials([]);
                 setLastWatchedTutorial(null);
+                localStorage.removeItem('cached_user_data'); // ניקוי מטמון בהתנתקות
               }
               setAuthLoading(false);
             });
@@ -1085,6 +1128,7 @@
                  setView('home');
               }
             } catch (error) {
+              console.log("התחברות נכשלה:", error.code); 
               if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
                 setLoginError("המייל או הסיסמה אינם נכונים. (או שהמשתמש עדיין לא נוצר במערכת)");
               } else if (error.code === 'auth/user-not-found') {
