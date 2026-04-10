@@ -335,18 +335,18 @@
         // ==========================================
         // מסך הבית (מרכז ההדרכות - הגלריה)
         // ==========================================
-        const TutorialsHub = ({ tutorialsData, onSelectTutorial, accessibleTutorialIds, isAuthenticated, searchQuery, completedTutorials, lastWatchedTutorial }) => {
+        const TutorialsHub = ({ tutorialsData, onSelectTutorial, accessibleTutorialIds, isAuthenticated, searchQuery, completedTutorials, lastWatchedTutorial, isClubMember }) => {
           const [activeTab, setActiveTab] = useState('all');
 
-          // סינון חכם לפי החיפוש והטאב הפעיל (בטוח מפני שגיאות טקסט)
+          // סינון חכם לפי החיפוש והטאב הפעיל (מוגן בפני שגיאות של מחרוזות)
           const visibleData = useMemo(() => {
             return tutorialsData.map(category => {
               if (activeTab !== 'all' && activeTab !== category.id) return null;
               
               const query = (searchQuery || '').toLowerCase();
               const filteredTutorials = category.tutorials.filter(tutorial => {
-                const titleStr = tutorial.title ? String(tutorial.title).toLowerCase() : '';
-                const descStr = tutorial.description ? String(tutorial.description).toLowerCase() : '';
+                const titleStr = tutorial?.title ? String(tutorial.title).toLowerCase() : '';
+                const descStr = tutorial?.description ? String(tutorial.description).toLowerCase() : '';
                 return titleStr.includes(query) || descStr.includes(query);
               });
 
@@ -359,7 +359,7 @@
           let heroTutorial = null;
           let isHeroContinue = false;
           
-          if (lastWatchedTutorial && accessibleTutorialIds.includes(lastWatchedTutorial.id)) {
+          if (lastWatchedTutorial && (isClubMember || accessibleTutorialIds.includes(lastWatchedTutorial.id))) {
             heroTutorial = lastWatchedTutorial;
             isHeroContinue = true;
           } else {
@@ -477,7 +477,8 @@
 
                           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                             {category.tutorials.map((tutorial) => {
-                              const isLocked = isAuthenticated && !accessibleTutorialIds.includes(tutorial.id);
+                              // שינוי לוגיקת המנעולים: פתוח אם היא רכשה או שהיא חברת מועדון!
+                              const isLocked = isAuthenticated && !isClubMember && !accessibleTutorialIds.includes(tutorial.id);
                               const isCompleted = isAuthenticated && completedTutorials.includes(tutorial.id);
                               const cardTheme = themeConfig[tutorial.categoryId] || theme;
                               
@@ -566,7 +567,7 @@
         // ==========================================
         // מסך ההדרכה הבודדת (מחברת העבודה)
         // ==========================================
-        const TutorialPage = ({ tutorial, tutorialsData, onBack, categoryName, onNext, hasNext, accessibleTutorialIds, userEmail, db, completedTutorials, setCompletedTutorials }) => {
+        const TutorialPage = ({ tutorial, tutorialsData, onBack, categoryName, onNext, hasNext, accessibleTutorialIds, userEmail, db, completedTutorials, setCompletedTutorials, isClubMember }) => {
           const [activeTab, setActiveTab] = useState('notes');
           const [notes, setNotes] = useState('');
           const [isSaved, setIsSaved] = useState(false);
@@ -720,10 +721,11 @@
                           className={`flex items-center justify-center gap-2 font-bold px-8 py-3.5 rounded-full transition-all duration-300 w-full sm:w-auto shadow-sm ${isCompleted ? 'bg-[#94A388] text-white hover:bg-opacity-80' : 'bg-[#E8F0ED] text-[#1B4D3E] hover:bg-[#1B4D3E] hover:text-white'}`}
                         >
                           <LucideIcon name="check-circle" size={22} className={isCompleted ? "animate-in zoom-in duration-300" : ""} />
-                          {isCompleted ? 'הושלם (לחצי לביטול)' : 'סיימתי את ההדרכה'}
+                          {isCompleted ? 'הושלם' : 'סיימתי את ההדרכה'}
                         </button>
                         
-                        {hasNext && accessibleTutorialIds.includes(tutorial.id + 1) && (
+                        {/* שינוי בדיקת הגישה כדי לאפשר לחברות מועדון לראות את ההמשך תמיד */}
+                        {hasNext && (isClubMember || accessibleTutorialIds.includes(tutorial.id + 1)) && (
                           <button onClick={onNext} className="flex items-center justify-center gap-2 text-[#1B4D3E] font-bold bg-white border border-gray-200 hover:border-[#1B4D3E] hover:bg-gray-50 px-8 py-3.5 rounded-full transition-all duration-300 w-full sm:w-auto shadow-sm">
                             להמשך ההדרכה הבאה
                             <LucideIcon name="chevron-left" size={22} />
@@ -912,6 +914,7 @@
           const [accessibleTutorialIds, setAccessibleTutorialIds] = useState([]);
           const [completedTutorials, setCompletedTutorials] = useState([]); 
           const [lastWatchedTutorial, setLastWatchedTutorial] = useState(null); 
+          const [isClubMember, setIsClubMember] = useState(false); // סטייט חברת מועדון VIP
           
           const [authLoading, setAuthLoading] = useState(true);
           const [catalogLoading, setCatalogLoading] = useState(true); 
@@ -984,7 +987,6 @@
                   imageUrl: tutorial.imageUrl || null,
                   pdfUrl: tutorial.pdfUrl || null,
                   pdfTitle: tutorial.pdfTitle || 'קובץ מצורף',
-                  // מיפוי עמודה I (קישור לדף נחיתה) - עם הגנה לאותיות קטנות/גדולות
                   landingPageUrl: tutorial.landingPageUrl || tutorial.landingpageurl || null 
                 };
 
@@ -1028,6 +1030,7 @@
                     setUserName(data.name);
                     setAccessibleTutorialIds(data.ids);
                     setCompletedTutorials(data.completed);
+                    setIsClubMember(data.isClubMember || false);
                     setIsAuthenticated(true);
                     setAuthLoading(false); // מבטל טעינה מיידית
                 } catch (e) {
@@ -1059,17 +1062,20 @@
                     
                     const completed = data.completed_tutorials || [];
                     const name = data.firstName || data.name || normalizedEmail.split('@')[0];
+                    const isClub = data.isClubMember === true; // בודק סטטוס חברת מועדון
 
                     setAccessibleTutorialIds(ids);
                     setCompletedTutorials(completed);
                     setUserName(name);
+                    setIsClubMember(isClub);
 
-                    // שמירה למטמון לפעם הבאה
+                    // שמירה למטמון לפעם הבאה כולל סטטוס מועדון
                     localStorage.setItem('cached_user_data', JSON.stringify({
                         email: normalizedEmail,
                         name: name,
                         ids: ids,
-                        completed: completed
+                        completed: completed,
+                        isClubMember: isClub
                     }));
 
                     if (data.last_watched) {
@@ -1078,7 +1084,8 @@
 
                     setPendingTutorial(currentPending => {
                       if (currentPending) {
-                        if (ids.includes(currentPending.id)) {
+                        // אם יש לה הרשאה או שהיא חברת מועדון - נכנסת!
+                        if (ids.includes(currentPending.id) || isClub) {
                           setTimeout(() => proceedToTutorial(currentPending), 0);
                         } else {
                           const url = currentPending.landingPageUrl || `https://wa.me/504207702?text=${encodeURIComponent('היי רבקה, אשמח לקבל פרטים ולינק רכישה להדרכה: ' + currentPending.title)}`;
@@ -1099,6 +1106,7 @@
                 setIsAuthenticated(false);
                 setUserEmail('');
                 setUserName('');
+                setIsClubMember(false);
                 setAccessibleTutorialIds([]);
                 setCompletedTutorials([]);
                 setLastWatchedTutorial(null);
@@ -1156,7 +1164,8 @@
               return;
             }
 
-            if (!accessibleTutorialIds.includes(tutorial.id)) {
+            // היא נחסמת רק אם היא לא חברת מועדון וגם לא רכשה ספציפית
+            if (!isClubMember && !accessibleTutorialIds.includes(tutorial.id)) {
               const url = tutorial.landingPageUrl || `https://wa.me/504207702?text=${encodeURIComponent('היי רבקה, אשמח לקבל פרטים ולינק רכישה להדרכה: ' + tutorial.title)}`;
               window.open(url, '_blank');
               return;
@@ -1251,14 +1260,21 @@
                   <div className="w-1/3 flex justify-end items-center gap-3">
                     <div className="text-left mr-3 hidden md:block">
                       {isAuthenticated ? (
-                        <>
-                          <p className="text-sm font-bold text-[#1B4D3E] truncate max-w-[120px]" title={userName}>
-                            שלום {userName}
-                          </p>
+                        <div className="flex flex-col items-end">
+                          <div className="flex items-center gap-2">
+                            <p className="text-sm font-bold text-[#1B4D3E] truncate max-w-[120px]" title={userName}>
+                              שלום {userName}
+                            </p>
+                            {isClubMember && (
+                              <span className="bg-[#D4AF37]/10 text-[#B8962D] text-[10px] font-bold px-2 py-0.5 rounded-full border border-[#D4AF37]/20">
+                                VIP
+                              </span>
+                            )}
+                          </div>
                           <a href="https://wa.me/504207702?text=היי רבקה, יש לי רעיון להדרכה חדשה:" target="_blank" rel="noopener noreferrer" className="text-[11px] text-[#D4AF37] font-bold hover:underline flex items-center gap-1 mt-0.5">
                              <LucideIcon name="lightbulb" size={10} /> יש לי רעיון להדרכה
                           </a>
-                        </>
+                        </div>
                       ) : (
                         <button onClick={() => setView('login')} className="text-sm font-bold text-[#D4AF37] hover:underline mt-2">
                           התחברי למרחב
@@ -1302,6 +1318,7 @@
                     searchQuery={searchQuery}
                     completedTutorials={completedTutorials}
                     lastWatchedTutorial={lastWatchedTutorial}
+                    isClubMember={isClubMember}
                   />
                 </>
               )}
@@ -1319,6 +1336,7 @@
                   db={db}
                   completedTutorials={completedTutorials}
                   setCompletedTutorials={setCompletedTutorials}
+                  isClubMember={isClubMember}
                 />
               )}
 
