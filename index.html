@@ -983,7 +983,9 @@
                   title: tutorial.title ? String(tutorial.title) : 'הדרכה ללא שם',
                   imageUrl: tutorial.imageUrl || null,
                   pdfUrl: tutorial.pdfUrl || null,
-                  pdfTitle: tutorial.pdfTitle || 'קובץ מצורף'
+                  pdfTitle: tutorial.pdfTitle || 'קובץ מצורף',
+                  // מיפוי עמודה I (קישור לדף נחיתה) - עם הגנה לאותיות קטנות/גדולות
+                  landingPageUrl: tutorial.landingPageUrl || tutorial.landingpageurl || null 
                 };
 
                 const catId = formattedTutorial.categoryId || 'personal-growth'; 
