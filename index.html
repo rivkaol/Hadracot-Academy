@@ -49,7 +49,7 @@
             scrollbar-width: none;
         }
         .pb-safe {
-            padding-bottom: env(safe-area-inset-bottom);
+            padding-bottom: max(16px, env(safe-area-inset-bottom));
         }
         /* כרטיסיות טעינה (Skeleton) */
         .skeleton-shimmer {
@@ -210,7 +210,7 @@
             `https://wa.me/504207702?text=${encodeURIComponent('היי רבקה, אשמח לקבל פרטים ולינק רכישה להדרכה: ' + (pendingTutorial?.title || ''))}`;
 
           return (
-            <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-[#F7F9FA] pb-24">
+            <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-[#F7F9FA] pb-safe">
               <div className="w-full max-w-md bg-white p-8 sm:p-10 rounded-[2.5rem] shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-gray-100 text-center relative overflow-hidden">
                 
                 <button onClick={onCancel} className="absolute top-6 left-6 text-gray-400 hover:text-[#1B4D3E] transition-colors z-20">
@@ -368,7 +368,8 @@
 
           return (
             <div>
-              <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 pb-28 md:pb-12">
+              {/* מרווח תחתון גדול בשביל תפריט המובייל - pb-[100px] פותר את בעיית ההסתרה במובייל */}
+              <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-[100px] md:py-12">
                 
                 {/* אזור "המשך צפייה" או "התחילי מכאן" */}
                 {heroTutorial && !searchQuery && (
@@ -687,7 +688,7 @@
           };
 
           return (
-            <div className="animate-in slide-in-from-left-4 duration-300 pb-24 md:pb-8">
+            <div className="animate-in slide-in-from-left-4 duration-300 pb-[100px] md:pb-8">
               <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
 
                 <div className="flex flex-col lg:flex-row gap-8">
@@ -983,20 +984,23 @@
                 const formattedTutorial = {
                   ...tutorial,
                   id: Number(tutorial.id),
+                  // הגנה אם הכותרת ריקה או הגיעה כמספר:
                   title: tutorial.title ? String(tutorial.title) : 'הדרכה ללא שם',
-                  imageUrl: tutorial.imageUrl || null,
-                  pdfUrl: tutorial.pdfUrl || null,
-                  pdfTitle: tutorial.pdfTitle || 'קובץ מצורף',
+                  // מיפוי שדות (גם באותיות קטנות למקרה שגוגל שיטס שינה)
+                  imageUrl: tutorial.imageUrl || tutorial.imageurl || null,
+                  pdfUrl: tutorial.pdfUrl || tutorial.pdfurl || null,
+                  pdfTitle: tutorial.pdfTitle || tutorial.pdftitle || 'קובץ מצורף',
                   landingPageUrl: tutorial.landingPageUrl || tutorial.landingpageurl || null 
                 };
 
-                const catId = formattedTutorial.categoryId || 'personal-growth'; 
-                if (categoriesMap[catId]) {
-                  categoriesMap[catId].tutorials.push(formattedTutorial);
+                const catIdFromSheet = formattedTutorial.categoryId || formattedTutorial.categoryid || 'personal-growth'; 
+                
+                if (categoriesMap[catIdFromSheet]) {
+                  categoriesMap[catIdFromSheet].tutorials.push(formattedTutorial);
                 } else {
-                  categoriesMap[catId] = {
-                    id: catId,
-                    title: formattedTutorial.categoryTitle || 'הדרכות נוספות',
+                  categoriesMap[catIdFromSheet] = {
+                    id: catIdFromSheet,
+                    title: formattedTutorial.categoryTitle || formattedTutorial.categorytitle || 'הדרכות נוספות',
                     description: '',
                     icon: <LucideIcon name="book-open" className="text-[#D4AF37]" size={20} />,
                     tutorials: [formattedTutorial]
@@ -1341,17 +1345,17 @@
               )}
 
               <nav className={`md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 justify-around items-center h-[72px] z-50 pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.05)] ${isKeyboardOpen ? 'hidden' : 'flex'}`}>
-                <button onClick={handleBackToHome} className={`flex flex-col items-center justify-center w-full h-full ${view === 'home' ? 'text-[#1B4D3E]' : 'text-gray-400 hover:text-[#1B4D3E]'}`}>
+                <button onClick={handleBackToHome} className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-safe ${view === 'home' ? 'text-[#1B4D3E]' : 'text-gray-400 hover:text-[#1B4D3E]'}`}>
                   <LucideIcon name="library" size={22} />
-                  <span className="text-[11px] mt-1.5 font-medium">ספרייה</span>
+                  <span className="text-[11px] font-medium gap-1">ספרייה</span>
                 </button>
-                <button onClick={() => {window.scrollTo(0,0); handleBackToHome(); setTimeout(() => document.querySelector('input[type="text"]')?.focus(), 100);}} className="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-[#1B4D3E]">
+                <button onClick={() => {window.scrollTo(0,0); handleBackToHome(); setTimeout(() => document.querySelector('input[type="text"]')?.focus(), 100);}} className="flex flex-col items-center justify-center w-full h-full pt-2 pb-safe text-gray-400 hover:text-[#1B4D3E]">
                   <LucideIcon name="search" size={22} />
-                  <span className="text-[11px] mt-1.5 font-medium">חיפוש</span>
+                  <span className="text-[11px] font-medium gap-1">חיפוש</span>
                 </button>
-                <button onClick={() => !isAuthenticated ? setView('login') : null} className={`flex flex-col items-center justify-center w-full h-full ${view === 'login' || (isAuthenticated && view !== 'home') ? 'text-[#1B4D3E]' : 'text-gray-400 hover:text-[#1B4D3E]'}`}>
+                <button onClick={() => !isAuthenticated ? setView('login') : null} className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-safe ${view === 'login' || (isAuthenticated && view !== 'home') ? 'text-[#1B4D3E]' : 'text-gray-400 hover:text-[#1B4D3E]'}`}>
                   <LucideIcon name="user" size={22} />
-                  <span className="text-[11px] mt-1.5 font-medium">האזור שלי</span>
+                  <span className="text-[11px] font-medium gap-1">האזור שלי</span>
                 </button>
               </nav>
 
