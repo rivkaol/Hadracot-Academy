@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>בריאות שבאה מהלב | רבקה הולצברג</title>
     
-    <!-- הכנת חיבורים לטעינה מהירה יותר (Preconnect) -->
+    <!-- הכנת חיבורים לטעינה מהירה יותר -->
     <link rel="preconnect" href="https://script.google.com">
     <link rel="preconnect" href="https://firestore.googleapis.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,6 +40,12 @@
             -webkit-tap-highlight-color: transparent;
             overflow-x: hidden;
             width: 100%;
+            min-height: 100dvh; /* פותר בעיות גובה במובייל */
+        }
+        #root {
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
         }
         .hide-scrollbar::-webkit-scrollbar {
             display: none;
@@ -47,9 +53,6 @@
         .hide-scrollbar {
             -ms-overflow-style: none;
             scrollbar-width: none;
-        }
-        .pb-safe {
-            padding-bottom: max(16px, env(safe-area-inset-bottom));
         }
         /* כרטיסיות טעינה (Skeleton) */
         .skeleton-shimmer {
@@ -133,33 +136,21 @@
             id: 'personal-growth',
             title: 'תודעה ושינוי מבפנים',
             description: 'כאן תמצאי כלים שיעזרו לך ליצור שינוי אמיתי – מבפנים החוצה.',
-            tutorials: [
-              { id: 56701, title: 'איך לחזק את כח הרצון מבחינה נוירולוגית?', badge: 'נקודת התחלה חשובה', vimeoId: '1136235641', categoryId: 'personal-growth', pdfUrl: 'https://example.com/dummy.pdf', pdfTitle: 'דף עבודה: חיזוק כוח הרצון' },
-              { id: 56702, title: 'המנועים הסודיים של שינוי אמיתי', vimeoId: '1145367897', categoryId: 'personal-growth', isNew: true },
-              { id: 56744, title: 'ניהול זמן חכם - תפסיקו לרוץ, ותתחילו לחיות', badge: 'הדרכה מיוחדת', vimeoId: '1154422489', categoryId: 'personal-growth' },
-              { id: 56704, title: 'שוזרת חוטים חדשים', vimeoId: '1166120313', vimeoHash: '4f38847d7f', categoryId: 'personal-growth' },
-              { id: 56705, title: 'לב שמח - גוף בריא', vimeoId: '1168230791', vimeoHash: 'c88c0f73ee', categoryId: 'personal-growth' },
-              { id: 56706, title: 'ניקוי חמץ פנימי - מהגוף אל הנפש', vimeoId: '1177093031', categoryId: 'personal-growth' },
-            ]
+            tutorials: []
           },
           {
             id: 'health',
             title: 'גוף בריא ואורח חיים מאוזן',
             description: 'ידע פרקטי לאורח חיים בריא, מזין ומאוזן.',
-            tutorials: [
-              { id: 56707, title: 'המדריך המלא לממתיקים', vimeoId: '1140919510', categoryId: 'health' },
-              { id: 56708, title: 'חורף בריא - חיזוק מערכת החיסון', vimeoId: '1150195614', categoryId: 'health', isNew: true },
-              { id: 56709, title: 'עיכול של שינוי - מבהלה לביטחון', badge: 'מומלץ', vimeoId: '1159548569', categoryId: 'health' },
-              { id: 56710, title: 'פסח נקי מרעלים', vimeoId: '1172694105', vimeoHash: 'bb32ffd019', categoryId: 'health' },
-            ]
+            tutorials: []
           }
         ];
 
         // ==========================================
-        // מסך טעינה - Skeleton Loaders (חוויית פרימיום)
+        // מסך טעינה - Skeleton Loaders
         // ==========================================
         const SkeletonGallery = () => (
-          <div dir="rtl" className="min-h-screen font-sans bg-[#F7F9FA] text-[#1B4D3E]">
+          <div dir="rtl" className="flex-1 font-sans bg-[#F7F9FA] text-[#1B4D3E]">
             <header className="bg-white sticky top-0 z-50 border-b border-gray-100 shadow-sm h-20 flex items-center px-4 sm:px-8">
                <div className="skeleton-shimmer h-10 w-48 rounded-md"></div>
             </header>
@@ -210,7 +201,7 @@
             `https://wa.me/504207702?text=${encodeURIComponent('היי רבקה, אשמח לקבל פרטים ולינק רכישה להדרכה: ' + (pendingTutorial?.title || ''))}`;
 
           return (
-            <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-[#F7F9FA] pb-safe">
+            <div className="flex-1 flex flex-col items-center justify-center p-4 bg-[#F7F9FA] pb-10">
               <div className="w-full max-w-md bg-white p-8 sm:p-10 rounded-[2.5rem] shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-gray-100 text-center relative overflow-hidden">
                 
                 <button onClick={onCancel} className="absolute top-6 left-6 text-gray-400 hover:text-[#1B4D3E] transition-colors z-20">
@@ -338,7 +329,7 @@
         const TutorialsHub = ({ tutorialsData, onSelectTutorial, accessibleTutorialIds, isAuthenticated, searchQuery, completedTutorials, lastWatchedTutorial, isClubMember }) => {
           const [activeTab, setActiveTab] = useState('all');
 
-          // סינון חכם לפי החיפוש והטאב הפעיל (מוגן בפני שגיאות של מחרוזות)
+          // סינון חכם לפי החיפוש והטאב הפעיל
           const visibleData = useMemo(() => {
             return tutorialsData.map(category => {
               if (activeTab !== 'all' && activeTab !== category.id) return null;
@@ -367,8 +358,7 @@
           }
 
           return (
-            <div>
-              {/* מרווח תחתון גדול בשביל תפריט המובייל - pb-[100px] פותר את בעיית ההסתרה במובייל */}
+            <div className="flex-1">
               <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-[100px] md:py-12">
                 
                 {/* אזור "המשך צפייה" או "התחילי מכאן" */}
@@ -478,7 +468,6 @@
 
                           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                             {category.tutorials.map((tutorial) => {
-                              // שינוי לוגיקת המנעולים: פתוח אם היא רכשה או שהיא חברת מועדון!
                               const isLocked = isAuthenticated && !isClubMember && !accessibleTutorialIds.includes(tutorial.id);
                               const isCompleted = isAuthenticated && completedTutorials.includes(tutorial.id);
                               const cardTheme = themeConfig[tutorial.categoryId] || theme;
@@ -521,7 +510,7 @@
 
                                 <div className="p-6 flex-1 flex flex-col justify-between">
                                   <div>
-                                    {tutorial.badge && !tutorial.isNew && (
+                                    {tutorial.badge && (
                                       <span className={`inline-block text-[11px] font-bold px-3 py-1 rounded-md mb-4 ${cardTheme.bgClass}`} style={{color: cardTheme.darkText}}>
                                         {tutorial.badge}
                                       </span>
@@ -688,7 +677,7 @@
           };
 
           return (
-            <div className="animate-in slide-in-from-left-4 duration-300 pb-[100px] md:pb-8">
+            <div className="flex-1 animate-in slide-in-from-left-4 duration-300 pb-[100px] md:pb-8">
               <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
 
                 <div className="flex flex-col lg:flex-row gap-8">
@@ -946,22 +935,24 @@
           }, []);
 
           const fetchCatalog = async () => {
-            // 1. נסיון לטעון מזיכרון המטמון (Cache) לטעינה מיידית
-            const cachedCatalog = localStorage.getItem('cached_catalog');
-            if (cachedCatalog) {
-                setTutorialsData(JSON.parse(cachedCatalog));
-                setCatalogLoading(false);
-            }
-
             try {
               const response = await fetch("https://script.google.com/macros/s/AKfycbwcU0zaYy02fKkgbG7nuV-nxpy8PghAshJ__eFO6Zt_NNPSqoGn4Zr156jeD5XAobwK/exec", { redirect: "follow" });
-              const catalog = await response.json();
+              const rawCatalog = await response.json();
 
-              if (!catalog || catalog.length === 0) {
-                  if (!cachedCatalog) setTutorialsData(fallbackTutorialsData);
+              if (!rawCatalog || rawCatalog.length === 0) {
+                  setTutorialsData(fallbackTutorialsData);
                   setCatalogLoading(false);
                   return;
               }
+
+              // ניקוי רווחים נסתרים מהשמות של העמודות בגוגל שיטס כדי למנוע שגיאות
+              const catalog = rawCatalog.map(item => {
+                 const cleanItem = {};
+                 for(let key in item) {
+                    if(key) cleanItem[key.trim()] = item[key];
+                 }
+                 return cleanItem;
+              });
 
               const categoriesMap = {
                 'personal-growth': {
@@ -983,17 +974,17 @@
               catalog.forEach(tutorial => {
                 const formattedTutorial = {
                   ...tutorial,
-                  id: Number(tutorial.id),
-                  // הגנה אם הכותרת ריקה או הגיעה כמספר:
+                  id: Number(tutorial.id || tutorial.Id || tutorial.ID),
                   title: tutorial.title ? String(tutorial.title) : 'הדרכה ללא שם',
-                  // מיפוי שדות (גם באותיות קטנות למקרה שגוגל שיטס שינה)
                   imageUrl: tutorial.imageUrl || tutorial.imageurl || null,
                   pdfUrl: tutorial.pdfUrl || tutorial.pdfurl || null,
                   pdfTitle: tutorial.pdfTitle || tutorial.pdftitle || 'קובץ מצורף',
                   landingPageUrl: tutorial.landingPageUrl || tutorial.landingpageurl || null 
                 };
 
-                const catIdFromSheet = formattedTutorial.categoryId || formattedTutorial.categoryid || 'personal-growth'; 
+                // שליפת קטגוריה בטוחה בלי רווחים או אותיות גדולות
+                let catIdFromSheet = (formattedTutorial.categoryId || formattedTutorial.categoryid || 'personal-growth');
+                catIdFromSheet = String(catIdFromSheet).trim().toLowerCase();
                 
                 if (categoriesMap[catIdFromSheet]) {
                   categoriesMap[catIdFromSheet].tutorials.push(formattedTutorial);
@@ -1009,14 +1000,11 @@
               });
 
               const finalData = Object.values(categoriesMap).filter(cat => cat.tutorials.length > 0);
-              
-              // 2. שמירת הנתונים המעודכנים למטמון
-              localStorage.setItem('cached_catalog', JSON.stringify(finalData));
               setTutorialsData(finalData);
 
             } catch (error) {
-              console.log("שגיאה במשיכת הנתונים מהגוגל שיטס. משתמש בזיכרון המטמון או בנתוני הגיבוי...", error);
-              if (!cachedCatalog) setTutorialsData(fallbackTutorialsData);
+              console.log("שגיאה במשיכת הנתונים מהגוגל שיטס. נטען נתוני גיבוי...", error);
+              setTutorialsData(fallbackTutorialsData);
             } finally {
               setCatalogLoading(false);
             }
@@ -1228,7 +1216,7 @@
           }
 
           return (
-            <div dir="rtl" className="min-h-screen font-sans bg-[#F7F9FA] text-[#1B4D3E]">
+            <div dir="rtl" className="flex-1 font-sans bg-[#F7F9FA] text-[#1B4D3E]">
               
               <header className="bg-white sticky top-0 z-50 border-b border-gray-100 shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between relative">
@@ -1344,18 +1332,18 @@
                 />
               )}
 
-              <nav className={`md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 justify-around items-center h-[72px] z-50 pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.05)] ${isKeyboardOpen ? 'hidden' : 'flex'}`}>
-                <button onClick={handleBackToHome} className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-safe ${view === 'home' ? 'text-[#1B4D3E]' : 'text-gray-400 hover:text-[#1B4D3E]'}`}>
+              <nav className={`md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 justify-around items-center z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] flex ${isKeyboardOpen ? 'hidden' : ''}`} style={{ minHeight: '72px', paddingBottom: 'env(safe-area-inset-bottom)' }}>
+                <button onClick={handleBackToHome} className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${view === 'home' ? 'text-[#1B4D3E]' : 'text-gray-400 hover:text-[#1B4D3E]'}`}>
                   <LucideIcon name="library" size={22} />
-                  <span className="text-[11px] font-medium gap-1">ספרייה</span>
+                  <span className="text-[11px] mt-1 font-medium">ספרייה</span>
                 </button>
-                <button onClick={() => {window.scrollTo(0,0); handleBackToHome(); setTimeout(() => document.querySelector('input[type="text"]')?.focus(), 100);}} className="flex flex-col items-center justify-center w-full h-full pt-2 pb-safe text-gray-400 hover:text-[#1B4D3E]">
+                <button onClick={() => {window.scrollTo(0,0); handleBackToHome(); setTimeout(() => document.querySelector('input[type="text"]')?.focus(), 100);}} className="flex flex-col items-center justify-center w-full h-full pt-2 pb-1 text-gray-400 hover:text-[#1B4D3E]">
                   <LucideIcon name="search" size={22} />
-                  <span className="text-[11px] font-medium gap-1">חיפוש</span>
+                  <span className="text-[11px] mt-1 font-medium">חיפוש</span>
                 </button>
-                <button onClick={() => !isAuthenticated ? setView('login') : null} className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-safe ${view === 'login' || (isAuthenticated && view !== 'home') ? 'text-[#1B4D3E]' : 'text-gray-400 hover:text-[#1B4D3E]'}`}>
+                <button onClick={() => !isAuthenticated ? setView('login') : null} className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${view === 'login' || (isAuthenticated && view !== 'home') ? 'text-[#1B4D3E]' : 'text-gray-400 hover:text-[#1B4D3E]'}`}>
                   <LucideIcon name="user" size={22} />
-                  <span className="text-[11px] font-medium gap-1">האזור שלי</span>
+                  <span className="text-[11px] mt-1 font-medium">האזור שלי</span>
                 </button>
               </nav>
 
