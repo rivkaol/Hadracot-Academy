@@ -150,7 +150,7 @@
         ];
 
         // ==========================================
-        // מסך טעינה - Skeleton Loaders
+        // מסך טעינה - Skeleton Loaders (חוויית פרימיום)
         // ==========================================
         const SkeletonGallery = () => (
           <div dir="rtl" className="flex-1 font-sans bg-[#F7F9FA] text-[#1B4D3E]">
@@ -940,8 +940,8 @@
           }, []);
 
           const fetchCatalog = async () => {
-            // 1. נסיון לטעון מזיכרון המטמון (Cache) לטעינה מיידית
-            const cachedCatalog = localStorage.getItem('cached_catalog');
+            // 1. שינינו את שם הזיכרון ל-v2 כדי להכריח את הדפדפן להתנקות מהשגיאה הישנה!
+            const cachedCatalog = localStorage.getItem('cached_catalog_v2');
             if (cachedCatalog) {
                 setTutorialsData(JSON.parse(cachedCatalog));
                 setCatalogLoading(false);
@@ -957,7 +957,6 @@
                   return;
               }
 
-              // ניקוי רווחים נסתרים מהשמות של העמודות בגוגל שיטס כדי למנוע שגיאות
               const catalog = rawCatalog.map(item => {
                  const cleanItem = {};
                  for(let key in item) {
@@ -984,28 +983,28 @@
               };
 
               catalog.forEach(tutorial => {
-                // חילוץ חכם של מזהה וימאו לטובת מניעת שגיאות אם הודבק קישור מלא
-                let finalVimeoId = tutorial.vimeoId || tutorial.vimeoid || '76979871';
+                let finalVimeoId = tutorial.vimeoId || tutorial.vimeoid || tutorial['קישור להדרכה בוימאו'] || '76979871';
                 if (typeof finalVimeoId === 'string' && finalVimeoId.includes('vimeo.com')) {
                     finalVimeoId = finalVimeoId.split('/').pop().split('?')[0];
                 }
 
                 const formattedTutorial = {
                   ...tutorial,
-                  id: Number(tutorial.id || tutorial.Id || tutorial.ID),
-                  title: tutorial.title ? String(tutorial.title) : 'הדרכה ללא שם',
+                  id: Number(tutorial.id || tutorial.Id || tutorial.ID || tutorial['מס הדרכה בינבוים']),
+                  title: tutorial.title ? String(tutorial.title) : (tutorial['שם הדרכה'] || 'הדרכה ללא שם'),
+                  description: tutorial.description || tutorial['תיאור קצר'] || '',
                   vimeoId: finalVimeoId,
-                  imageUrl: tutorial.imageUrl || tutorial.imageurl || null,
-                  pdfUrl: tutorial.pdfUrl || tutorial.pdfurl || null,
+                  imageUrl: tutorial.imageUrl || tutorial.imageurl || tutorial['לינק לתמונה'] || null,
+                  pdfUrl: tutorial.pdfUrl || tutorial.pdfurl || tutorial['שם הקובץ להורדה'] || null,
                   pdfTitle: tutorial.pdfTitle || tutorial.pdftitle || 'קובץ מצורף',
-                  landingPageUrl: tutorial.landingPageUrl || tutorial.landingpageurl || null 
+                  landingPageUrl: tutorial.landingPageUrl || tutorial.landingpageurl || tutorial['דף נחיתה רלוונטי'] || null 
                 };
 
-                // שליפת קטגוריה בטוחה בלי רווחים מוסתרים או אותיות גדולות
-                let rawCat = String(tutorial.categoryId || tutorial.categoryid || tutorial.categoryLabel || tutorial.categorylabel || '').trim().toLowerCase();
+                // תיקון קריטי: שואב את הקטגוריה המקורית מעמודה B ישירות (categoryLabel) לפני שהוא נופל לברירת המחדל
+                let rawCat = String(tutorial.categoryLabel || tutorial.categorylabel || tutorial.categoryId || tutorial.categoryid || tutorial['categoryId'] || '').trim().toLowerCase();
                 
                 let catIdFromSheet = 'personal-growth';
-                if (rawCat.includes('health') || rawCat.includes('בריאות')) {
+                if (rawCat.includes('health') || rawCat.includes('בריאות') || rawCat === 'health') {
                     catIdFromSheet = 'health';
                 } else if (rawCat.includes('personal') || rawCat.includes('תודעה') || rawCat.includes('נפש')) {
                     catIdFromSheet = 'personal-growth';
@@ -1018,7 +1017,7 @@
                 } else {
                   categoriesMap[catIdFromSheet] = {
                     id: catIdFromSheet,
-                    title: tutorial.categoryTitle || tutorial.categorytitle || catIdFromSheet,
+                    title: tutorial.categoryTitle || tutorial.categorytitle || 'הדרכות נוספות',
                     description: '',
                     icon: <LucideIcon name="book-open" className="text-[#D4AF37]" size={20} />,
                     tutorials: [formattedTutorial]
@@ -1028,8 +1027,7 @@
 
               const finalData = Object.values(categoriesMap).filter(cat => cat.tutorials.length > 0);
               
-              // 2. שמירת הנתונים המעודכנים למטמון
-              localStorage.setItem('cached_catalog', JSON.stringify(finalData));
+              localStorage.setItem('cached_catalog_v2', JSON.stringify(finalData));
               setTutorialsData(finalData);
 
             } catch (error) {
