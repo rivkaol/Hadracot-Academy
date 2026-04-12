@@ -93,7 +93,7 @@
             bgClass: 'bg-[#94A388]/15',
             borderClass: 'border-r-4 border-r-[#94A388]',
             gradient: 'from-[#94A388]/30 to-transparent',
-            ctaText: 'אני רוצה להרגיש קלילה'
+            ctaText: 'אני בוחרת בבריאות'
           }
         };
 
@@ -322,6 +322,127 @@
                   
                 </div>
               </div>
+            </div>
+          );
+        };
+
+        // ==========================================
+        // מסך פרופיל (האזור האישי)
+        // ==========================================
+        const ProfilePage = ({ userEmail, userName, completedTutorials, isClubMember, tutorialsData, db, onSelectTutorial }) => {
+          const [userNotes, setUserNotes] = useState([]);
+          const [loadingNotes, setLoadingNotes] = useState(true);
+
+          useEffect(() => {
+            if(userEmail && db) {
+              db.collection("users").doc(userEmail).collection("notes").get().then(snapshot => {
+                const fetched = [];
+                snapshot.forEach(doc => {
+                  if(doc.data().text && doc.data().text.trim() !== '') {
+                    fetched.push({ tutorialId: Number(doc.id), text: doc.data().text });
+                  }
+                });
+                setUserNotes(fetched);
+                setLoadingNotes(false);
+              }).catch(err => {
+                console.error("שגיאה במשיכת סיכומים", err);
+                setLoadingNotes(false);
+              });
+            }
+          }, [userEmail, db]);
+
+          // חישוב סך כל ההדרכות
+          const totalTutorials = tutorialsData.reduce((sum, cat) => sum + cat.tutorials.length, 0);
+          const progressPercent = totalTutorials > 0 ? Math.round((completedTutorials.length / totalTutorials) * 100) : 0;
+
+          const getTutorialDetails = (id) => {
+            for(let cat of tutorialsData) {
+              const tut = cat.tutorials.find(t => t.id === id);
+              if(tut) return tut;
+            }
+            return null;
+          };
+
+          return (
+            <div className="flex-1 animate-in fade-in duration-300 pb-[100px] md:pb-8">
+              <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
+                 <h2 className="text-3xl font-bold text-[#1B4D3E] mb-8">האזור האישי שלי</h2>
+                 
+                 {/* כרטיס פרופיל */}
+                 <div className="bg-white rounded-3xl p-6 md:p-8 border border-gray-100 shadow-sm mb-8 flex flex-col md:flex-row gap-6 items-center md:items-start relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-40 h-40 bg-[#D4AF37]/5 rounded-full blur-3xl -translate-y-10 -translate-x-10"></div>
+                    
+                    <div className="w-24 h-24 bg-[#1B4D3E] rounded-full flex items-center justify-center text-[#D4AF37] font-serif font-bold text-4xl shrink-0 shadow-md relative">
+                      {userName ? userName.charAt(0) : 'ר'}
+                      {isClubMember && (
+                        <div className="absolute -top-1 -right-1 bg-gradient-to-r from-[#D4AF37] to-[#B8962D] w-8 h-8 rounded-full flex items-center justify-center shadow-md border-2 border-white">
+                           <LucideIcon name="crown" size={16} className="text-white" />
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="flex-1 text-center md:text-right z-10 w-full">
+                       <div className="flex flex-col md:flex-row md:items-center gap-3 mb-2 justify-center md:justify-start">
+                         <h3 className="text-2xl font-bold text-[#1B4D3E]">{userName}</h3>
+                         {isClubMember && (
+                           <span className="bg-gradient-to-r from-[#D4AF37] to-[#B8962D] text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-sm inline-flex items-center gap-1 justify-center w-max mx-auto md:mx-0">
+                             <LucideIcon name="crown" size={12} /> חברת מועדון VIP
+                           </span>
+                         )}
+                       </div>
+                       <p className="text-gray-500 mb-6">{userEmail}</p>
+                       
+                       <div className="w-full max-w-md mx-auto md:mx-0 bg-[#F7F9FA] p-5 rounded-2xl border border-gray-200/60">
+                          <div className="flex justify-between items-center text-sm font-bold text-[#1B4D3E] mb-3">
+                             <span>התקדמות במרחב ההדרכות</span>
+                             <span className="bg-white px-2 py-1 rounded-md text-[#94A388] shadow-sm">{completedTutorials.length} / {totalTutorials}</span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                             <div className="bg-[#94A388] h-3 rounded-full transition-all duration-1000 ease-out" style={{width: `${progressPercent}%`}}></div>
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+
+                 {/* המחברת שלי */}
+                 <h3 className="text-2xl font-bold text-[#1B4D3E] mb-6 flex items-center gap-2">
+                    <LucideIcon name="book-open" size={24} className="text-[#D4AF37]" />
+                    המחברת שלי (סיכומים)
+                 </h3>
+
+                 {loadingNotes ? (
+                    <div className="flex justify-center py-12"><LucideIcon name="loader" className="animate-spin text-[#D4AF37]" size={32} /></div>
+                 ) : userNotes.length === 0 ? (
+                    <div className="bg-white rounded-3xl p-10 text-center border border-gray-100 shadow-sm">
+                       <LucideIcon name="edit" size={48} className="mx-auto text-gray-300 mb-4" />
+                       <p className="text-lg font-medium text-[#1B4D3E] mb-2">המחברת שלך עדיין ריקה</p>
+                       <p className="text-gray-500 max-w-sm mx-auto">כשאת צופה בהדרכות, תוכלי לכתוב תובנות וסיכומים, והם יופיעו כאן בצורה מסודרת כדי שתוכלי לחזור אליהם תמיד.</p>
+                    </div>
+                 ) : (
+                    <div className="grid gap-6">
+                       {userNotes.map((note, idx) => {
+                          const tut = getTutorialDetails(note.tutorialId);
+                          if(!tut) return null;
+                          return (
+                            <div key={idx} className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all group">
+                               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 gap-4">
+                                  <div>
+                                    <h4 className="font-bold text-[#1B4D3E] text-lg mb-1">{tut.title}</h4>
+                                    <p className="text-xs text-[#D4AF37] font-medium flex items-center gap-1"><LucideIcon name="check-circle" size={12}/> נשמר בהצלחה</p>
+                                  </div>
+                                  <button onClick={() => onSelectTutorial(tut)} className="text-sm font-bold text-[#1B4D3E] bg-[#F7F9FA] hover:bg-[#E8F0ED] px-4 py-2 rounded-full transition-colors flex items-center gap-1.5 self-start shrink-0 border border-gray-200">
+                                    <LucideIcon name="play-circle" size={16} className="text-[#D4AF37]"/> צפייה בהדרכה
+                                  </button>
+                               </div>
+                               <div className="bg-[#F7F9FA] p-5 rounded-2xl text-gray-700 leading-relaxed whitespace-pre-wrap text-sm border border-gray-100/50">
+                                 {note.text}
+                               </div>
+                            </div>
+                          )
+                       })}
+                    </div>
+                 )}
+              </main>
             </div>
           );
         };
@@ -940,7 +1061,6 @@
           }, []);
 
           const fetchCatalog = async () => {
-            // 1. שינינו את שם הזיכרון ל-v2 כדי להכריח את הדפדפן להתנקות מהשגיאה הישנה!
             const cachedCatalog = localStorage.getItem('cached_catalog_v2');
             if (cachedCatalog) {
                 setTutorialsData(JSON.parse(cachedCatalog));
@@ -988,9 +1108,21 @@
                     finalVimeoId = finalVimeoId.split('/').pop().split('?')[0];
                 }
 
+                // תיקון קריטי: הגדרת הקטגוריה המדויקת לפי הערך מעמודה B (כדי למנוע שפסים של בריאות יצבעו בוורוד)
+                let rawCat = String(tutorial.categoryLabel || tutorial.categorylabel || tutorial.categoryId || tutorial.categoryid || tutorial['categoryId'] || '').trim().toLowerCase();
+                let catIdFromSheet = 'personal-growth';
+                if (rawCat.includes('health') || rawCat.includes('בריאות') || rawCat === 'health') {
+                    catIdFromSheet = 'health';
+                } else if (rawCat.includes('personal') || rawCat.includes('תודעה') || rawCat.includes('נפש')) {
+                    catIdFromSheet = 'personal-growth';
+                } else if (rawCat !== '') {
+                    catIdFromSheet = rawCat;
+                }
+
                 const formattedTutorial = {
                   ...tutorial,
                   id: Number(tutorial.id || tutorial.Id || tutorial.ID || tutorial['מס הדרכה בינבוים']),
+                  categoryId: catIdFromSheet, // זה פותר את צבע הפס הוורוד/ירוק בצורה מוחלטת!
                   title: tutorial.title ? String(tutorial.title) : (tutorial['שם הדרכה'] || 'הדרכה ללא שם'),
                   description: tutorial.description || tutorial['תיאור קצר'] || '',
                   vimeoId: finalVimeoId,
@@ -1000,18 +1132,6 @@
                   landingPageUrl: tutorial.landingPageUrl || tutorial.landingpageurl || tutorial['דף נחיתה רלוונטי'] || null 
                 };
 
-                // תיקון קריטי: שואב את הקטגוריה המקורית מעמודה B ישירות (categoryLabel) לפני שהוא נופל לברירת המחדל
-                let rawCat = String(tutorial.categoryLabel || tutorial.categorylabel || tutorial.categoryId || tutorial.categoryid || tutorial['categoryId'] || '').trim().toLowerCase();
-                
-                let catIdFromSheet = 'personal-growth';
-                if (rawCat.includes('health') || rawCat.includes('בריאות') || rawCat === 'health') {
-                    catIdFromSheet = 'health';
-                } else if (rawCat.includes('personal') || rawCat.includes('תודעה') || rawCat.includes('נפש')) {
-                    catIdFromSheet = 'personal-growth';
-                } else if (rawCat !== '') {
-                    catIdFromSheet = rawCat;
-                }
-                
                 if (categoriesMap[catIdFromSheet]) {
                   categoriesMap[catIdFromSheet].tutorials.push(formattedTutorial);
                 } else {
@@ -1041,7 +1161,6 @@
           useEffect(() => {
             fetchCatalog();
 
-            // 1. טעינה אופטימית של פרטי המשתמש מהמטמון
             const cachedUser = localStorage.getItem('cached_user_data');
             if (cachedUser) {
                 try {
@@ -1052,7 +1171,7 @@
                     setCompletedTutorials(data.completed);
                     setIsClubMember(data.isClubMember || false);
                     setIsAuthenticated(true);
-                    setAuthLoading(false); // מבטל טעינה מיידית
+                    setAuthLoading(false); 
                 } catch (e) {
                     console.error("שגיאה בקריאת מטמון משתמש", e);
                 }
@@ -1082,14 +1201,13 @@
                     
                     const completed = data.completed_tutorials || [];
                     const name = data.firstName || data.name || normalizedEmail.split('@')[0];
-                    const isClub = data.isClubMember === true; // בודק סטטוס חברת מועדון
+                    const isClub = data.isClubMember === true;
 
                     setAccessibleTutorialIds(ids);
                     setCompletedTutorials(completed);
                     setUserName(name);
                     setIsClubMember(isClub);
 
-                    // שמירה למטמון לפעם הבאה כולל סטטוס מועדון
                     localStorage.setItem('cached_user_data', JSON.stringify({
                         email: normalizedEmail,
                         name: name,
@@ -1104,7 +1222,6 @@
 
                     setPendingTutorial(currentPending => {
                       if (currentPending) {
-                        // אם יש לה הרשאה או שהיא חברת מועדון - נכנסת!
                         if (ids.includes(currentPending.id) || isClub) {
                           setTimeout(() => proceedToTutorial(currentPending), 0);
                         } else {
@@ -1130,7 +1247,7 @@
                 setAccessibleTutorialIds([]);
                 setCompletedTutorials([]);
                 setLastWatchedTutorial(null);
-                localStorage.removeItem('cached_user_data'); // ניקוי מטמון בהתנתקות
+                localStorage.removeItem('cached_user_data');
               }
               setAuthLoading(false);
             });
@@ -1184,7 +1301,6 @@
               return;
             }
 
-            // היא נחסמת רק אם היא לא חברת מועדון וגם לא רכשה ספציפית
             if (!isClubMember && !accessibleTutorialIds.includes(tutorial.id)) {
               const url = tutorial.landingPageUrl || `https://wa.me/504207702?text=${encodeURIComponent('היי רבקה, אשמח לקבל פרטים ולינק רכישה להדרכה: ' + tutorial.title)}`;
               window.open(url, '_blank');
@@ -1243,8 +1359,65 @@
                    />;
           }
 
+          // תצוגת האזור האישי
+          if (view === 'profile') {
+             return (
+               <div dir="rtl" className="min-h-screen font-sans bg-[#F7F9FA] text-[#1B4D3E] flex flex-col">
+                 <header className="bg-white sticky top-0 z-50 border-b border-gray-100 shadow-sm">
+                   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between relative">
+                     <div className="w-1/3 flex items-center">
+                       <button onClick={handleBackToHome} className="hidden lg:flex items-center gap-1.5 md:gap-2 text-[#1B4D3E] font-bold bg-[#E8F0ED] hover:bg-[#1B4D3E] hover:text-[#D4AF37] px-3 md:px-5 py-2 rounded-full transition-all duration-300 shadow-sm border border-[#1B4D3E]/10">
+                         <LucideIcon name="chevron-right" size={24} />
+                         <span className="hidden md:inline text-base">חזרה להדרכות</span>
+                       </button>
+                     </div>
+                     <div className="w-1/3 flex justify-center">
+                       <div className="cursor-pointer flex flex-col items-center" onClick={handleBackToHome}>
+                         <img src="logo.jpg.png" alt="לוגו המרחב של רבקה" className="h-8 md:h-10 w-auto mb-1 object-contain" onError={(e) => { e.target.onerror = null; e.target.style.display='none'; e.target.nextSibling.style.display='block'; }} />
+                         <div className="hidden"><h1 className="text-2xl font-bold tracking-tight text-[#1B4D3E]">בריאות שבאה מהלב</h1></div>
+                         <p className="text-xs text-[#D4AF37] font-medium hidden md:block mt-0.5">המרחב שלך לצמיחה, רוגע ובריאות אמיתית</p>
+                       </div>
+                     </div>
+                     <div className="w-1/3 flex justify-end items-center gap-3">
+                       <button onClick={handleLogout} className="text-gray-400 hover:text-red-500 transition-colors flex items-center gap-1 text-sm font-medium">
+                         <span className="hidden sm:inline">יציאה מותנת</span>
+                         <LucideIcon name="log-out" size={18} />
+                       </button>
+                     </div>
+                   </div>
+                 </header>
+                 
+                 <ProfilePage 
+                   userEmail={userEmail}
+                   userName={userName}
+                   completedTutorials={completedTutorials}
+                   isClubMember={isClubMember}
+                   tutorialsData={tutorialsData}
+                   db={db}
+                   onSelectTutorial={(tut) => proceedToTutorial(tut)}
+                 />
+
+                 <nav className={`md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 justify-around items-center z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] flex`} style={{ minHeight: '72px', paddingBottom: 'env(safe-area-inset-bottom)' }}>
+                   <button onClick={handleBackToHome} className="flex flex-col items-center justify-center w-full h-full pt-2 pb-1 text-gray-400 hover:text-[#1B4D3E]">
+                     <LucideIcon name="library" size={22} />
+                     <span className="text-[11px] mt-1 font-medium">ספרייה</span>
+                   </button>
+                   <button onClick={() => {window.scrollTo(0,0); handleBackToHome(); setTimeout(() => document.querySelector('input[type="text"]')?.focus(), 100);}} className="flex flex-col items-center justify-center w-full h-full pt-2 pb-1 text-gray-400 hover:text-[#1B4D3E]">
+                     <LucideIcon name="search" size={22} />
+                     <span className="text-[11px] mt-1 font-medium">חיפוש</span>
+                   </button>
+                   <button className="flex flex-col items-center justify-center w-full h-full pt-2 pb-1 text-[#1B4D3E]">
+                     <LucideIcon name="user" size={22} />
+                     <span className="text-[11px] mt-1 font-medium">האזור שלי</span>
+                   </button>
+                 </nav>
+               </div>
+             );
+          }
+
+          // תצוגת ראשי (גלריה או הדרכה)
           return (
-            <div dir="rtl" className="flex-1 font-sans bg-[#F7F9FA] text-[#1B4D3E]">
+            <div dir="rtl" className="flex-1 font-sans bg-[#F7F9FA] text-[#1B4D3E] flex flex-col">
               
               <header className="bg-white sticky top-0 z-50 border-b border-gray-100 shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between relative">
@@ -1301,8 +1474,17 @@
                         </button>
                       )}
                     </div>
-                    <div className="h-10 w-10 rounded-full bg-[#E8F0ED] flex items-center justify-center text-[#1B4D3E] cursor-pointer hover:bg-[#1B4D3E] hover:text-[#D4AF37] transition-colors hidden md:flex">
-                      {isAuthenticated ? <LucideIcon name="book-open" size={18} /> : <LucideIcon name="user" size={18} />}
+                    {/* כפתור כניסה לאזור האישי עם כתר קטן אם המשתמשת VIP במובייל */}
+                    <div 
+                       className="relative h-10 w-10 rounded-full bg-[#E8F0ED] flex items-center justify-center text-[#1B4D3E] cursor-pointer hover:bg-[#1B4D3E] hover:text-[#D4AF37] transition-colors"
+                       onClick={() => !isAuthenticated ? setView('login') : setView('profile')}
+                    >
+                      <LucideIcon name="user" size={18} />
+                      {isAuthenticated && isClubMember && (
+                         <div className="absolute -top-1 -right-1 bg-gradient-to-r from-[#D4AF37] to-[#B8962D] w-4 h-4 rounded-full flex items-center justify-center shadow-sm border border-white md:hidden">
+                            <LucideIcon name="crown" size={10} className="text-white" />
+                         </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -1369,7 +1551,7 @@
                   <LucideIcon name="search" size={22} />
                   <span className="text-[11px] mt-1 font-medium">חיפוש</span>
                 </button>
-                <button onClick={() => !isAuthenticated ? setView('login') : null} className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${view === 'login' || (isAuthenticated && view !== 'home') ? 'text-[#1B4D3E]' : 'text-gray-400 hover:text-[#1B4D3E]'}`}>
+                <button onClick={() => !isAuthenticated ? setView('login') : setView('profile')} className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${view === 'login' || view === 'profile' ? 'text-[#1B4D3E]' : 'text-gray-400 hover:text-[#1B4D3E]'}`}>
                   <LucideIcon name="user" size={22} />
                   <span className="text-[11px] mt-1 font-medium">האזור שלי</span>
                 </button>
