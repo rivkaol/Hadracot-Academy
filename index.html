@@ -150,7 +150,7 @@
         ];
 
         // ==========================================
-        // מסך טעינה - Skeleton Loaders (חוויית פרימיום)
+        // מסך טעינה - Skeleton Loaders
         // ==========================================
         const SkeletonGallery = () => (
           <div dir="rtl" className="flex-1 font-sans bg-[#F7F9FA] text-[#1B4D3E]">
@@ -984,26 +984,41 @@
               };
 
               catalog.forEach(tutorial => {
+                // חילוץ חכם של מזהה וימאו לטובת מניעת שגיאות אם הודבק קישור מלא
+                let finalVimeoId = tutorial.vimeoId || tutorial.vimeoid || '76979871';
+                if (typeof finalVimeoId === 'string' && finalVimeoId.includes('vimeo.com')) {
+                    finalVimeoId = finalVimeoId.split('/').pop().split('?')[0];
+                }
+
                 const formattedTutorial = {
                   ...tutorial,
                   id: Number(tutorial.id || tutorial.Id || tutorial.ID),
                   title: tutorial.title ? String(tutorial.title) : 'הדרכה ללא שם',
+                  vimeoId: finalVimeoId,
                   imageUrl: tutorial.imageUrl || tutorial.imageurl || null,
                   pdfUrl: tutorial.pdfUrl || tutorial.pdfurl || null,
                   pdfTitle: tutorial.pdfTitle || tutorial.pdftitle || 'קובץ מצורף',
                   landingPageUrl: tutorial.landingPageUrl || tutorial.landingpageurl || null 
                 };
 
-                // שליפת קטגוריה בטוחה בלי רווחים או אותיות גדולות
-                let catIdFromSheet = (formattedTutorial.categoryId || formattedTutorial.categoryid || 'personal-growth');
-                catIdFromSheet = String(catIdFromSheet).trim().toLowerCase();
+                // שליפת קטגוריה בטוחה בלי רווחים מוסתרים או אותיות גדולות
+                let rawCat = String(tutorial.categoryId || tutorial.categoryid || tutorial.categoryLabel || tutorial.categorylabel || '').trim().toLowerCase();
+                
+                let catIdFromSheet = 'personal-growth';
+                if (rawCat.includes('health') || rawCat.includes('בריאות')) {
+                    catIdFromSheet = 'health';
+                } else if (rawCat.includes('personal') || rawCat.includes('תודעה') || rawCat.includes('נפש')) {
+                    catIdFromSheet = 'personal-growth';
+                } else if (rawCat !== '') {
+                    catIdFromSheet = rawCat;
+                }
                 
                 if (categoriesMap[catIdFromSheet]) {
                   categoriesMap[catIdFromSheet].tutorials.push(formattedTutorial);
                 } else {
                   categoriesMap[catIdFromSheet] = {
                     id: catIdFromSheet,
-                    title: formattedTutorial.categoryTitle || formattedTutorial.categorytitle || 'הדרכות נוספות',
+                    title: tutorial.categoryTitle || tutorial.categorytitle || catIdFromSheet,
                     description: '',
                     icon: <LucideIcon name="book-open" className="text-[#D4AF37]" size={20} />,
                     tutorials: [formattedTutorial]
