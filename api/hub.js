@@ -25,7 +25,9 @@ function normEmail(e = '') {
 const csvToIds = (s) =>
   String(s || '')
     .split(',')
-    .map((x) => Number(String(x).trim()))
+    .map((x) => String(x).trim())
+    .filter((x) => x !== '')
+    .map(Number)
     .filter((n) => !isNaN(n))
 
 const idsToCsv = (arr) =>
