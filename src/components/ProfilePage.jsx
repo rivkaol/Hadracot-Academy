@@ -1,24 +1,15 @@
 import { useState, useEffect } from 'react'
 import { BookOpen, Edit, CheckCircle, PlayCircle, Loader, Crown } from 'lucide-react'
-import { db } from '../firebase'
-import { doc, collection, getDocs } from 'firebase/firestore'
+import { apiListNotes } from '../api'
 
-export default function ProfilePage({ userEmail, userName, completedTutorials, isClubMember, tutorialsData, onSelectTutorial }) {
+export default function ProfilePage({ userEmail, userPassword, userName, completedTutorials, isClubMember, tutorialsData, onSelectTutorial }) {
   const [userNotes, setUserNotes] = useState([])
   const [loadingNotes, setLoadingNotes] = useState(true)
 
   useEffect(() => {
     if (!userEmail) return
-    getDocs(collection(db, 'users', userEmail, 'notes'))
-      .then((snapshot) => {
-        const fetched = []
-        snapshot.forEach((d) => {
-          if (d.data().text?.trim()) {
-            fetched.push({ tutorialId: Number(d.id), text: d.data().text })
-          }
-        })
-        setUserNotes(fetched)
-      })
+    apiListNotes({ email: userEmail, password: userPassword })
+      .then(({ notes }) => setUserNotes(notes || []))
       .catch((err) => console.error('שגיאה במשיכת סיכומים', err))
       .finally(() => setLoadingNotes(false))
   }, [userEmail])

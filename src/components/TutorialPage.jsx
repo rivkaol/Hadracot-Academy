@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Sparkles, CheckCircle, ChevronLeft, BookOpen, Edit, Download, Save, Loader, FileText } from 'lucide-react'
 import confetti from 'canvas-confetti'
-import { db } from '../firebase'
-import { doc, getDoc, setDoc, arrayUnion, arrayRemove, serverTimestamp } from 'firebase/firestore'
+import { apiGetNote, apiSaveNote, apiSetCompleted } from '../api'
 
 export default function TutorialPage({
   tutorial,
@@ -13,10 +12,12 @@ export default function TutorialPage({
   hasNext,
   accessibleTutorialIds,
   userEmail,
+  userPassword,
   completedTutorials,
   setCompletedTutorials,
   isClubMember,
 }) {
+  const cred = { email: userEmail, password: userPassword }
   const [activeTab, setActiveTab] = useState('notes')
   const [notes, setNotes] = useState('')
   const [isSaved, setIsSaved] = useState(false)
@@ -38,16 +39,13 @@ export default function TutorialPage({
     if (activeTab === 'resources' && !tutorial.pdfUrl) setActiveTab('notes')
 
     if (!userEmail) return
-    getDoc(doc(db, 'users', userEmail, 'notes', tutorial.id.toString()))
-      .then((snap) => { if (snap.exists()) setNotes(snap.data().text || '') })
+    apiGetNote(cred, tutorial.id)
+      .then(({ text }) => setNotes(text || ''))
       .catch((err) => console.error('שגיאה בטעינת סיכום:', err))
 
     return () => {
       if (notesRef.current.trim() && userEmail) {
-        setDoc(doc(db, 'users', userEmail, 'notes', tutorial.id.toString()), {
-          text: notesRef.current,
-          updatedAt: serverTimestamp(),
-        }, { merge: true }).catch(console.error)
+        apiSaveNote(cred, tutorial.id, notesRef.current).catch(console.error)
       }
     }
   }, [tutorial.id, userEmail])
@@ -56,10 +54,7 @@ export default function TutorialPage({
     if (!userEmail || notes === '') return
     setIsSavingAuto(true)
     const timer = setTimeout(() => {
-      setDoc(doc(db, 'users', userEmail, 'notes', tutorial.id.toString()), {
-        text: notes,
-        updatedAt: serverTimestamp(),
-      }, { merge: true })
+      apiSaveNote(cred, tutorial.id, notes)
         .then(() => setIsSavingAuto(false))
         .catch(() => setIsSavingAuto(false))
     }, 1500)
@@ -68,10 +63,7 @@ export default function TutorialPage({
 
   const handleSaveNotes = async () => {
     if (!userEmail) return
-    await setDoc(doc(db, 'users', userEmail, 'notes', tutorial.id.toString()), {
-      text: notes,
-      updatedAt: serverTimestamp(),
-    }, { merge: true })
+    await apiSaveNote(cred, tutorial.id, notes)
     setIsSaved(true)
     setTimeout(() => setIsSaved(false), 3000)
   }
@@ -89,10 +81,7 @@ export default function TutorialPage({
     }
 
     if (userEmail) {
-      const userDoc = doc(db, 'users', userEmail)
-      await setDoc(userDoc, {
-        completed_tutorials: next ? arrayUnion(tutorial.id) : arrayRemove(tutorial.id),
-      }, { merge: true }).catch(console.error)
+      apiSetCompleted(cred, tutorial.id, next).catch(console.error)
     }
   }
 

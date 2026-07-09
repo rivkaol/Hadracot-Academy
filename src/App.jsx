@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
-import { signInWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from 'firebase/auth'
-import { doc, getDoc, setDoc } from 'firebase/firestore'
-import { auth, db } from './firebase'
+import { apiLogin, apiLastWatched } from './api'
 import { useCatalog } from './useCatalog'
 
 import SkeletonGallery from './components/SkeletonGallery'
@@ -20,6 +18,7 @@ export default function App() {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [userEmail, setUserEmail] = useState('')
+  const [userPassword, setUserPassword] = useState('')
   const [userName, setUserName] = useState('')
   const [accessibleTutorialIds, setAccessibleTutorialIds] = useState([])
   const [completedTutorials, setCompletedTutorials] = useState([])
@@ -47,6 +46,41 @@ export default function App() {
     }
   }, [])
 
+  const applyUser = (user, password) => {
+    setUserEmail(user.email)
+    setUserPassword(password)
+    setUserName(user.name)
+    setAccessibleTutorialIds(user.purchasedProductIds || [])
+    setCompletedTutorials(user.completed || [])
+    setIsClubMember(user.isClubMember === true)
+    if (user.lastWatched) setLastWatchedTutorial(user.lastWatched)
+    setIsAuthenticated(true)
+    localStorage.setItem(
+      'cached_user_data',
+      JSON.stringify({
+        email: user.email,
+        password,
+        name: user.name,
+        ids: user.purchasedProductIds || [],
+        completed: user.completed || [],
+        isClubMember: user.isClubMember === true,
+        lastWatched: user.lastWatched || null,
+      })
+    )
+  }
+
+  const clearUser = () => {
+    setIsAuthenticated(false)
+    setUserEmail('')
+    setUserPassword('')
+    setUserName('')
+    setIsClubMember(false)
+    setAccessibleTutorialIds([])
+    setCompletedTutorials([])
+    setLastWatchedTutorial(null)
+    localStorage.removeItem('cached_user_data')
+  }
+
   useEffect(() => {
     fetchCatalog()
 
@@ -55,83 +89,25 @@ export default function App() {
       try {
         const data = JSON.parse(cached)
         setUserEmail(data.email)
+        setUserPassword(data.password || '')
         setUserName(data.name)
-        setAccessibleTutorialIds(data.ids)
-        setCompletedTutorials(data.completed)
+        setAccessibleTutorialIds(data.ids || [])
+        setCompletedTutorials(data.completed || [])
         setIsClubMember(data.isClubMember || false)
+        if (data.lastWatched) setLastWatchedTutorial(data.lastWatched)
         setIsAuthenticated(true)
-        setAuthLoading(false)
+
+        // רענון שקט ברקע — מושך נתונים עדכניים ומאמת שהסיסמה עדיין תקפה
+        if (data.email && data.password) {
+          apiLogin(data.email, data.password)
+            .then(({ user }) => applyUser(user, data.password))
+            .catch((e) => { if (e.status === 401) clearUser() })
+        }
       } catch (e) {
         console.error('שגיאה בקריאת מטמון משתמש', e)
       }
     }
-
-    setPersistence(auth, browserLocalPersistence).catch(console.error)
-
-    const unsub = onAuthStateChanged(auth, async (user) => {
-      if (user?.email) {
-        const email = user.email.toLowerCase().trim()
-        setUserEmail(email)
-        setIsAuthenticated(true)
-
-        try {
-          const snap = await getDoc(doc(db, 'users', email))
-          if (snap.exists()) {
-            const data = snap.data()
-            const ids = (data.purchased_products || '')
-              .split(',')
-              .map((id) => Number(id.trim()))
-              .filter((id) => !isNaN(id))
-            const completed = data.completed_tutorials || []
-            const name = data.firstName || data.name || email.split('@')[0]
-            const isClub = data.isClubMember === true
-
-            setAccessibleTutorialIds(ids)
-            setCompletedTutorials(completed)
-            setUserName(name)
-            setIsClubMember(isClub)
-
-            localStorage.setItem(
-              'cached_user_data',
-              JSON.stringify({ email, name, ids, completed, isClubMember: isClub })
-            )
-
-            if (data.last_watched) setLastWatchedTutorial(data.last_watched)
-
-            setPendingTutorial((current) => {
-              if (current) {
-                if (ids.includes(current.id) || isClub) {
-                  setTimeout(() => proceedToTutorial(current), 0)
-                } else {
-                  const url =
-                    current.landingPageUrl ||
-                    `https://wa.me/504207702?text=${encodeURIComponent('היי רבקה, אשמח לקבל פרטים ולינק רכישה להדרכה: ' + current.title)}`
-                  window.open(url, '_blank')
-                  setView('home')
-                }
-              }
-              return null
-            })
-          } else {
-            setUserName(email.split('@')[0])
-          }
-        } catch (err) {
-          console.error('שגיאה בסנכרון נתונים:', err)
-        }
-      } else {
-        setIsAuthenticated(false)
-        setUserEmail('')
-        setUserName('')
-        setIsClubMember(false)
-        setAccessibleTutorialIds([])
-        setCompletedTutorials([])
-        setLastWatchedTutorial(null)
-        localStorage.removeItem('cached_user_data')
-      }
-      setAuthLoading(false)
-    })
-
-    return () => unsub()
+    setAuthLoading(false)
   }, [])
 
   useEffect(() => {
@@ -168,13 +144,29 @@ export default function App() {
     setAuthLoading(true)
     setLoginError('')
     try {
-      await signInWithEmailAndPassword(auth, email.toLowerCase().trim(), password)
-      if (!pendingTutorial) setView('home')
+      const pw = password.trim()
+      const { user } = await apiLogin(email, pw)
+      applyUser(user, pw)
+
+      const current = pendingTutorial
+      setPendingTutorial(null)
+      if (current) {
+        if (user.isClubMember || (user.purchasedProductIds || []).includes(current.id)) {
+          setTimeout(() => proceedToTutorial(current), 0)
+        } else {
+          const url =
+            current.landingPageUrl ||
+            `https://wa.me/504207702?text=${encodeURIComponent('היי רבקה, אשמח לקבל פרטים ולינק רכישה להדרכה: ' + current.title)}`
+          window.open(url, '_blank')
+          setView('home')
+        }
+      } else {
+        setView('home')
+      }
+      setAuthLoading(false)
     } catch (error) {
-      if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
+      if (error.status === 401) {
         setLoginError('המייל או הסיסמה אינם נכונים.')
-      } else if (error.code === 'auth/user-not-found') {
-        setLoginError('לא נמצא משתמש עם המייל הזה.')
       } else {
         setLoginError('חלה שגיאה בהתחברות. ודאי שיש חיבור לאינטרנט ונסי שוב.')
       }
@@ -182,8 +174,8 @@ export default function App() {
     }
   }
 
-  const handleLogout = async () => {
-    await signOut(auth)
+  const handleLogout = () => {
+    clearUser()
     setView('home')
   }
 
@@ -201,9 +193,7 @@ export default function App() {
       return
     }
     if (userEmail) {
-      setDoc(doc(db, 'users', userEmail), { last_watched: tutorial.id }, { merge: true }).catch(
-        console.error
-      )
+      apiLastWatched({ email: userEmail, password: userPassword }, tutorial.id).catch(console.error)
     }
     setLastWatchedTutorial(tutorial)
     proceedToTutorial(tutorial)
@@ -362,6 +352,7 @@ export default function App() {
         <Header showBack />
         <ProfilePage
           userEmail={userEmail}
+          userPassword={userPassword}
           userName={userName}
           completedTutorials={completedTutorials}
           isClubMember={isClubMember}
@@ -421,6 +412,7 @@ export default function App() {
           hasNext={!!nextTutorial}
           accessibleTutorialIds={accessibleTutorialIds}
           userEmail={userEmail}
+          userPassword={userPassword}
           completedTutorials={completedTutorials}
           setCompletedTutorials={setCompletedTutorials}
           isClubMember={isClubMember}

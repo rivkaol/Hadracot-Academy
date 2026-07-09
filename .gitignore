@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# נתונים רגישים — לא לעלות לגיטהאב לעולם
+.env
+.env.local
+migration/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
