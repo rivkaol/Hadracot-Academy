@@ -151,15 +151,11 @@ export default function App() {
       const current = pendingTutorial
       setPendingTutorial(null)
       if (current) {
+        // חברה עם גישה → צפייה מלאה; אחרת → נכנסת לעמוד ההדרכה במצב טעימה (5 דק')
         if (user.isClubMember || (user.purchasedProductIds || []).includes(current.id)) {
-          setTimeout(() => proceedToTutorial(current), 0)
-        } else {
-          const url =
-            current.landingPageUrl ||
-            `https://wa.me/504207702?text=${encodeURIComponent('היי רבקה, אשמח לקבל פרטים ולינק רכישה להדרכה: ' + current.title)}`
-          window.open(url, '_blank')
-          setView('home')
+          apiLastWatched({ email: user.email, password: pw }, current.id).catch(console.error)
         }
+        setTimeout(() => proceedToTutorial(current), 0)
       } else {
         setView('home')
       }
@@ -180,22 +176,13 @@ export default function App() {
   }
 
   const handleSelectTutorial = (tutorial) => {
-    if (!isAuthenticated) {
-      setPendingTutorial(tutorial)
-      setView('login')
-      return
-    }
-    if (!isClubMember && !accessibleTutorialIds.includes(tutorial.id)) {
-      const url =
-        tutorial.landingPageUrl ||
-        `https://wa.me/504207702?text=${encodeURIComponent('היי רבקה, אשמח לקבל פרטים ולינק רכישה להדרכה: ' + tutorial.title)}`
-      window.open(url, '_blank')
-      return
-    }
-    if (userEmail) {
+    // כולן נכנסות לעמוד ההדרכה. מי שיש לה גישה רואה הכל;
+    // מי שלא — רואה 5 דק' טעימה ואז שער הצטרפות (הלוגיקה ב-TutorialPage).
+    const hasAccess = isClubMember || accessibleTutorialIds.includes(tutorial.id)
+    if (hasAccess && userEmail) {
       apiLastWatched({ email: userEmail, password: userPassword }, tutorial.id).catch(console.error)
+      setLastWatchedTutorial(tutorial)
     }
-    setLastWatchedTutorial(tutorial)
     proceedToTutorial(tutorial)
   }
 
@@ -416,6 +403,7 @@ export default function App() {
           completedTutorials={completedTutorials}
           setCompletedTutorials={setCompletedTutorials}
           isClubMember={isClubMember}
+          onLoginRequest={() => { setPendingTutorial(selectedTutorial); setView('login') }}
         />
       )}
 

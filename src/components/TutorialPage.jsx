@@ -1,7 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
-import { Sparkles, CheckCircle, ChevronLeft, BookOpen, Edit, Download, Save, Loader, FileText } from 'lucide-react'
+import { Sparkles, CheckCircle, ChevronLeft, BookOpen, Edit, Download, Save, Loader, FileText, Gift, Crown } from 'lucide-react'
 import confetti from 'canvas-confetti'
+import Player from '@vimeo/player'
 import { apiGetNote, apiSaveNote, apiSetCompleted } from '../api'
+
+const PREVIEW_SECONDS = 300 // חמש דקות טעימה חינם
 
 export default function TutorialPage({
   tutorial,
@@ -16,8 +19,46 @@ export default function TutorialPage({
   completedTutorials,
   setCompletedTutorials,
   isClubMember,
+  onLoginRequest,
 }) {
   const cred = { email: userEmail, password: userPassword }
+  const hasAccess = isClubMember || accessibleTutorialIds.includes(tutorial.id)
+  const iframeRef = useRef(null)
+  const [gateOpen, setGateOpen] = useState(false)
+
+  const joinUrl =
+    tutorial.landingPageUrl ||
+    `https://wa.me/504207702?text=${encodeURIComponent('היי רבקה, אשמח להצטרף למועדון ולצפות בהדרכה: ' + tutorial.title)}`
+
+  // שער הטעימה: למי שאינה מנויה — עצירה אחרי 5 דק' וחסימת גרירה קדימה
+  useEffect(() => {
+    if (hasAccess || !iframeRef.current) return
+    const player = new Player(iframeRef.current)
+    let locked = false
+
+    const openGate = async () => {
+      if (locked) return
+      locked = true
+      try {
+        await player.pause()
+        await player.setCurrentTime(PREVIEW_SECONDS)
+      } catch (e) { /* התעלמות משגיאות נגן */ }
+      setGateOpen(true)
+    }
+
+    const onTime = (d) => { if (d.seconds >= PREVIEW_SECONDS) openGate() }
+    const onSeek = (d) => { if (d.seconds > PREVIEW_SECONDS) openGate() }
+
+    player.on('timeupdate', onTime)
+    player.on('seeking', onSeek)
+    player.on('seeked', onSeek)
+
+    return () => {
+      player.off('timeupdate', onTime)
+      player.off('seeking', onSeek)
+      player.off('seeked', onSeek)
+    }
+  }, [hasAccess, tutorial.id])
   const [activeTab, setActiveTab] = useState('notes')
   const [notes, setNotes] = useState('')
   const [isSaved, setIsSaved] = useState(false)
@@ -95,6 +136,7 @@ export default function TutorialPage({
 
             <div className="bg-black aspect-video rounded-2xl overflow-hidden relative shadow-[0_10px_30px_rgba(0,0,0,0.1)] mb-6 border border-black/10">
               <iframe
+                ref={iframeRef}
                 src={vimeoSrc}
                 className="absolute top-0 left-0 w-full h-full"
                 frameBorder="0"
@@ -102,6 +144,42 @@ export default function TutorialPage({
                 allowFullScreen
                 title={`הדרכה - ${tutorial.title}`}
               />
+
+              {!hasAccess && !gateOpen && (
+                <div className="absolute top-3 right-3 z-20 inline-flex items-center gap-1.5 bg-white/90 backdrop-blur-sm text-[#9E626C] text-[11px] md:text-xs font-bold px-3 py-1.5 rounded-full shadow-sm pointer-events-none">
+                  <Gift size={13} /> 5 דקות ראשונות לצפייה ללא עלות
+                </div>
+              )}
+
+              {!hasAccess && gateOpen && (
+                <div className="absolute inset-0 z-30 flex items-center justify-center text-center px-6 py-8" dir="rtl" style={{ background: 'rgba(43,39,36,0.95)' }}>
+                  <div className="max-w-lg">
+                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white mb-5 shadow-lg mx-auto">
+                      <Crown size={30} />
+                    </div>
+                    <h2 className="text-2xl md:text-3xl font-bold text-[#FFFDF9] mb-3">רוצה להמשיך לצפות?</h2>
+                    <p className="text-[#E9E0DB] text-base md:text-lg leading-[1.7] mb-7 max-w-md mx-auto">
+                      ההדרכה המלאה וכל ספריית התכנים מחכות לך בתוך המועדון — יחד עם כלים ליישום בריאות טבעית בחיים עצמם.
+                    </p>
+                    <a
+                      href={joinUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white font-bold text-base md:text-lg px-8 py-4 rounded-full shadow-[0_12px_28px_rgba(158,98,108,0.35)] hover:-translate-y-0.5 transition-all"
+                    >
+                      להצטרפות למועדון ולצפייה מלאה
+                    </a>
+                    <div className="mt-5">
+                      <button
+                        onClick={() => onLoginRequest && onLoginRequest()}
+                        className="text-[#E9E0DB] text-sm font-medium hover:text-white underline underline-offset-4 transition-colors"
+                      >
+                        כבר חברה במועדון? התחברי כאן
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="mb-8 text-center flex flex-col items-center">
