@@ -214,7 +214,7 @@ export default function App() {
 
   if (view === 'login') {
     return (
-      <div dir="rtl" className="min-h-screen font-sans bg-[#F7F9FA] flex flex-col">
+      <div dir="rtl" className="min-h-screen font-sans bg-[#FAF7F2] flex flex-col">
         <LoginScreen
           onLogin={handleLoginSubmit}
           onCancel={handleBackToHome}
@@ -234,7 +234,7 @@ export default function App() {
           {showBack ? (
             <button
               onClick={handleBackToHome}
-              className="hidden lg:flex items-center gap-1.5 md:gap-2 text-[#1B4D3E] font-bold bg-[#E8F0ED] hover:bg-[#1B4D3E] hover:text-[#D4AF37] px-3 md:px-5 py-2 rounded-full transition-all duration-300 shadow-sm border border-[#1B4D3E]/10"
+              className="hidden lg:flex items-center gap-1.5 md:gap-2 text-[#3E3935] font-bold bg-[#E8EEE5] hover:bg-[#3E3935] hover:text-[#C88F96] px-3 md:px-5 py-2 rounded-full transition-all duration-300 shadow-sm border border-[#3E3935]/10"
             >
               <ChevronRight size={24} />
               <span className="hidden md:inline text-base">חזרה לכל ההדרכות</span>
@@ -259,7 +259,7 @@ export default function App() {
               className="h-8 md:h-10 w-auto mb-1 object-contain"
               onError={(e) => { e.target.style.display = 'none' }}
             />
-            <p className="text-xs text-[#D4AF37] font-medium hidden md:block mt-0.5">
+            <p className="text-xs text-[#C88F96] font-medium hidden md:block mt-0.5">
               המרחב שלך לצמיחה, רוגע ובריאות אמיתית
             </p>
           </div>
@@ -270,11 +270,11 @@ export default function App() {
             {isAuthenticated ? (
               <div className="flex flex-col items-end">
                 <div className="flex items-center gap-2">
-                  <p className="text-sm font-bold text-[#1B4D3E] truncate max-w-[120px]" title={userName}>
+                  <p className="text-sm font-bold text-[#3E3935] truncate max-w-[120px]" title={userName}>
                     שלום {userName}
                   </p>
                   {isClubMember && (
-                    <span className="bg-gradient-to-r from-[#D4AF37] to-[#B8962D] text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-sm flex items-center gap-1">
+                    <span className="bg-gradient-to-r from-[#C88F96] to-[#9E626C] text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-sm flex items-center gap-1">
                       <Crown size={12} /> VIP
                     </span>
                   )}
@@ -283,7 +283,7 @@ export default function App() {
                   href="https://wa.me/504207702?text=היי רבקה, יש לי רעיון להדרכה חדשה:"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[11px] text-[#D4AF37] font-bold hover:underline flex items-center gap-1 mt-0.5"
+                  className="text-[11px] text-[#C88F96] font-bold hover:underline flex items-center gap-1 mt-0.5"
                 >
                   <Lightbulb size={10} /> יש לי רעיון להדרכה
                 </a>
@@ -291,19 +291,19 @@ export default function App() {
             ) : (
               <button
                 onClick={() => setView('login')}
-                className="text-sm font-bold text-[#D4AF37] hover:underline mt-2"
+                className="text-sm font-bold text-[#C88F96] hover:underline mt-2"
               >
                 התחברי למרחב
               </button>
             )}
           </div>
           <div
-            className="relative h-10 w-10 rounded-full bg-[#E8F0ED] flex items-center justify-center text-[#1B4D3E] cursor-pointer hover:bg-[#1B4D3E] hover:text-[#D4AF37] transition-colors"
+            className="relative h-10 w-10 rounded-full bg-[#E8EEE5] flex items-center justify-center text-[#3E3935] cursor-pointer hover:bg-[#3E3935] hover:text-[#C88F96] transition-colors"
             onClick={() => (!isAuthenticated ? setView('login') : setView('profile'))}
           >
             <User size={18} />
             {isAuthenticated && isClubMember && (
-              <div className="absolute -top-1 -right-1 bg-gradient-to-r from-[#D4AF37] to-[#B8962D] w-4 h-4 rounded-full flex items-center justify-center shadow-sm border border-white md:hidden">
+              <div className="absolute -top-1 -right-1 bg-gradient-to-r from-[#C88F96] to-[#9E626C] w-4 h-4 rounded-full flex items-center justify-center shadow-sm border border-white md:hidden">
                 <Crown size={10} className="text-white" />
               </div>
             )}
@@ -320,7 +320,7 @@ export default function App() {
     >
       <button
         onClick={handleBackToHome}
-        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'home' ? 'text-[#1B4D3E]' : 'text-gray-400 hover:text-[#1B4D3E]'}`}
+        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'home' ? 'text-[#3E3935]' : 'text-gray-400 hover:text-[#3E3935]'}`}
       >
         <Library size={22} />
         <span className="text-[11px] mt-1 font-medium">ספרייה</span>
@@ -331,14 +331,14 @@ export default function App() {
           handleBackToHome()
           setTimeout(() => document.querySelector('input[type="text"]')?.focus(), 100)
         }}
-        className="flex flex-col items-center justify-center w-full h-full pt-2 pb-1 text-gray-400 hover:text-[#1B4D3E]"
+        className="flex flex-col items-center justify-center w-full h-full pt-2 pb-1 text-gray-400 hover:text-[#3E3935]"
       >
         <Search size={22} />
         <span className="text-[11px] mt-1 font-medium">חיפוש</span>
       </button>
       <button
         onClick={() => (!isAuthenticated ? setView('login') : setView('profile'))}
-        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'profile' ? 'text-[#1B4D3E]' : 'text-gray-400 hover:text-[#1B4D3E]'}`}
+        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'profile' ? 'text-[#3E3935]' : 'text-gray-400 hover:text-[#3E3935]'}`}
       >
         <User size={22} />
         <span className="text-[11px] mt-1 font-medium">האזור שלי</span>
@@ -348,7 +348,7 @@ export default function App() {
 
   if (view === 'profile') {
     return (
-      <div dir="rtl" className="min-h-screen font-sans bg-[#F7F9FA] text-[#1B4D3E] flex flex-col">
+      <div dir="rtl" className="min-h-screen font-sans bg-[#FAF7F2] text-[#3E3935] flex flex-col">
         <Header showBack />
         <ProfilePage
           userEmail={userEmail}
@@ -365,21 +365,21 @@ export default function App() {
   }
 
   return (
-    <div dir="rtl" className="flex-1 font-sans bg-[#F7F9FA] text-[#1B4D3E] flex flex-col">
+    <div dir="rtl" className="flex-1 font-sans bg-[#FAF7F2] text-[#3E3935] flex flex-col">
       <Header showBack={view === 'tutorial'} />
 
       {view === 'home' && (
         <>
           <div className="bg-white/80 backdrop-blur-md border-b border-gray-100 py-3 sticky top-20 z-40 shadow-sm">
             <div className="max-w-xl mx-auto px-4 sm:px-6">
-              <div className="flex items-center bg-[#F7F9FA] rounded-full px-4 py-2.5 border border-gray-200 focus-within:border-[#D4AF37] focus-within:bg-white focus-within:shadow-md transition-all">
+              <div className="flex items-center bg-[#FAF7F2] rounded-full px-4 py-2.5 border border-gray-200 focus-within:border-[#C88F96] focus-within:bg-white focus-within:shadow-md transition-all">
                 <Search size={18} className="text-gray-400" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="חפשי הדרכה או נושא שמעניין אותך..."
-                  className="bg-transparent border-none outline-none mr-3 w-full text-sm text-[#1B4D3E] placeholder-gray-400"
+                  className="bg-transparent border-none outline-none mr-3 w-full text-sm text-[#3E3935] placeholder-gray-400"
                 />
                 {searchQuery && (
                   <button onClick={() => setSearchQuery('')} className="text-gray-400 hover:text-gray-600">

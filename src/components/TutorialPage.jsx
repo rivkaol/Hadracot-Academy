@@ -77,7 +77,7 @@ export default function TutorialPage({
     setCompletedTutorials(newArr)
 
     if (next) {
-      confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#1B4D3E', '#D4AF37', '#94A388', '#C5A18E'], disableForReducedMotion: true })
+      confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#3E3935', '#C88F96', '#687B63', '#C88F96'], disableForReducedMotion: true })
     }
 
     if (userEmail) {
@@ -85,7 +85,7 @@ export default function TutorialPage({
     }
   }
 
-  const vimeoSrc = `https://player.vimeo.com/video/${tutorial.vimeoId?.toString().trim() || '76979871'}?${tutorial.vimeoHash ? `h=${tutorial.vimeoHash.toString().trim()}&` : ''}color=1B4D3E&title=0&byline=0&portrait=0&badge=0&dnt=1&playsinline=1`
+  const vimeoSrc = `https://player.vimeo.com/video/${tutorial.vimeoId?.toString().trim() || '76979871'}?${tutorial.vimeoHash ? `h=${tutorial.vimeoHash.toString().trim()}&` : ''}color=9E626C&title=0&byline=0&portrait=0&badge=0&dnt=1&playsinline=1`
 
   return (
     <div className="flex-1 pb-[100px] md:pb-8">
@@ -105,16 +105,16 @@ export default function TutorialPage({
             </div>
 
             <div className="mb-8 text-center flex flex-col items-center">
-              <div className="flex items-center justify-center gap-2 text-sm text-[#D4AF37] font-bold mb-2">
+              <div className="flex items-center justify-center gap-2 text-sm text-[#C88F96] font-bold mb-2">
                 <Sparkles size={14} />
                 <span>{categoryName || 'תודעה ושינוי מבפנים'}</span>
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold text-[#1B4D3E] mb-6 leading-tight text-center">{tutorial.title}</h1>
+              <h1 className="text-3xl md:text-4xl font-bold text-[#3E3935] mb-6 leading-tight text-center">{tutorial.title}</h1>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 border-b border-gray-200 pb-8 w-full max-w-lg mx-auto">
                 <button
                   onClick={handleCompleteLesson}
-                  className={`flex items-center justify-center gap-2 font-bold px-8 py-3.5 rounded-full transition-all duration-300 w-full sm:w-auto shadow-sm ${isCompleted ? 'bg-[#94A388] text-white hover:bg-opacity-80' : 'bg-[#E8F0ED] text-[#1B4D3E] hover:bg-[#1B4D3E] hover:text-white'}`}
+                  className={`flex items-center justify-center gap-2 font-bold px-8 py-3.5 rounded-full transition-all duration-300 w-full sm:w-auto shadow-sm ${isCompleted ? 'bg-[#687B63] text-white hover:bg-opacity-80' : 'bg-[#E8EEE5] text-[#3E3935] hover:bg-[#3E3935] hover:text-white'}`}
                 >
                   <CheckCircle size={22} />
                   {isCompleted ? 'הושלם' : 'סיימתי את ההדרכה'}
@@ -123,7 +123,7 @@ export default function TutorialPage({
                 {hasNext && (isClubMember || accessibleTutorialIds.includes(tutorial.id + 1)) && (
                   <button
                     onClick={onNext}
-                    className="flex items-center justify-center gap-2 text-[#1B4D3E] font-bold bg-white border border-gray-200 hover:border-[#1B4D3E] hover:bg-gray-50 px-8 py-3.5 rounded-full transition-all duration-300 w-full sm:w-auto shadow-sm"
+                    className="flex items-center justify-center gap-2 text-[#3E3935] font-bold bg-white border border-gray-200 hover:border-[#3E3935] hover:bg-gray-50 px-8 py-3.5 rounded-full transition-all duration-300 w-full sm:w-auto shadow-sm"
                   >
                     להמשך ההדרכה הבאה
                     <ChevronLeft size={22} />
@@ -141,23 +141,23 @@ export default function TutorialPage({
                 <button
                   key={id}
                   onClick={() => setActiveTab(id)}
-                  className={`pb-3 text-base font-medium transition-all relative flex items-center gap-2 whitespace-nowrap ${activeTab === id ? 'text-[#1B4D3E]' : 'text-gray-500 hover:text-[#1B4D3E]'}`}
+                  className={`pb-3 text-base font-medium transition-all relative flex items-center gap-2 whitespace-nowrap ${activeTab === id ? 'text-[#3E3935]' : 'text-gray-500 hover:text-[#3E3935]'}`}
                 >
                   <Icon size={18} />
                   {label}
-                  {activeTab === id && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#1B4D3E] rounded-t-full"></span>}
+                  {activeTab === id && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#3E3935] rounded-t-full"></span>}
                 </button>
               ))}
             </div>
 
             <div className="bg-white rounded-[2rem] p-6 md:p-8 border border-gray-100 shadow-sm mb-12">
               {activeTab === 'about' && (
-                <div className="text-[#2F4858] leading-[1.8] text-right">
+                <div className="text-[#716861] leading-[1.8] text-right">
                   <p className="mb-4">תיאור ההדרכה: {tutorial.title}.</p>
-                  <h3 className="text-xl font-bold text-[#1B4D3E] mt-8 mb-4">נקודות מרכזיות:</h3>
+                  <h3 className="text-xl font-bold text-[#3E3935] mt-8 mb-4">נקודות מרכזיות:</h3>
                   <ul className="space-y-3 list-none p-0">
-                    <li className="flex items-start gap-3"><div className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] mt-3 shrink-0"></div><span>הבנת העקרונות הבסיסיים של הנושא.</span></li>
-                    <li className="flex items-start gap-3"><div className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] mt-3 shrink-0"></div><span>כלים פרקטיים ליישום מיידי.</span></li>
+                    <li className="flex items-start gap-3"><div className="w-1.5 h-1.5 rounded-full bg-[#C88F96] mt-3 shrink-0"></div><span>הבנת העקרונות הבסיסיים של הנושא.</span></li>
+                    <li className="flex items-start gap-3"><div className="w-1.5 h-1.5 rounded-full bg-[#C88F96] mt-3 shrink-0"></div><span>כלים פרקטיים ליישום מיידי.</span></li>
                   </ul>
                 </div>
               )}
@@ -166,8 +166,8 @@ export default function TutorialPage({
                 <div>
                   <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-2">
                     <div>
-                      <h3 className="text-xl font-bold text-[#1B4D3E]">הסיכום האישי שלך</h3>
-                      <p className="text-[#2F4858] mt-1 max-w-xl leading-[1.8]">זה המקום שלך לעצור רגע ולכתוב תובנות מההדרכה.</p>
+                      <h3 className="text-xl font-bold text-[#3E3935]">הסיכום האישי שלך</h3>
+                      <p className="text-[#716861] mt-1 max-w-xl leading-[1.8]">זה המקום שלך לעצור רגע ולכתוב תובנות מההדרכה.</p>
                     </div>
                   </div>
                   <div className="relative">
@@ -175,7 +175,7 @@ export default function TutorialPage({
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
                       placeholder="התחילי לכתוב כאן..."
-                      className="w-full min-h-[250px] p-6 bg-[#F7F9FA] border border-gray-200 rounded-2xl focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] outline-none resize-y text-[#2F4858] leading-[1.8] shadow-inner transition-all placeholder:text-gray-400 pb-16"
+                      className="w-full min-h-[250px] p-6 bg-[#FAF7F2] border border-gray-200 rounded-2xl focus:border-[#C88F96] focus:ring-1 focus:ring-[#C88F96] outline-none resize-y text-[#716861] leading-[1.8] shadow-inner transition-all placeholder:text-gray-400 pb-16"
                     />
                     <div className="absolute bottom-4 left-4 flex items-center z-10">
                       {isSavingAuto ? (
@@ -194,7 +194,7 @@ export default function TutorialPage({
                   <div className="mt-4 flex items-center justify-end">
                     <button
                       onClick={handleSaveNotes}
-                      className="bg-[#1B4D3E] hover:bg-[#153D31] text-white px-6 py-2.5 rounded-full font-medium flex items-center gap-2 transition-all shadow-sm hover:shadow-md"
+                      className="bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white px-6 py-2.5 rounded-full font-bold flex items-center gap-2 transition-all shadow-[0_12px_28px_rgba(158,98,108,0.25)] hover:shadow-md hover:-translate-y-0.5"
                     >
                       <Save size={18} /> שמירה
                     </button>
@@ -204,22 +204,22 @@ export default function TutorialPage({
 
               {activeTab === 'resources' && tutorial.pdfUrl && (
                 <div>
-                  <h3 className="text-xl font-bold text-[#1B4D3E] mb-2">חומרים נלווים להדרכה</h3>
-                  <p className="text-[#2F4858] mb-6 leading-[1.8]">כאן ריכזתי עבורך את כל מה שצריך להשלים את הלמידה.</p>
+                  <h3 className="text-xl font-bold text-[#3E3935] mb-2">חומרים נלווים להדרכה</h3>
+                  <p className="text-[#716861] mb-6 leading-[1.8]">כאן ריכזתי עבורך את כל מה שצריך להשלים את הלמידה.</p>
                   <a
                     href={tutorial.pdfUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center p-4 border border-gray-100 rounded-2xl hover:bg-gray-50 hover:border-[#D4AF37]/30 transition-all cursor-pointer group"
+                    className="flex items-center p-4 border border-gray-100 rounded-2xl hover:bg-gray-50 hover:border-[#C88F96]/30 transition-all cursor-pointer group"
                   >
-                    <div className="w-12 h-12 bg-[#F7F9FA] rounded-full flex items-center justify-center text-[#1B4D3E] group-hover:bg-[#1B4D3E] group-hover:text-white transition-colors ml-4">
+                    <div className="w-12 h-12 bg-[#FAF7F2] rounded-full flex items-center justify-center text-[#3E3935] group-hover:bg-[#3E3935] group-hover:text-white transition-colors ml-4">
                       <FileText size={20} />
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-bold text-[#1B4D3E] group-hover:text-[#D4AF37] transition-colors">{tutorial.pdfTitle || 'קובץ מצורף להורדה'}</h4>
+                      <h4 className="font-bold text-[#3E3935] group-hover:text-[#C88F96] transition-colors">{tutorial.pdfTitle || 'קובץ מצורף להורדה'}</h4>
                       <p className="text-sm text-gray-500 mt-0.5">לחצי כאן לפתיחה והורדה</p>
                     </div>
-                    <Download size={20} className="text-gray-400 group-hover:text-[#D4AF37]" />
+                    <Download size={20} className="text-gray-400 group-hover:text-[#C88F96]" />
                   </a>
                 </div>
               )}
@@ -229,24 +229,24 @@ export default function TutorialPage({
           <div className="w-full lg:w-80 shrink-0 hidden lg:block">
             <div className="bg-white rounded-2xl border border-gray-100 shadow-[0_10px_30px_rgba(0,0,0,0.03)] p-5 sticky top-24">
               <div className="mb-6">
-                <div className="flex justify-between items-center text-sm font-bold text-[#1B4D3E] mb-2">
+                <div className="flex justify-between items-center text-sm font-bold text-[#3E3935] mb-2">
                   <span>התקדמות בקטגוריה</span>
                   <span>{completedInCategory} / {categoryTutorials.length}</span>
                 </div>
                 <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
-                  <div className="bg-[#94A388] h-2 rounded-full transition-all duration-1000 ease-out" style={{ width: `${progressPercent}%` }}></div>
+                  <div className="bg-[#687B63] h-2 rounded-full transition-all duration-1000 ease-out" style={{ width: `${progressPercent}%` }}></div>
                 </div>
               </div>
-              <h3 className="font-bold text-[#1B4D3E] mb-4 flex items-center gap-2 border-b border-gray-100 pb-3">
-                <Sparkles size={18} className="text-[#D4AF37]" /> המשך הסדרה
+              <h3 className="font-bold text-[#3E3935] mb-4 flex items-center gap-2 border-b border-gray-100 pb-3">
+                <Sparkles size={18} className="text-[#C88F96]" /> המשך הסדרה
               </h3>
-              <div className="p-3 bg-[#F7F9FA] rounded-xl border border-[#D4AF37]/30 flex gap-3 cursor-default relative">
-                <div className="absolute right-0 top-0 bottom-0 w-1 bg-[#D4AF37] rounded-r-xl"></div>
-                <div className="w-10 h-10 rounded-lg bg-[#1B4D3E] flex items-center justify-center text-white shrink-0">
+              <div className="p-3 bg-[#FAF7F2] rounded-xl border border-[#C88F96]/30 flex gap-3 cursor-default relative">
+                <div className="absolute right-0 top-0 bottom-0 w-1 bg-[#C88F96] rounded-r-xl"></div>
+                <div className="w-10 h-10 rounded-lg bg-[#3E3935] flex items-center justify-center text-white shrink-0">
                   <Sparkles size={20} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-sm font-bold text-[#1B4D3E] truncate">{tutorial.title}</h4>
+                  <h4 className="text-sm font-bold text-[#3E3935] truncate">{tutorial.title}</h4>
                   <span className="text-xs text-gray-500 mt-0.5 block">מתנגן עכשיו</span>
                 </div>
               </div>
