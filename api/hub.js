@@ -62,7 +62,90 @@ export default async function handler(req, res) {
     const email = normEmail(body.email)
     const password = String(body.password || '').trim()
 
-    // כל פעולה מזוהה לפי מייל+סיסמה. סיסמה שגויה => 401.
+    // ---- פעולות ציבוריות (בלי סיסמה): לידים, מעקב מעורבות, דף אדמין ----
+
+    // הרשמת ליד (שם+טלפון+מייל) לפני צפייה בטעימה
+    if (action === 'registerLead') {
+      if (!email) return res.status(400).json({ error: 'email' })
+      await supabase.from('hadracot_leads').upsert(
+        {
+          email,
+          name: String(body.name || '').trim(),
+          phone: String(body.phone || '').trim(),
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'email' }
+      )
+      return res.json({ ok: true })
+    }
+
+    // רישום מעורבות: כמה שניות צפתה, האם סיימה, כמה פעמים נכנסה
+    if (action === 'logProgress') {
+      if (!email) return res.json({ ok: false })
+      const tid = Number(body.tutorialId)
+      if (isNaN(tid)) return res.json({ ok: false })
+      const secs = Math.max(0, Math.round(Number(body.seconds) || 0))
+      const { data: existing } = await supabase
+        .from('hadracot_lead_progress')
+        .select('max_seconds,attempts,reached_limit')
+        .eq('email', email)
+        .eq('tutorial_id', tid)
+        .maybeSingle()
+      const prevAttempts = existing?.attempts || 0
+      await supabase.from('hadracot_lead_progress').upsert(
+        {
+          email,
+          tutorial_id: tid,
+          tutorial_title: String(body.tutorialTitle || '').slice(0, 300),
+          max_seconds: Math.max(secs, existing?.max_seconds || 0),
+          attempts: existing ? (body.newAttempt ? prevAttempts + 1 : prevAttempts) : 1,
+          reached_limit: body.reachedLimit === true || existing?.reached_limit || false,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'email,tutorial_id' }
+      )
+      // "נראתה לאחרונה" (משפיע רק אם זו ליד; משתמשת רשומה — 0 שורות, לא מזיק)
+      await supabase.from('hadracot_leads').update({ updated_at: new Date().toISOString() }).eq('email', email)
+      return res.json({ ok: true })
+    }
+
+    // דף אדמין: כל הלידים עם סיכום מעורבות. מוגן במפתח סודי (ADMIN_KEY ב-Vercel).
+    if (action === 'adminLeads') {
+      if (!process.env.ADMIN_KEY || String(body.adminKey || '') !== process.env.ADMIN_KEY) {
+        return res.status(401).json({ error: 'admin' })
+      }
+      const { data: leads } = await supabase.from('hadracot_leads').select('*').order('updated_at', { ascending: false })
+      const { data: progress } = await supabase.from('hadracot_lead_progress').select('*')
+      const byEmail = {}
+      for (const p of progress || []) {
+        const a = byEmail[p.email] || (byEmail[p.email] = { tutorials: 0, totalSeconds: 0, reached: 0, items: [] })
+        a.tutorials += 1
+        a.totalSeconds += p.max_seconds || 0
+        if (p.reached_limit) a.reached += 1
+        a.items.push({
+          tutorialId: p.tutorial_id,
+          title: p.tutorial_title,
+          maxSeconds: p.max_seconds,
+          reachedLimit: p.reached_limit,
+          attempts: p.attempts,
+        })
+      }
+      const rows = (leads || []).map((l) => ({
+        email: l.email,
+        name: l.name,
+        phone: l.phone,
+        createdAt: l.created_at,
+        lastSeen: l.updated_at,
+        tutorials: 0,
+        totalSeconds: 0,
+        reached: 0,
+        items: [],
+        ...(byEmail[l.email] || {}),
+      }))
+      return res.json({ leads: rows })
+    }
+
+    // ---- מכאן ואילך: פעולות חברות המזוהות לפי מייל+סיסמה. סיסמה שגויה => 401 ----
     const user = email ? await getUser(email) : null
     const authed = user && String(user.password || '') === password && password !== ''
     if (!authed) return res.status(401).json({ error: 'auth' })

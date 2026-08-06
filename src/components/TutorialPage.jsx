@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Sparkles, CheckCircle, ChevronLeft, BookOpen, Edit, Download, Save, Loader, FileText, Crown } from 'lucide-react'
 import confetti from 'canvas-confetti'
 import Player from '@vimeo/player'
-import { apiGetNote, apiSaveNote, apiSetCompleted } from '../api'
+import { apiGetNote, apiSaveNote, apiSetCompleted, apiLogProgress } from '../api'
 
 const PREVIEW_SECONDS = 300 // חמש דקות טעימה חינם
 
@@ -19,22 +19,43 @@ export default function TutorialPage({
   completedTutorials,
   setCompletedTutorials,
   isClubMember,
+  leadEmail,
   onLoginRequest,
 }) {
   const cred = { email: userEmail, password: userPassword }
   const hasAccess = isClubMember || accessibleTutorialIds.includes(tutorial.id)
+  const viewerEmail = userEmail || leadEmail || '' // מי שנרשמה/מחוברת — למעקב מעורבות
   const iframeRef = useRef(null)
+  const maxSecRef = useRef(0)
+  const lastSentRef = useRef(0)
   const [gateOpen, setGateOpen] = useState(false)
 
   const joinUrl =
     tutorial.landingPageUrl ||
     `https://wa.me/504207702?text=${encodeURIComponent('היי רבקה, אשמח להצטרף למועדון ולצפות בהדרכה: ' + tutorial.title)}`
 
-  // שער הטעימה: למי שאינה מנויה — עצירה פיזית אחרי 5 דק' וחסימת גרירה קדימה
+  // שער הטעימה: למי שאינה מנויה — עצירה פיזית אחרי 5 דק', חסימת גרירה, ומעקב מעורבות
   useEffect(() => {
     if (hasAccess || !iframeRef.current) return
     const player = new Player(iframeRef.current)
     let locked = false
+    maxSecRef.current = 0
+    lastSentRef.current = 0
+
+    const logProgress = (reachedLimit, newAttempt) => {
+      if (!viewerEmail) return
+      apiLogProgress({
+        email: viewerEmail,
+        tutorialId: tutorial.id,
+        tutorialTitle: tutorial.title,
+        seconds: Math.round(maxSecRef.current),
+        reachedLimit: !!reachedLimit,
+        newAttempt: !!newAttempt,
+      }).catch(() => {})
+    }
+
+    // רישום כניסה חדשה להדרכה
+    logProgress(false, true)
 
     const enforcePause = () => { player.pause().catch(() => {}) }
 
@@ -42,10 +63,17 @@ export default function TutorialPage({
       locked = true
       try { await player.pause() } catch (e) { /* התעלמות משגיאות נגן */ }
       setGateOpen(true)
+      logProgress(true, false) // הגיעה לסוף הטעימה = ליד חמה
     }
 
     // כל עוד נעולה — כל ניסיון המשך/ניגון נעצר מיד (עצירה פיזית)
     const onTime = (d) => {
+      if (d.seconds > maxSecRef.current) maxSecRef.current = d.seconds
+      // שליחת עדכון מעורבות כל ~20 שניות
+      if (!locked && d.seconds - lastSentRef.current >= 20) {
+        lastSentRef.current = d.seconds
+        logProgress(false, false)
+      }
       if (d.seconds >= PREVIEW_SECONDS) { locked ? enforcePause() : openGate() }
     }
     const onSeek = (d) => { if (d.seconds > PREVIEW_SECONDS && !locked) openGate() }
@@ -61,8 +89,9 @@ export default function TutorialPage({
       player.off('seeking', onSeek)
       player.off('seeked', onSeek)
       player.off('play', onPlay)
+      logProgress(false, false) // שמירת זמן הצפייה הסופי ביציאה
     }
-  }, [hasAccess, tutorial.id])
+  }, [hasAccess, tutorial.id, viewerEmail])
   const [activeTab, setActiveTab] = useState('notes')
   const [notes, setNotes] = useState('')
   const [isSaved, setIsSaved] = useState(false)

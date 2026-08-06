@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
-import { apiLogin, apiLastWatched } from './api'
+import { apiLogin, apiLastWatched, apiRegisterLead } from './api'
 import { useCatalog } from './useCatalog'
 
 import SkeletonGallery from './components/SkeletonGallery'
 import LoginScreen from './components/LoginScreen'
+import LeadCaptureScreen from './components/LeadCaptureScreen'
+import AdminPage from './components/AdminPage'
 import ProfilePage from './components/ProfilePage'
 import TutorialsHub from './components/TutorialsHub'
 import TutorialPage from './components/TutorialPage'
@@ -30,6 +32,10 @@ export default function App() {
   const [pendingTutorial, setPendingTutorial] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
+
+  const [lead, setLead] = useState(null) // ליד אנונימית שנרשמה לטעימה
+  const [leadLoading, setLeadLoading] = useState(false)
+  const [adminKey, setAdminKey] = useState('')
 
   const { tutorialsData, catalogLoading, fetchCatalog } = useCatalog()
 
@@ -82,6 +88,20 @@ export default function App() {
   }
 
   useEffect(() => {
+    // כניסת אדמין: ?admin=המפתח-הסודי
+    const params = new URLSearchParams(window.location.search)
+    const ak = params.get('admin')
+    if (ak) {
+      setAdminKey(ak)
+      setView('admin')
+    }
+
+    // ליד ששמורה מקומית (כדי לא לבקש הרשמה שוב בכל כניסה)
+    const cachedLead = localStorage.getItem('cached_lead')
+    if (cachedLead) {
+      try { setLead(JSON.parse(cachedLead)) } catch (e) { /* התעלמות */ }
+    }
+
     fetchCatalog()
 
     const cached = localStorage.getItem('cached_user_data')
@@ -176,14 +196,45 @@ export default function App() {
   }
 
   const handleSelectTutorial = (tutorial) => {
-    // כולן נכנסות לעמוד ההדרכה. מי שיש לה גישה רואה הכל;
-    // מי שלא — רואה 5 דק' טעימה ואז שער הצטרפות (הלוגיקה ב-TutorialPage).
     const hasAccess = isClubMember || accessibleTutorialIds.includes(tutorial.id)
-    if (hasAccess && userEmail) {
-      apiLastWatched({ email: userEmail, password: userPassword }, tutorial.id).catch(console.error)
-      setLastWatchedTutorial(tutorial)
+
+    // חברה עם גישה → צפייה מלאה
+    if (hasAccess) {
+      if (userEmail) {
+        apiLastWatched({ email: userEmail, password: userPassword }, tutorial.id).catch(console.error)
+        setLastWatchedTutorial(tutorial)
+      }
+      proceedToTutorial(tutorial)
+      return
     }
+
+    // אנונימית שעדיין לא נרשמה → חובת הרשמה לפני הטעימה
+    if (!isAuthenticated && !lead) {
+      setPendingTutorial(tutorial)
+      setView('register')
+      return
+    }
+
+    // רשומה (חברה בלי גישה / ליד שכבר נרשמה) → טעימה של 5 דק'
     proceedToTutorial(tutorial)
+  }
+
+  const handleRegisterLead = async ({ name, email, phone }) => {
+    setLeadLoading(true)
+    const newLead = { name, email, phone }
+    try {
+      await apiRegisterLead(newLead)
+    } catch (e) {
+      // גם אם השמירה בשרת נכשלה — לא חוסמים את הצפייה
+      console.error('שמירת ליד נכשלה', e)
+    }
+    setLead(newLead)
+    localStorage.setItem('cached_lead', JSON.stringify(newLead))
+    setLeadLoading(false)
+    const current = pendingTutorial
+    setPendingTutorial(null)
+    if (current) proceedToTutorial(current)
+    else setView('home')
   }
 
   const handleBackToHome = () => {
@@ -197,7 +248,23 @@ export default function App() {
     if (nextTutorial) handleSelectTutorial(nextTutorial)
   }
 
-  if ((authLoading || catalogLoading) && view !== 'login') return <SkeletonGallery />
+  if (view === 'admin') return <AdminPage adminKey={adminKey} />
+
+  if ((authLoading || catalogLoading) && view !== 'login' && view !== 'register') return <SkeletonGallery />
+
+  if (view === 'register') {
+    return (
+      <div dir="rtl" className="min-h-screen font-sans bg-[#FAF7F2] flex flex-col">
+        <LeadCaptureScreen
+          onRegister={handleRegisterLead}
+          onCancel={handleBackToHome}
+          onLoginRequest={() => setView('login')}
+          isLoading={leadLoading}
+          tutorialTitle={pendingTutorial?.title}
+        />
+      </div>
+    )
+  }
 
   if (view === 'login') {
     return (
@@ -403,6 +470,7 @@ export default function App() {
           completedTutorials={completedTutorials}
           setCompletedTutorials={setCompletedTutorials}
           isClubMember={isClubMember}
+          leadEmail={lead?.email || ''}
           onLoginRequest={() => { setPendingTutorial(selectedTutorial); setView('login') }}
         />
       )}
