@@ -30,9 +30,8 @@ export default function TutorialPage({
   const lastSentRef = useRef(0)
   const [gateOpen, setGateOpen] = useState(false)
 
-  const joinUrl =
-    tutorial.landingPageUrl ||
-    `https://wa.me/504207702?text=${encodeURIComponent('היי רבקה, אשמח להצטרף למועדון ולצפות בהדרכה: ' + tutorial.title)}`
+  // אחרי טעימה של 5 דק' — בכל הדרכה מפנים לדף ה"חם" שממשיך את הצפייה במועדון
+  const joinUrl = '/join-lesson'
 
   // שער הטעימה: למי שאינה מנויה — עצירה פיזית אחרי 5 דק', חסימת גרירה, ומעקב מעורבות
   useEffect(() => {
