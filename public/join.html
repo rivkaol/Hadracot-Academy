@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="he">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>מועדון בריאות שבאה מהלב | רבקה הולצברג</title>
+<meta content="סדרת הדרכות חיה על תודעה, תת-ההכרה ושינוי פנימי — לנשים בנות 45+ שמוכנות להפסיק רק להבין, ולהתחיל לחיות אחרת." name="description"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<!-- טעינת פונט רוביק במשקלים שונים לקריאה אופטימלית -->
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700&amp;family=Heebo:wght@500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --cream:#FAF6F1;
+  --paper:#FFFDF9;
+  --paper-2:#F4ECE5;
+  --ink:#3F3A36;
+  --ink-soft:#6E655E;
+  --rose:#C98F96;
+  --rose-deep:#A96874;
+  --rose-soft:#F2DFE1;
+  --sage:#A8B5A2;
+  --sage-deep:#667660;
+  --sage-soft:#E8EEE5;
+  --sand:#D7C2A3;
+  --bronze:#A88459;
+  --line:rgba(63,58,54,.11);
+  --shadow:0 18px 55px rgba(74,61,54,.09);
+  --shadow-lg:0 34px 90px rgba(74,61,54,.15);
+  --radius:30px;
+  --container:min(1160px,calc(100% - 44px));
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:92px}
+body{font-family:'Assistant',Arial,sans-serif;background:var(--cream);color:var(--ink);direction:rtl;line-height:1.72;font-size:19px;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;z-index:-1;inset:0;background:radial-gradient(800px 500px at 100% 0,rgba(201,143,150,.13),transparent 70%),radial-gradient(750px 520px at 0 38%,rgba(168,181,162,.12),transparent 70%);pointer-events:none}
+a{text-decoration:none;color:inherit}img{display:block;max-width:100%}button{font:inherit}.container{width:var(--container);margin-inline:auto}
+::selection{background:var(--rose-soft);color:var(--ink)}
+
+/* top message */
+.topbar{background:#3F3A36;color:#fff;text-align:center;padding:10px 18px;font-size:15px;letter-spacing:.01em;position:relative;z-index:120}.topbar strong{color:#E8D6BA;font-weight:700}
+
+/* navigation */
+.site-header{position:sticky;top:0;z-index:110;background:rgba(255,253,249,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.nav-wrap{width:var(--container);min-height:78px;margin-inline:auto;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{display:flex;align-items:center;gap:12px}.brand img{width:72px;height:54px;object-fit:contain}.brand-copy{line-height:1.15}.brand-copy strong{font-family:'Heebo',sans-serif;font-size:1rem}.brand-copy small{display:block;color:var(--ink-soft);font-size:.72rem;margin-top:4px}
+.main-nav{display:flex;align-items:center;gap:26px;color:var(--ink-soft);font-size:.91rem;font-weight:700}.main-nav a{position:relative}.main-nav a::after{content:"";position:absolute;right:0;bottom:-7px;width:0;height:2px;background:var(--rose-deep);transition:.2s}.main-nav a:hover::after{width:100%}
+.nav-cta{display:inline-flex;align-items:center;justify-content:center;min-height:45px;padding:10px 20px;border-radius:999px;background:var(--rose-deep);color:white;font-weight:800;font-size:.9rem;box-shadow:0 10px 25px rgba(169,104,116,.22);transition:.2s}.nav-cta:hover{transform:translateY(-2px)}
+.menu-btn{display:none;width:46px;height:46px;border:1px solid var(--line);border-radius:50%;background:var(--paper);font-size:1.2rem;cursor:pointer}.mobile-nav{display:none}
+
+/* hero */
+.hero{padding:64px 0 56px;position:relative;overflow:hidden;text-align:right;background:transparent}
+.hero::before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;background:rgba(201,143,150,.11);right:-260px;top:-250px;z-index:-1}
+.hero-shell{width:var(--container);margin-inline:auto;display:grid;grid-template-columns:1.02fr .98fr;gap:58px;align-items:center}
+.hero-copy{max-width:650px}.hero-eyebrow{display:inline-flex;align-items:center;gap:9px;background:var(--rose-soft);color:var(--rose-deep);border-radius:999px;padding:8px 15px;font-size:.82rem;font-weight:800;letter-spacing:.01em;margin-bottom:20px}.hero-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.hero h1{font-family:'Heebo',sans-serif;font-size:clamp(2.75rem,5.3vw,5.2rem);line-height:.99;letter-spacing:-.045em;color:var(--ink);max-width:720px;margin:0 0 22px;font-weight:900;text-shadow:none}.hero h1 em{font-style:normal;color:var(--rose-deep);position:relative;display:inline-block}.hero h1 em::after{content:"";position:absolute;right:1%;left:1%;bottom:-5px;height:10px;border-radius:50%;background:rgba(201,143,150,.24);z-index:-1;transform:rotate(-1deg)}
+.hero-sub{font-size:1.2rem;color:var(--ink-soft);max-width:640px;margin:0 0 30px;line-height:1.65;font-weight:400}
+.hero-cta-wrap{display:flex;align-items:flex-start;gap:13px;flex-wrap:wrap}.hero-meta-text{font-size:.86rem;color:var(--ink-soft);width:100%;font-weight:600}.hero-divider{display:none}
+.btn-primary{display:inline-flex;align-items:center;justify-content:center;min-height:58px;padding:14px 30px;border-radius:999px;background:linear-gradient(135deg,var(--rose-deep),var(--rose));color:#fff;font-family:'Heebo',sans-serif;font-size:1rem;font-weight:800;border:0;box-shadow:0 14px 32px rgba(169,104,116,.27);transition:.25s;max-width:none;width:auto;position:relative;overflow:hidden}.btn-primary:hover{transform:translateY(-3px);box-shadow:0 18px 38px rgba(169,104,116,.34);color:#fff}.btn-primary::after{display:none}
+.hero-visual{position:relative;min-height:560px}.hero-photo{position:absolute;inset:15px 16px 0 38px;border-radius:44px;overflow:hidden;box-shadow:var(--shadow-lg);border:8px solid rgba(255,253,249,.75)}.hero-photo img{width:100%;height:100%;object-fit:cover}.hero-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(63,58,54,.28))}
+.hero-note-card{position:absolute;z-index:4;right:-8px;top:54px;background:rgba(255,253,249,.95);backdrop-filter:blur(14px);padding:18px 20px;border-radius:22px;box-shadow:var(--shadow);max-width:230px;border:1px solid rgba(255,255,255,.8)}.hero-note-card strong{display:block;font-family:'Heebo',sans-serif;font-size:1.05rem;line-height:1.25}.hero-note-card span{display:block;color:var(--ink-soft);font-size:.82rem;margin-top:5px}
+.hero-profile{position:absolute;z-index:5;left:-2px;bottom:24px;width:170px;background:rgba(255,253,249,.96);border:1px solid rgba(255,255,255,.9);box-shadow:var(--shadow);border-radius:24px;padding:12px;display:grid;grid-template-columns:58px 1fr;gap:11px;align-items:center}.hero-profile img{width:58px;height:58px;border-radius:50%;object-fit:cover}.hero-profile strong{font-size:.9rem;line-height:1.15}.hero-profile small{display:block;color:var(--ink-soft);font-size:.7rem;margin-top:4px;line-height:1.25}
+
+/* trust */
+.trust-strip{padding:0 0 68px}.trust-grid{width:var(--container);margin-inline:auto;display:grid;grid-template-columns:repeat(3,1fr);background:var(--paper);border-radius:25px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.88);overflow:hidden}.trust-item{text-align:center;padding:24px 25px}.trust-item+.trust-item{border-right:1px solid var(--line)}.trust-item strong{display:block;color:var(--rose-deep);font-family:'Heebo',sans-serif;font-size:1.25rem;line-height:1.2}.trust-item span{display:block;color:var(--ink-soft);font-size:.88rem;margin-top:6px}
+
+/* shared sections */
+.content-bg,.series-bg{background:transparent}.series-bg{background:rgba(255,253,249,.62);border-block:1px solid rgba(63,58,54,.06)}
+.section{width:var(--container);max-width:1160px;margin:0 auto;padding:100px 0;position:relative}.section-label{display:flex;align-items:center;justify-content:center;gap:10px;color:var(--rose-deep);font-size:.84rem;font-weight:800;letter-spacing:.04em;margin-bottom:13px;text-align:center}.section-label::before,.section-label::after{content:"";width:28px;height:1px;background:var(--sand)}
+.section h2{font-family:'Heebo',sans-serif;font-size:clamp(2.1rem,4.1vw,3.45rem);line-height:1.12;letter-spacing:-.03em;color:var(--ink);text-align:center;margin:0 auto 20px;max-width:850px;font-weight:900}.section h2 em{font-style:normal;color:var(--rose-deep)}
+.section>p{max-width:820px;margin:0 auto 24px;text-align:center;color:var(--ink-soft);font-size:1.1rem;line-height:1.75}.section>p strong{color:var(--ink)}
+.glass-card{background:var(--paper);border:1px solid rgba(255,255,255,.88);border-radius:26px;box-shadow:var(--shadow);transition:.25s;backdrop-filter:none}.glass-card:hover{transform:translateY(-5px);box-shadow:0 24px 60px rgba(74,61,54,.12)}
+
+/* problem */
+.insight-box{max-width:900px;margin:44px auto 0;padding:34px 38px;border-radius:26px;background:linear-gradient(135deg,var(--sage-soft),var(--paper));color:var(--ink);font-size:1.15rem;line-height:1.75;text-align:right;border-right:6px solid var(--sage-deep);box-shadow:none}.insight-box::before{display:none}.insight-box strong{color:var(--sage-deep)}
+
+/* cards */
+.pillars-grid,.topics-grid{display:grid;gap:20px;margin-top:42px}.pillars-grid{grid-template-columns:repeat(3,1fr)}.topics-grid{grid-template-columns:repeat(2,1fr)}
+.topic-card{padding:30px 28px;text-align:right;position:relative;overflow:hidden}.topic-card::before{content:"";position:absolute;right:0;top:0;width:100%;height:5px;background:linear-gradient(90deg,var(--sage),var(--rose));opacity:.75}.topic-icon{width:52px;height:52px;border-radius:17px;display:grid;place-items:center;background:var(--sage-soft);color:var(--sage-deep);font-family:'Heebo',sans-serif;font-weight:900;font-size:1.25rem;margin-bottom:19px;border:0}.topic-card:nth-child(even) .topic-icon{background:var(--rose-soft);color:var(--rose-deep)}
+.lesson-eyebrow{display:inline-flex;background:var(--rose-soft);color:var(--rose-deep);border-radius:999px;padding:5px 12px;font-size:.75rem;font-weight:800;margin-bottom:12px;letter-spacing:0;text-transform:none}.topic-card h3{font-family:'Heebo',sans-serif;font-size:1.32rem;color:var(--ink);margin-bottom:9px;line-height:1.25}.topic-card p{font-size:.98rem;color:var(--ink-soft);line-height:1.68;margin:0;text-align:right}
+.series-note{max-width:820px;margin:55px auto 0;padding:28px 30px;text-align:center;color:var(--ink);font-size:1.2rem;font-weight:700;font-style:normal;border-radius:24px;background:var(--rose-soft)}.series-note::before{display:none}
+
+/* mid visual */
+.mid-visual{width:var(--container);margin:0 auto 90px;display:grid;grid-template-columns:.82fr 1.18fr;background:var(--paper);border-radius:34px;overflow:hidden;box-shadow:var(--shadow-lg)}.mid-visual-image{min-height:330px;background:url('data:image/jpeg;base64,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') center/cover}.mid-visual-copy{padding:50px 48px;display:flex;flex-direction:column;justify-content:center}.mid-visual-copy span{color:var(--sage-deep);font-size:.84rem;font-weight:800}.mid-visual-copy h2{font-family:'Heebo',sans-serif;font-size:2.2rem;line-height:1.18;margin:10px 0 14px}.mid-visual-copy p{color:var(--ink-soft);margin:0 0 22px}.mid-visual-copy .btn-primary{align-self:flex-start}
+
+/* objections */
+.objections-list{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:42px}.objection-item{padding:28px;display:grid;grid-template-columns:48px 1fr;gap:17px;align-items:start;text-align:right}.objection-item:hover{transform:translateY(-5px)}.objection-icon{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:var(--rose-soft);color:var(--rose-deep);font-weight:900;font-size:1.25rem;box-shadow:none}.objection-text h3{font-family:'Heebo',sans-serif;font-size:1.15rem;color:var(--ink);margin-bottom:8px;line-height:1.35}.objection-text p{font-size:.96rem;color:var(--ink-soft);line-height:1.68;margin:0;text-align:right}
+
+/* testimonials */
+.testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:42px}.testimonial-card{padding:32px 28px;text-align:right;position:relative}.testimonial-quote{position:static;color:var(--rose);font-family:serif;font-size:3rem;height:30px;line-height:1;opacity:.65}.testimonial-text{font-size:1rem;color:var(--ink);line-height:1.7;margin:12px 0 22px;font-style:normal}.testimonial-author{display:flex;align-items:center;gap:10px;color:var(--rose-deep);font-weight:800;font-size:.88rem}.testimonial-author::before{content:"";width:25px;height:2px;background:var(--sand)}
+.leaf-divider{padding:26px 0;text-align:center;color:var(--sage);opacity:.8}.leaf-divider svg{width:38px;height:38px}
+
+/* about */
+.about-inner{display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:center;padding:48px;background:var(--paper)!important;border-color:rgba(63,58,54,.08)!important;text-align:right}.about-img-wrap img{width:210px;height:260px;border-radius:100px 100px 30px 30px;object-fit:cover;border:7px solid #fff;box-shadow:var(--shadow-lg)}.about-text h2{text-align:right;font-size:2.35rem;margin:0 0 14px}.about-title-small{display:block;color:var(--rose-deep);font-weight:800;font-size:.82rem;margin-bottom:8px;letter-spacing:.06em}.about-text p{text-align:right;color:var(--ink-soft);font-size:1.05rem;margin-bottom:15px}.quote-line{margin:24px 0 0;padding:22px 25px;border-right:5px solid var(--rose);background:var(--rose-soft);border-radius:18px 0 0 18px;color:var(--ink);font-size:1.18rem;font-weight:700;font-style:normal}
+
+/* pricing */
+.pricing-card{max-width:600px;margin:48px auto 0;padding:48px 44px;text-align:center;border:1px solid rgba(169,104,116,.22);background:var(--paper);position:relative;overflow:hidden}.pricing-card::before{content:"";position:absolute;top:0;right:0;left:0;height:8px;background:linear-gradient(90deg,var(--sage),var(--rose))}.price-name{font-family:'Heebo',sans-serif;font-size:1.25rem;font-weight:800;color:var(--ink);margin-bottom:16px}.price-amount{display:flex;justify-content:center;align-items:baseline;font-family:'Heebo',sans-serif;font-size:5rem;line-height:1;font-weight:900;color:var(--ink);margin-bottom:7px}.price-amount .currency{font-size:2rem;color:var(--rose-deep);margin-left:8px}.price-period{display:inline-block;background:var(--paper-2);color:var(--ink-soft);border-radius:999px;padding:6px 16px;font-size:.88rem;margin-bottom:25px}.price-features{list-style:none;text-align:right;padding:24px 0;margin:14px 0 28px;border-block:1px solid var(--line)}.price-features li{display:flex;align-items:flex-start;gap:13px;padding:10px 0;font-size:1rem}.price-features li::before{content:"✓";flex:0 0 25px;width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:var(--sage-soft);color:var(--sage-deep);font-size:.76rem;font-weight:900;margin-top:2px}.pricing-card .btn-primary{width:100%;max-width:100%}.price-note{font-size:.82rem!important;color:var(--ink-soft)!important;margin:15px 0 0!important}
+
+/* FAQ */
+.faq-list{max-width:900px;margin:42px auto 0;display:grid;gap:13px}.faq-item{background:var(--paper);border:1px solid var(--line);border-radius:20px;overflow:hidden;transition:.2s}.faq-item:hover{border-color:rgba(169,104,116,.28);box-shadow:var(--shadow)}.faq-q{width:100%;border:0;background:none;padding:23px 25px;text-align:right;display:flex;justify-content:space-between;align-items:center;gap:16px;color:var(--ink);font-family:'Heebo',sans-serif;font-size:1.05rem;font-weight:800;cursor:pointer}.faq-q .arrow{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;border-radius:50%;background:var(--rose-soft);color:var(--rose-deep);padding:0;transition:.25s}.faq-q.open .arrow{transform:rotate(180deg);background:var(--sage-deep);color:#fff}.faq-a-wrapper{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s}.faq-a-wrapper.open{grid-template-rows:1fr}.faq-a-inner{overflow:hidden}.faq-a-content{padding:0 25px 24px;color:var(--ink-soft);font-size:.98rem;line-height:1.7;text-align:right;border-top:0;margin:0}
+
+/* final CTA */
+.bottom-cta{width:var(--container);margin:0 auto 80px;border-radius:40px;background:linear-gradient(135deg,#514841,#3F3A36);padding:82px 38px;text-align:center;position:relative;overflow:hidden}.bottom-cta::before{content:"";position:absolute;width:430px;height:430px;border-radius:50%;background:rgba(201,143,150,.15);right:-190px;top:-260px}.bottom-cta::after{content:"";position:absolute;width:380px;height:380px;border-radius:50%;background:rgba(168,181,162,.13);left:-170px;bottom:-250px}.bottom-cta .section{width:auto;padding:0;position:relative;z-index:2}.bottom-cta h2{color:#fff;font-family:'Heebo',sans-serif;font-size:clamp(2.2rem,4.5vw,4rem);line-height:1.08;margin:0 auto 20px;max-width:900px}.bottom-cta h2 em{color:#E8D6BA}.bottom-cta p{color:rgba(255,255,255,.8);font-size:1.12rem;max-width:700px;margin:0 auto 28px}.bottom-cta .btn-primary{background:#fff;color:var(--rose-deep);box-shadow:none}.final-meta{margin-top:20px;color:rgba(255,255,255,.68);font-size:.88rem}.final-meta a{color:#fff;border-bottom:1px solid rgba(255,255,255,.35)}
+
+footer{background:#352F2B;color:rgba(255,255,255,.72);padding:42px 0 98px;font-size:.86rem}footer .section{padding:0;width:var(--container);display:flex;justify-content:space-between;align-items:center;gap:25px}footer a:hover{color:#fff}.footer-brand{display:flex;align-items:center;gap:12px}.footer-brand img{width:70px;height:52px;object-fit:contain;background:white;border-radius:13px;padding:3px}.footer-brand strong{display:block;color:#fff;font-family:'Heebo',sans-serif}.footer-brand small{display:block;color:rgba(255,255,255,.55)}.footer-links{display:flex;gap:18px;flex-wrap:wrap}
+.mobile-sticky{display:none}
+.fade-in{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s ease}.fade-in.visible{opacity:1;transform:none}
+
+@media(max-width:980px){
+  .main-nav,.nav-cta{display:none}.menu-btn{display:grid;place-items:center}.mobile-nav.open{display:grid;padding:8px 22px 20px;border-top:1px solid var(--line);background:var(--paper)}.mobile-nav a{padding:9px 0;color:var(--ink-soft);font-weight:700}
+  .hero-shell{grid-template-columns:1fr}.hero-copy{text-align:center;margin-inline:auto}.hero h1,.hero-sub{margin-inline:auto}.hero-cta-wrap{justify-content:center}.hero-meta-text{text-align:center}.hero-visual{max-width:720px;width:100%;margin:0 auto;min-height:500px}
+  .pillars-grid{grid-template-columns:1fr}.topics-grid,.objections-list{grid-template-columns:1fr 1fr}.testimonials-grid{grid-template-columns:1fr}.mid-visual{grid-template-columns:1fr}.mid-visual-image{min-height:290px}.about-inner{grid-template-columns:1fr;text-align:center}.about-img-wrap{display:flex;justify-content:center}.about-text h2,.about-text p{text-align:center}.quote-line{border-right:0;border-top:5px solid var(--rose);border-radius:0 0 18px 18px;text-align:center}
+}
+@media(max-width:680px){
+  :root{--container:calc(100% - 28px);--radius:24px}html{scroll-padding-top:76px}body{font-size:17px}.topbar{font-size:13px;padding:8px 12px}.nav-wrap{min-height:68px}.brand img{width:58px;height:44px}.brand-copy strong{font-size:.9rem}.brand-copy small{font-size:.65rem}
+  .hero{padding:36px 0 32px}.hero-shell{gap:28px}.hero h1{font-size:2.75rem}.hero-sub{font-size:1.04rem}.hero-cta-wrap{display:grid}.hero-cta-wrap .btn-primary{width:100%}.hero-visual{min-height:395px}.hero-photo{inset:0;border-radius:29px}.hero-note-card{right:-4px;top:20px;padding:14px 15px;max-width:190px}.hero-profile{left:-4px;bottom:15px;width:160px}.trust-strip{padding-bottom:48px}.trust-grid{grid-template-columns:1fr}.trust-item+.trust-item{border-right:0;border-top:1px solid var(--line)}
+  .section{padding:74px 0}.section h2{font-size:2.2rem}.section>p{font-size:1rem}.insight-box{padding:25px 22px;font-size:1.02rem}.topics-grid,.objections-list{grid-template-columns:1fr}.topic-card,.objection-item{padding:24px 21px}.series-note{padding:24px 20px;font-size:1.05rem}.mid-visual{margin-bottom:68px;border-radius:28px}.mid-visual-copy{padding:34px 24px}.mid-visual-copy h2{font-size:1.85rem}.mid-visual-copy .btn-primary{width:100%}.about-inner{padding:34px 22px}.about-img-wrap img{width:180px;height:220px}.about-text h2{font-size:2rem}.pricing-card{padding:38px 22px}.price-amount{font-size:4.35rem}.faq-q{padding:19px 18px;font-size:.98rem}.faq-a-content{padding:0 18px 20px}.bottom-cta{padding:58px 22px;border-radius:30px;margin-bottom:60px}.bottom-cta .btn-primary{width:100%}footer .section{flex-direction:column;text-align:center}.footer-links{justify-content:center}
+  .mobile-sticky{display:block;position:fixed;z-index:1000;right:10px;left:10px;bottom:10px}.mobile-sticky .btn-primary{width:100%;min-height:54px;box-shadow:0 16px 34px rgba(63,58,54,.28)}
+}
+:focus-visible{outline:3px solid var(--rose-deep);outline-offset:4px}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+<meta content="#FAF6F1" name="theme-color"/></head>
+<body>
+<!-- TOP BAR -->
+<div class="topbar">
+  ההדרכה שראית — היא חלק מסדרה. <strong>וזה רק ההתחלה.</strong>
+</div><header class="site-header">
+<div class="nav-wrap">
+<a aria-label="בריאות שבאה מהלב — דף הבית" class="brand" href="#top">
+<span class="brand-copy"><strong>בריאות שבאה מהלב</strong><small>המועדון של רבקה הולצברג</small></span>
+</a>
+<nav aria-label="ניווט ראשי" class="main-nav">
+<a href="#why">למה המועדון</a><a href="#lessons">ההדרכות</a><a href="#about">על רבקה</a><a href="#faq">שאלות</a>
+</nav>
+<a class="nav-cta" href="#join">להצטרפות למועדון</a>
+<button aria-expanded="false" aria-label="פתיחת תפריט" class="menu-btn" type="button">☰</button>
+</div>
+<nav aria-label="ניווט לנייד" class="mobile-nav">
+<a href="#why">למה המועדון</a><a href="#lessons">ההדרכות</a><a href="#about">על רבקה</a><a href="#join">להצטרפות</a><a href="#faq">שאלות</a>
+</nav>
+</header>
+<!-- HERO -->
+<section class="hero" id="top"><div class="hero-shell"><div class="hero-copy">
+<div class="hero-eyebrow">מועדון בריאות שבאה מהלב</div>
+<h1>הגיע הזמן להפסיק <em>רק להבין</em><br/>ולהתחיל לחיות אחרת</h1>
+<p class="hero-sub">
+    המקום שבו אנחנו מפסיקות להילחם בעצמנו דרך "כוח רצון", ולומדות לתכנת מחדש את השקט הפנימי והבריאות שלנו.
+  </p>
+<div class="hero-cta-wrap">
+<a aria-label="מעבר מאובטח להצטרפות למועדון" class="btn-primary" href="https://private.invoice4u.co.il/newsite/he/clearing/public/i4u-clearing?ProductGuid=550b937f-ac6b-4fc0-bb03-99139eb0193f">
+      אני רוצה להצטרף למועדון
+    </a>
+<span class="hero-meta-text">ביטול בכל עת · ללא התחייבות</span>
+<div class="hero-divider">המקום שבו נשים מגלות שוב את עצמן</div>
+</div>
+</div><div aria-label="שינוי פנימי וצמיחה" class="hero-visual">
+<div class="hero-photo"><img alt="תודעה, אור ושינוי פנימי" src="https://res.cloudinary.com/dyqe95map/image/upload/v1778355572/profile.jpg_zror0m.jpg"/></div>
+<div class="hero-note-card"><strong>לא עוד מאבק בכוח הרצון</strong><span>מסגרת שמחברת הבנה, תרגול ורצף</span></div>
+<div class="hero-profile"><img alt="רבקה הולצברג" src="https://res.cloudinary.com/dyqe95map/image/upload/v1778355572/profile.jpg_zror0m.jpg"/><div><strong>רבקה הולצברג</strong><small>12 שנים של ליווי והדרכה</small></div></div>
+</div></div></section><section aria-label="פרטי המועדון בקצרה" class="trust-strip">
+<div class="trust-grid">
+<div class="trust-item"><strong>2 הדרכות חיות</strong><span>בכל חודש, עם רבקה</span></div>
+<div class="trust-item"><strong>ארכיון מלא</strong><span>לצפייה בזמן ובקצב שלך</span></div>
+<div class="trust-item"><strong>69 ₪ לחודש</strong><span>ללא התחייבות · ביטול בכל עת</span></div>
+</div>
+</section>
+<!-- STORY / PROBLEM -->
+<section class="content-bg" id="why">
+<div class="section fade-in">
+<div class="section-label">למה זה כל-כך מוכר?</div>
+<h2>ניסית הכל. ובכל זאת — את עדיין כאן.</h2>
+<p>
+      את אישה חכמה. את יודעת בדיוק מה את צריכה לעשות. קראת ספרים, הקשבת להרצאות, קמת בבוקר עם החלטות נחושות (לאכול נכון, למצוא זמן לעצמך, לא לכעוס) —
+      ופעם אחר פעם, בערב או אחרי שבועיים, את חוזרת לאותו המקום בדיוק.
+    </p>
+<p>
+      ואז הקול המוכר הזה מגיע: "אולי זו פשוט אני? אולי אין לי אופי? אולי בגיל שלי כבר קשה מדי להשתנות?"
+    </p>
+<div class="insight-box">
+      זה לא האופי שלך. ואת לא אשמה. יש סיבה פיזיולוגית ומדעית מדויקת שבגללה את תקועה בלופ הזה.
+      <br/><br/>
+<strong>97% מהפעילות של המוח שלנו</strong> מתנהלת בתת-ההכרה. ההיגיון שלך רוצה לעשות שינוי (ה-3%),
+      אבל הקוד הפנימי שנשזר בך במשך עשרות שנים מושך אחורה. וכשיש עימות בין הרצון להרגל —
+      ההרגל הישן תמיד מנצח.
+    </div>
+<p style="margin-top: 48px;">
+      ידע בלבד לא מספיק כאן. <strong>צריך לעדכן את הקוד מתוך תת-ההכרה.</strong> וזה בדיוק, צעד אחר צעד, מה שאנחנו עושות במועדון.
+    </p>
+</div>
+</section>
+<!-- WHAT IS THE CLUB -->
+<section class="series-bg" id="club">
+<div class="section fade-in">
+<div class="section-label">מה זה המועדון</div>
+<h2>שלוש סיבות שעושות את ההבדל</h2>
+<p>זה לא עוד "מקום ללמוד". זה מסגרת שמחזיקה אותך — לאורך זמן, מתוך עומק.</p>
+<div class="pillars-grid">
+<div class="glass-card topic-card">
+<div class="topic-icon">א</div>
+<h3>שיטה שעובדת לעומק</h3>
+<p>לא טריקים, לא "חשיבה חיובית" שטחית. שילוב של מדע המוח המעודכן עם תורת הרבי מליובאוויטש, ספר התניא ושער הביטחון. שיטה שמחלחלת לתת-ההכרה ומשנה את הקוד מבפנים.</p>
+</div>
+<div class="glass-card topic-card">
+<div class="topic-icon">ב</div>
+<h3>רצף שבונה את עצמו</h3>
+<p>כל הדרכה נשענת על זו שלפניה. את לא מקבלת "ספרייה" מבולגנת — את עוברת מסע מובנה, שיעור על גבי שיעור, עד שהשינוי מצטבר לכוח אמיתי.</p>
+</div>
+<div class="glass-card topic-card">
+<div class="topic-icon">ג</div>
+<h3>חברות שלא נופלות לבד</h3>
+<p>קהילה של נשים שעוברות את אותה הדרך. מסגרת שמחכה לך, שמחזירה אותך כשמתעייפים, ושחוגגת איתך את הצעדים הקטנים שמצטברים לשינוי גדול.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- LECTURE SERIES PREVIEW -->
+<section class="content-bg" id="lessons">
+<div class="section fade-in">
+<div class="section-label">סדרת ההדרכות</div>
+<h2>12 הדרכות שכבר מחכות לך</h2>
+<p>כל אחת מההדרכות בנויה על הקודמת לה. את לא מקבלת אוסף אקראי של שיעורים — אלא דרך שלמה שמתקדמת איתך, שלב אחרי שלב.</p>
+<div class="topics-grid">
+<div class="glass-card topic-card">
+<div class="lesson-eyebrow">שיעור ראשון</div>
+<h3>כוח הרצון כשריר</h3>
+<p>למה את מתחילה ועוצרת — שוב ושוב? למה ההחלטות של ראש השנה נשכחות עד חשוון? את באמת מאמינה שאת "חסרת משמעת" — או שמישהי שכחה לספר לך משהו חשוב על האזור הזה שבמוח?</p>
+</div>
+<div class="glass-card topic-card">
+<div class="lesson-eyebrow">שיעור שני</div>
+<h3>כאב ועונג — מנוע השינוי</h3>
+<p>למה את יודעת בדיוק מה טוב לך — ובכל זאת לא עושה את זה? למה את דוחה את הבדיקה, את השיחה הקשה, את ההחלטה החשובה — עד שמשהו מתפוצץ ומאלץ אותך? איזה כאב את בורחת ממנו בלי שאת מודעת לזה?</p>
+</div>
+<div class="glass-card topic-card">
+<div class="lesson-eyebrow">שיעור שלישי</div>
+<h3>ניהול זמן — לחיות, לא לרוץ</h3>
+<p>את עייפה מהרגע שאת קמה? עושה את הכל בשביל כולם — ובסוף היום אומרת לעצמך "לא עשיתי כלום בשבילי"? מתי בפעם האחרונה חייכת בלי סיבה? ומה היה קורה אם פעם אחת, רק פעם אחת, היית שמה את עצמך ראשונה?</p>
+</div>
+<div class="glass-card topic-card">
+<div class="lesson-eyebrow">שיעור רביעי</div>
+<h3>כוחן של תפיסות תת-הכרתיות</h3>
+<p>למה את יודעת בדיוק מה לאכול, ובכל זאת מוצאת את עצמך מול המקרר? למה הפרנסה תקועה על סכום מסוים? נגלה איך קוד פנימי אחד שנשזר בך לפני שלושים שנה, מנהל את התגובות שלך היום — ואיך מנתקים אותו.</p>
+</div>
+<div class="glass-card topic-card">
+<div class="lesson-eyebrow">שיעור חמישי</div>
+<h3>איך מטביעים תפיסה חדשה</h3>
+<p>ניסית פעם להגיד לעצמך "אני מספיקה, אני יפה, אני שווה" — והרגשת מזויפת? אולי אפילו יותר גרוע מקודם? למה האפירמציות הרגילות לא עובדות עלייך — ומה ההבדל בין "להגיד לעצמי משהו" לבין באמת לתת לזה לחדור פנימה?</p>
+</div>
+<div class="glass-card topic-card">
+<div class="lesson-eyebrow">שיעור שישי</div>
+<h3>שבעה כללי זהב לתכנות מחדש</h3>
+<p>את משננת — אבל לא מרגישה שזה חודר באמת? יש לך הרגשה שאת "עושה את הכל נכון" וזה עדיין נשאר על פני השטח? ידעת שיש שעות ביום שבהן המוח שלך פתוח פי עשרה — ושאת אולי מבזבזת אותן בלי לדעת?</p>
+</div>
+<div class="glass-card topic-card">
+<div class="lesson-eyebrow">שיעור שביעי</div>
+<h3>המציאות מתחדשת בכל רגע</h3>
+<p>את מרגישה שהכל "כבר נסגר" — הגיל, הגוף, היחסים, המצב הכלכלי, הילדים שלא מתקשרים? את מתפללת ומבקשת — אבל המציאות נראית קבועה ובלתי משתנה? מה אם המציאות שלך לא נוצרה פעם אחת ולתמיד — אלא נבראת מחדש בכל רגע ורגע?</p>
+</div>
+<div class="glass-card topic-card">
+<div class="lesson-eyebrow">שיעור שמיני</div>
+<h3>5 דקות שמשנות את החיים</h3>
+<p>כלי קצר ועוצמתי שמשלים את עבודת השינון: לפנות בכל יום חמש דקות לדאגה, לתפילה ולביטחון — כדי לתת ללב מקום ולהמשיך את היום מתוך שקט וכוח.</p>
+</div>
+<div class="glass-card topic-card">
+<div class="lesson-eyebrow">שיעור תשיעי</div>
+<h3>אמונות מגבילות: 3 השאלות שעוצרות אותנו בדרך</h3>
+<p>איך לזהות את המחשבות והאמונות שמנהלות אותך בלי שתשימי לב, ואילו שלוש שאלות יכולות לעזור לך לעצור, לבדוק ולבחור דרך חדשה.</p>
+</div>
+<div class="glass-card topic-card">
+<div class="lesson-eyebrow">שיעור עשירי</div>
+<h3>למה אני ראויה?</h3>
+<p>האמונה הפנימית שקובעת כמה טוב אנחנו מרשות לעצמנו לקבל. שיעור שמחזיר אותך לידיעה עמוקה שאת בת מלך — וראויה לטוב, לרחמים ולשפע.</p>
+</div>
+<div class="glass-card topic-card">
+<div class="lesson-eyebrow">שיעור אחד־עשר</div>
+<h3>אני אישה של ביטחון</h3>
+<p>איך לבנות בתוכך ביטחון פשוט וחזק, להישען על מקור הכוח האמיתי שלך ולצעוד קדימה גם כשעדיין לא רואים את התשובה.</p>
+</div>
+<div class="glass-card topic-card">
+<div class="lesson-eyebrow">שיעור שנים־עשר</div>
+<h3>הסוד שהופך כל קושי למתנה</h3>
+<p>איך להסתכל אחרת על מה שלא בחרת, לגלות את הכוחות שנולדים דווקא מתוך האתגר ולהפוך קושי לנקודת צמיחה ושינוי.</p>
+</div>
+<div class="glass-card topic-card">
+<div class="lesson-eyebrow">והמסע ממשיך...</div>
+<h3>הדרכה חדשה בכל שבועיים</h3>
+<p>המועדון ממשיך להתחדש. כל הדרכה חיה מצטרפת לארכיון ונשארת זמינה לך, כך שלא משנה מתי הצטרפת — תמיד תוכלי להתחיל מהיסודות ולהתקדם בקצב שלך.</p>
+</div>
+</div>
+<div class="series-note">
+      "אחרי כל הספרים והקורסים שעשיתי — פתאום הבנתי שלא הבנתי כלום."<br/>
+<span style="font-size: 19px; color: var(--text-muted); font-style: normal; font-weight: 400;">— מתוך הודעות החברות במועדון</span>
+</div>
+</div>
+</section><section aria-label="הצטרפות למועדון" class="mid-visual fade-in">
+<div class="mid-visual-image"></div>
+<div class="mid-visual-copy">
+<span>שינוי שנבנה בהדרגה</span>
+<h2>לא צריך להפוך את כל החיים ביום אחד</h2>
+<p>צריך מקום שמחזיר אותך שוב ושוב לכיוון שבחרת — עם הדרכה, רצף וכלים שאפשר באמת לקחת אל היום־יום.</p>
+<a class="btn-primary" href="#join">לראות מה מקבלים במועדון</a>
+</div>
+</section>
+<div class="leaf-divider">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path></svg>
+</div>
+<!-- SKEPTIC SECTION -->
+<section class="series-bg">
+<div class="section fade-in">
+<h2>אבל באמת — <em>איך זה שונה</em> ממה שכבר ניסית?</h2>
+<div class="objections-list">
+<div class="glass-card objection-item">
+<div class="objection-icon">?</div>
+<div class="objection-text">
+<h3>"אני כבר יודעת את זה. למדתי, קראתי, הקשבתי."</h3>
+<p>בדיוק זו הבעיה. ידע לבד לא משנה כלום, כי הוא נשאר ב-3% של ההכרה. כאן לא מלמדים מידע — מטמיעים אותו במקום שבו הוא משנה באמת. זה לא קורה במחברת. זה קורה בפנים.</p>
+</div>
+</div>
+<div class="glass-card objection-item">
+<div class="objection-icon">?</div>
+<div class="objection-text">
+<h3>"בגיל שלי כבר מאוחר מדי לשנות דברים."</h3>
+<p>זה בדיוק מה שהקוד הישן רוצה שתאמיני. מחקרי המוח של העשור האחרון הוכיחו את ההפך — המוח שלנו ממשיך להתחדש בכל גיל. הגיל הוא לא המגבלה, התפיסה שלך על הגיל היא המגבלה.</p>
+</div>
+</div>
+<div class="glass-card objection-item">
+<div class="objection-icon">?</div>
+<div class="objection-text">
+<h3>"ניסיתי כל-כך הרבה דברים. למה זה כן יעבוד עליי?"</h3>
+<p>כי כל מה שניסית עד עכשיו פעל על השכבה הלא נכונה. ניסית לשנות התנהגות, החלטות, הרגלים — בלי לשנות את המקור שמייצר אותם. זה כמו לנגב רטיבות בלי לסגור את הברז.</p>
+</div>
+</div>
+<div class="glass-card objection-item">
+<div class="objection-icon">?</div>
+<div class="objection-text">
+<h3>"איך אני יכולה לדעת שזה לא עוד מקום שאתחיל ואוותר?"</h3>
+<p>לא תוכלי לדעת מראש. וזה בסדר גמור לחשוש. אבל זו בדיוק הסיבה שבנינו מסגרת של מועדון קבוע ולא "קורס" חולף. יש לך כאן חברות שמחכות לך, וביטול בכל רגע בלי שאלות. את לא "מתחייבת לכל החיים" — את באה לנסות חודש אחד.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- TESTIMONIALS (Social Proof) -->
+<section class="content-bg">
+<div class="section fade-in">
+<div class="section-label">מתוך הקהילה</div>
+<h2>מה אומרות הנשים שכבר בפנים?</h2>
+<div class="testimonials-grid">
+<div class="glass-card testimonial-card">
+<div class="testimonial-quote">"</div>
+<div class="testimonial-text">
+          "תמיד חשבתי שאין לי משמעת עצמית ושנועדתי להתחיל ולהישבר. במועדון הבנתי בפעם הראשונה איך המוח שלי עובד. פתאום הדברים קורים בלי שאני צריכה 'להכריח' את עצמי. השקט הפנימי שקיבלתי כאן שווה הכל."
+        </div>
+<div class="testimonial-author">מיכל ד., בת 52</div>
+</div>
+<div class="glass-card testimonial-card">
+<div class="testimonial-quote">"</div>
+<div class="testimonial-text">
+          "הייתי עייפה מקורסים שאומרים לי לחשוב חיובי. רבקה מביאה משהו אחר לגמרי — מדע מדויק משולב עם עומק לנשמה. לחכות למפגשים שלנו הפך להיות העוגן של השבועיים שלי."
+        </div>
+<div class="testimonial-author">יעל ש., בת 48</div>
+</div>
+<div class="glass-card testimonial-card">
+<div class="testimonial-quote">"</div>
+<div class="testimonial-text">
+          "בגיל 56 הייתי בטוחה שאי אפשר לשנות הרגלים של חיים שלמים. הצטרפתי סקפטית לגמרי. היום אני אוכלת טוב יותר, ישנה טוב יותר, ובעיקר — פחות כועסת על עצמי כשקשה לי. הקהילה הזו היא מתנה."
+        </div>
+<div class="testimonial-author">רחל ט., בת 56</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ABOUT -->
+<section class="series-bg" id="about">
+<div class="section fade-in">
+<div class="glass-card about-inner">
+<div class="about-img-wrap">
+<img alt="רבקה הולצברג" src="https://res.cloudinary.com/dyqe95map/image/upload/v1778355572/profile.jpg_zror0m.jpg"/>
+</div>
+<div class="about-text">
+<span class="about-title-small">מי אני</span>
+<h2>נעים מאוד, רבקה הולצברג</h2>
+<p>12 שנים אני יושבת מול נשים. נשים חכמות, מנוסות, חזקות — שמרגישות שמשהו תקוע, ולא מבינות מה.</p>
+<p>הייתי בדיוק שם. ידעתי, קראתי, ניסיתי — עד שהבנתי שכל הידע שאספתי לא חדר באמת לפנים. עד שלמדתי איך להכניס אותו פנימה — וגיליתי שכשהקוד הפנימי משתנה, הכל מתחיל לזרום.</p>
+<div class="quote-line">
+          הפחד לא הולך לפני שמתחילות. הוא הולך כי מתחילות.
+        </div>
+</div>
+</div>
+</div>
+</section>
+<!-- PRICING -->
+<section class="content-bg" id="join">
+<div class="section fade-in">
+<div class="section-label">להצטרף עכשיו</div>
+<h2>השקעה אחת קטנה. שינוי שמחזיק.</h2>
+<p>פחות ממה שאת מוציאה על קפה ומאפה בחודש. ואת מקבלת מסגרת אמיתית לחיים.</p>
+<div class="glass-card pricing-card">
+<div class="price-name">חברה במועדון</div>
+<div class="price-amount">69<span class="currency">₪</span></div>
+<div class="price-period">לחודש · ללא תקופת התחייבות</div>
+<ul class="price-features">
+<li><strong>שתי הדרכות זום חיות</strong> בכל חודש (עם רבקה)</li>
+<li><strong>הקלטות זמינות תמיד</strong> לכל ההדרכות בארכיון</li>
+<li><strong>קורס כניסה ייעודי</strong> (4 הדרכות יסוד)</li>
+<li><strong>קבוצת קהילה סגורה</strong> לתמיכה, שאלות וחיבוק</li>
+<li><strong>ביטול מיידי בוואטסאפ</strong> - בלי שאלות ובלי אותיות קטנות</li>
+</ul>
+<a aria-label="מעבר מאובטח להצטרפות למועדון" class="btn-primary" href="https://private.invoice4u.co.il/newsite/he/clearing/public/i4u-clearing?ProductGuid=550b937f-ac6b-4fc0-bb03-99139eb0193f">
+        כן, אני מצטרפת למועדון
+      </a>
+<p class="price-note">התשלום מבוצע בצורה מאובטחת · ניתן לבטל בכל עת.</p>
+</div>
+</div>
+</section>
+<div class="leaf-divider">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path></svg>
+</div>
+<!-- FAQ -->
+<section class="content-bg" id="faq">
+<div class="section fade-in">
+<div class="section-label">שאלות שכדאי לדעת</div>
+<h2>שאלות שכבר שאלו אותי</h2>
+<div class="faq-list">
+<div class="faq-item">
+<button class="faq-q" onclick="toggleFaq(this)">
+          אני מצטרפת באמצע סדרה. לא אפסיד את ההקשר?
+          <span class="arrow">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="6 9 12 15 18 9"></polyline></svg>
+</span>
+</button>
+<div class="faq-a-wrapper">
+<div class="faq-a-inner">
+<div class="faq-a-content">לא. ברגע שאת מצטרפת מקבלת גישה לארכיון המלא של כל ההדרכות הקודמות, וגם לקורס כניסה ייעודי שמכין אותך לכל מה שבא אחר כך. את לא קופצת לאמצע — את מתחילה מההתחלה ומתחברת לקצב הקבוצה.</div>
+</div>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-q" onclick="toggleFaq(this)">
+          אין לי זמן להגיע להדרכות חיות. זה בשבילי?
+          <span class="arrow">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="6 9 12 15 18 9"></polyline></svg>
+</span>
+</button>
+<div class="faq-a-wrapper">
+<div class="faq-a-inner">
+<div class="faq-a-content">בהחלט. כל הדרכה מוקלטת ועולה לארכיון באותו היום. את צופה מתי שמתאים לך דרך הטלפון או המחשב — בבוקר, בערב, בכביש. לא חסר לך שום דבר אם לא היית בזמן אמת.</div>
+</div>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-q" onclick="toggleFaq(this)">
+          איך אני מבטלת אם זה לא מתאים לי?
+          <span class="arrow">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="6 9 12 15 18 9"></polyline></svg>
+</span>
+</button>
+<div class="faq-a-wrapper">
+<div class="faq-a-inner">
+<div class="faq-a-content">הודעה אחת בוואטסאפ אליי ומסתיים. אין חוזים, אין טפסים מורכבים, אין "תקופת הודעה מוקדמת". אם זה לא בשבילך — את משלמת על החודש שעבר וזהו. הוגן, פשוט, ובלי הפתעות.</div>
+</div>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-q" onclick="toggleFaq(this)">
+          אני לא דתייה. זה יתאים לי?
+          <span class="arrow">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="6 9 12 15 18 9"></polyline></svg>
+</span>
+</button>
+<div class="faq-a-wrapper">
+<div class="faq-a-inner">
+<div class="faq-a-content">לחלוטין. ההדרכות משלבות מקורות יהודיים יחד עם מדע המוח, ופונות לכל אישה שמחפשת עומק. אין כאן לחץ דתי או "הטפה" — יש כאן חכמה. כל אישה לוקחת ממה שמדבר אליה.</div>
+</div>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-q" onclick="toggleFaq(this)">
+          איך אני יודעת שזה לא עוד דבר שאתחיל ולא אתמיד בו?
+          <span class="arrow">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="6 9 12 15 18 9"></polyline></svg>
+</span>
+</button>
+<div class="faq-a-wrapper">
+<div class="faq-a-inner">
+<div class="faq-a-content">את לא יודעת מראש. אבל זו בדיוק הסיבה שבחרנו במבנה הזה — מסגרת חיה שמחכה לך, קהילה שמרימה אותך, וביטול בכל רגע. את לא קונה קורס יקר ומהמרת עליו — את באה לנסות חודש אחד. ואם זה עובד, את נשארת.</div>
+</div>
+</div>
+</div>
+<div class="faq-item">
+<button class="faq-q" onclick="toggleFaq(this)">
+          מתי אני אתחיל לראות שינוי?
+          <span class="arrow">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="6 9 12 15 18 9"></polyline></svg>
+</span>
+</button>
+<div class="faq-a-wrapper">
+<div class="faq-a-inner">
+<div class="faq-a-content">תלוי בך. נשים מדווחות על שינוי משמעותי בתחושת ה"אוויר לנשימה" והשקט הפנימי כבר אחרי ההדרכה הראשונה. השינויים בחיים החיצוניים — בקשרים עם הילדים, בגוף, בתזונה — מצטברים לאורך שבועות וחודשים של תרגול. זה לא קסם אינסטנט, אלא בנייה אמיתית של משהו שמחזיק.</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- BOTTOM CTA -->
+<section class="bottom-cta">
+<div class="section fade-in">
+<h2>הפחד לא הולך לפני שמתחילות.<br/>הוא הולך <em>כי</em> מתחילות.</h2>
+<p>לא צריך להיות בנקודה מושלמת. לא צריך כוח רצון מלא. צריך רק להחליט שהפעם, את לא עושה את זה לבד.</p>
+<div style="max-width: 500px; margin: 0 auto; margin-top: 64px;">
+<a aria-label="מעבר מאובטח להצטרפות למועדון" class="btn-primary" href="https://private.invoice4u.co.il/newsite/he/clearing/public/i4u-clearing?ProductGuid=550b937f-ac6b-4fc0-bb03-99139eb0193f">
+        אני רוצה להתחיל עכשיו
+      </a>
+<div class="final-meta">
+        ₪69 לחודש · ביטול בכל עת · <a href="https://wa.me/972504207702" rel="noopener" target="_blank">יש לי שאלה</a>
+</div>
+</div>
+</div>
+</section>
+<!-- FOOTER -->
+<footer>
+<div class="section">
+<div class="footer-brand"><div><strong>בריאות שבאה מהלב</strong><small>המועדון של רבקה הולצברג</small></div></div>
+<div class="footer-links"><a href="https://wa.me/972504207702" rel="noopener" target="_blank">יש לי שאלה</a><a href="https://rivkaholtsberg.co.il">האתר של רבקה</a><span>© רבקה הולצברג</span></div>
+</div></footer>
+<div class="mobile-sticky"><a class="btn-primary" href="#join">אני רוצה להצטרף למועדון</a></div><script>
+function toggleFaq(btn){
+  const wrapper=btn.nextElementSibling;
+  const isOpen=btn.classList.contains('open');
+  document.querySelectorAll('.faq-q').forEach(b=>{b.classList.remove('open');b.nextElementSibling.classList.remove('open')});
+  if(!isOpen){btn.classList.add('open');wrapper.classList.add('open')}
+}
+const menuBtn=document.querySelector('.menu-btn');
+const mobileNav=document.querySelector('.mobile-nav');
+if(menuBtn&&mobileNav){menuBtn.addEventListener('click',()=>{const open=mobileNav.classList.toggle('open');menuBtn.setAttribute('aria-expanded',open?'true':'false');menuBtn.textContent=open?'×':'☰'});mobileNav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mobileNav.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');menuBtn.textContent='☰'}))}
+if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}}),{threshold:.1});document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el))}else{document.querySelectorAll('.fade-in').forEach(el=>el.classList.add('visible'))}
+</script>
+</body>
+</html>
