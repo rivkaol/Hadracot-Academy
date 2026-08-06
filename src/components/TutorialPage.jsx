@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Sparkles, CheckCircle, ChevronLeft, BookOpen, Edit, Download, Save, Loader, FileText, Gift, Crown } from 'lucide-react'
+import { Sparkles, CheckCircle, ChevronLeft, BookOpen, Edit, Download, Save, Loader, FileText, Crown } from 'lucide-react'
 import confetti from 'canvas-confetti'
 import Player from '@vimeo/player'
 import { apiGetNote, apiSaveNote, apiSetCompleted } from '../api'
@@ -30,33 +30,37 @@ export default function TutorialPage({
     tutorial.landingPageUrl ||
     `https://wa.me/504207702?text=${encodeURIComponent('היי רבקה, אשמח להצטרף למועדון ולצפות בהדרכה: ' + tutorial.title)}`
 
-  // שער הטעימה: למי שאינה מנויה — עצירה אחרי 5 דק' וחסימת גרירה קדימה
+  // שער הטעימה: למי שאינה מנויה — עצירה פיזית אחרי 5 דק' וחסימת גרירה קדימה
   useEffect(() => {
     if (hasAccess || !iframeRef.current) return
     const player = new Player(iframeRef.current)
     let locked = false
 
+    const enforcePause = () => { player.pause().catch(() => {}) }
+
     const openGate = async () => {
-      if (locked) return
       locked = true
-      try {
-        await player.pause()
-        await player.setCurrentTime(PREVIEW_SECONDS)
-      } catch (e) { /* התעלמות משגיאות נגן */ }
+      try { await player.pause() } catch (e) { /* התעלמות משגיאות נגן */ }
       setGateOpen(true)
     }
 
-    const onTime = (d) => { if (d.seconds >= PREVIEW_SECONDS) openGate() }
-    const onSeek = (d) => { if (d.seconds > PREVIEW_SECONDS) openGate() }
+    // כל עוד נעולה — כל ניסיון המשך/ניגון נעצר מיד (עצירה פיזית)
+    const onTime = (d) => {
+      if (d.seconds >= PREVIEW_SECONDS) { locked ? enforcePause() : openGate() }
+    }
+    const onSeek = (d) => { if (d.seconds > PREVIEW_SECONDS && !locked) openGate() }
+    const onPlay = () => { if (locked) enforcePause() }
 
     player.on('timeupdate', onTime)
     player.on('seeking', onSeek)
     player.on('seeked', onSeek)
+    player.on('play', onPlay)
 
     return () => {
       player.off('timeupdate', onTime)
       player.off('seeking', onSeek)
       player.off('seeked', onSeek)
+      player.off('play', onPlay)
     }
   }, [hasAccess, tutorial.id])
   const [activeTab, setActiveTab] = useState('notes')
@@ -144,12 +148,6 @@ export default function TutorialPage({
                 allowFullScreen
                 title={`הדרכה - ${tutorial.title}`}
               />
-
-              {!hasAccess && !gateOpen && (
-                <div className="absolute top-3 right-3 z-20 inline-flex items-center gap-1.5 bg-white/90 backdrop-blur-sm text-[#9E626C] text-[11px] md:text-xs font-bold px-3 py-1.5 rounded-full shadow-sm pointer-events-none">
-                  <Gift size={13} /> 5 דקות ראשונות לצפייה ללא עלות
-                </div>
-              )}
 
               {!hasAccess && gateOpen && (
                 <div className="absolute inset-0 z-30 flex items-center justify-center text-center px-6 py-8" dir="rtl" style={{ background: 'rgba(43,39,36,0.95)' }}>
