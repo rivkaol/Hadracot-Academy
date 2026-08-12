@@ -38,6 +38,13 @@ async function pushToSheet(payload) {
   }
 }
 
+// טלפון ישראלי לצורך השוואה: משאיר ספרות בלבד, 972 → 0. הסיסמה של מנויה = הטלפון שלה.
+function normPhone(raw = '') {
+  let d = String(raw).replace(/\D/g, '')
+  if (d.startsWith('972')) d = '0' + d.slice(3)
+  return d
+}
+
 const csvToIds = (s) =>
   String(s || '')
     .split(',')
@@ -85,12 +92,35 @@ export default async function handler(req, res) {
       if (!email) return res.status(400).json({ error: 'email' })
       const leadName = String(body.name || '').trim()
       const leadPhone = String(body.phone || '').trim()
+      const phoneNorm = normPhone(leadPhone)
       const now = new Date().toISOString()
+
+      // זיהוי מנויה שנרשמה בטעות כאורחת:
+      // 1) לפי המייל (המפתח בטבלת המנויות)  2) ואם לא — לפי הטלפון (שהוא הסיסמה).
+      let member = await getUser(email)
+      if (!member && phoneNorm) {
+        const { data: byPhone } = await supabase
+          .from('hadracot_users')
+          .select('*')
+          .eq('password', phoneNorm)
+          .limit(1)
+        member = (byPhone && byPhone[0]) || null
+      }
+      if (member) {
+        const storedPw = String(member.password || '')
+        // הטלפון שהזינה תואם לסיסמה השמורה → מכניסים אותה ישר כמנויה (התחברות אוטומטית).
+        if (phoneNorm && normPhone(storedPw) === phoneNorm) {
+          return res.json({ member: publicUser(member), password: storedPw })
+        }
+        // המייל מוכר אבל הטלפון לא תואם → שולחים אותה למסך התחברות עם המייל מוכן מראש.
+        return res.json({ knownMemberEmail: member.email })
+      }
+
+      // אורחת רגילה — שמירה כליד + זרימה לגיליון גוגל
       await supabase.from('hadracot_leads').upsert(
         { email, name: leadName, phone: leadPhone, updated_at: now },
         { onConflict: 'email' }
       )
-      // זרימה בזמן אמת לגיליון גוגל: אורחת חדשה
       await pushToSheet({ type: 'lead', email, name: leadName, phone: leadPhone, when: now })
       return res.json({ ok: true })
     }

@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { ChevronRight, Mail, KeyRound, Loader, Sparkles } from 'lucide-react'
 
-export default function LoginScreen({ onLogin, onCancel, isLoading, error, pendingTutorial, clearError }) {
-  const [emailInput, setEmailInput] = useState('')
+export default function LoginScreen({ onLogin, onCancel, isLoading, error, pendingTutorial, clearError, prefillEmail, knownMember }) {
+  const [emailInput, setEmailInput] = useState(prefillEmail || '')
   const [passwordInput, setPasswordInput] = useState('')
 
   const handleSubmit = (e) => {
@@ -43,7 +43,14 @@ export default function LoginScreen({ onLogin, onCancel, isLoading, error, pendi
           />
 
           <h1 className="text-3xl font-bold text-[#3E3935] mb-2">ברוכה הבאה</h1>
-          <p className="text-[#716861] mb-6 font-medium leading-[1.8]">התחברי כדי לגשת להדרכות שרכשת</p>
+          {knownMember ? (
+            <div className="bg-[#E8EEE5] text-[#586b53] text-sm font-bold px-4 py-3 rounded-2xl mb-6 leading-[1.7]">
+              נראה שאת כבר מנויה במועדון! 💚<br />
+              התחברי עם הסיסמה שלך (מספר הטלפון) כדי להיכנס לצפייה מלאה.
+            </div>
+          ) : (
+            <p className="text-[#716861] mb-6 font-medium leading-[1.8]">התחברי כדי לגשת להדרכות שרכשת</p>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-5 text-right">
             <div>

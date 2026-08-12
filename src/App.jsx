@@ -30,6 +30,7 @@ export default function App() {
   const [authLoading, setAuthLoading] = useState(true)
   const [loginError, setLoginError] = useState('')
   const [pendingTutorial, setPendingTutorial] = useState(null)
+  const [prefillEmail, setPrefillEmail] = useState('') // מייל מוכן מראש בהתחברות (מנויה שזוהתה)
   const [searchQuery, setSearchQuery] = useState('')
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
 
@@ -223,11 +224,35 @@ export default function App() {
     setLeadLoading(true)
     const newLead = { name, email, phone }
     try {
-      await apiRegisterLead(newLead)
+      const res = await apiRegisterLead(newLead)
+
+      // מנויה שנרשמה בטעות כאורחת + הטלפון תואם לסיסמה → התחברות אוטומטית, ישר לאתר
+      if (res && res.member) {
+        applyUser(res.member, res.password || '')
+        setLeadLoading(false)
+        const current = pendingTutorial
+        setPendingTutorial(null)
+        if (current && (res.member.isClubMember || (res.member.purchasedProductIds || []).includes(current.id))) {
+          apiLastWatched({ email: res.member.email, password: res.password }, current.id).catch(console.error)
+        }
+        if (current) proceedToTutorial(current)
+        else setView('home')
+        return
+      }
+
+      // המייל מוכר כמנויה אך הטלפון לא תאם → למסך התחברות עם המייל מוכן מראש
+      if (res && res.knownMemberEmail) {
+        setLeadLoading(false)
+        setPrefillEmail(res.knownMemberEmail)
+        setView('login')
+        return
+      }
     } catch (e) {
       // גם אם השמירה בשרת נכשלה — לא חוסמים את הצפייה
       console.error('שמירת ליד נכשלה', e)
     }
+
+    // אורחת רגילה
     setLead(newLead)
     localStorage.setItem('cached_lead', JSON.stringify(newLead))
     setLeadLoading(false)
@@ -241,6 +266,7 @@ export default function App() {
     setView('home')
     setSelectedTutorial(null)
     setPendingTutorial(null)
+    setPrefillEmail('')
     window.scrollTo(0, 0)
   }
 
@@ -276,6 +302,8 @@ export default function App() {
           error={loginError}
           pendingTutorial={pendingTutorial}
           clearError={() => setLoginError('')}
+          prefillEmail={prefillEmail}
+          knownMember={!!prefillEmail}
         />
       </div>
     )
