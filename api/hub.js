@@ -22,6 +22,22 @@ function normEmail(e = '') {
   return local + '@' + domain
 }
 
+// שולח אירוע בזמן אמת לגיליון גוגל (Apps Script Webhook), אם הוגדר URL ב-env.
+// נכשל בשקט — לעולם לא חוסם את הרשמת האורחת או את הצפייה.
+async function pushToSheet(payload) {
+  const url = process.env.SHEETS_WEBHOOK_URL
+  if (!url) return
+  try {
+    await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ secret: process.env.SHEETS_WEBHOOK_SECRET || '', ...payload }),
+    })
+  } catch (e) {
+    console.error('sheet webhook failed:', e)
+  }
+}
+
 const csvToIds = (s) =>
   String(s || '')
     .split(',')
@@ -67,15 +83,15 @@ export default async function handler(req, res) {
     // הרשמת ליד (שם+טלפון+מייל) לפני צפייה בטעימה
     if (action === 'registerLead') {
       if (!email) return res.status(400).json({ error: 'email' })
+      const leadName = String(body.name || '').trim()
+      const leadPhone = String(body.phone || '').trim()
+      const now = new Date().toISOString()
       await supabase.from('hadracot_leads').upsert(
-        {
-          email,
-          name: String(body.name || '').trim(),
-          phone: String(body.phone || '').trim(),
-          updated_at: new Date().toISOString(),
-        },
+        { email, name: leadName, phone: leadPhone, updated_at: now },
         { onConflict: 'email' }
       )
+      // זרימה בזמן אמת לגיליון גוגל: אורחת חדשה
+      await pushToSheet({ type: 'lead', email, name: leadName, phone: leadPhone, when: now })
       return res.json({ ok: true })
     }
 
@@ -106,6 +122,28 @@ export default async function handler(req, res) {
       )
       // "נראתה לאחרונה" (משפיע רק אם זו ליד; משתמשת רשומה — 0 שורות, לא מזיק)
       await supabase.from('hadracot_leads').update({ updated_at: new Date().toISOString() }).eq('email', email)
+
+      // זרימה בזמן אמת לגיליון גוגל — רק ברגעים חשובים (לא בכל פינג של 20 שניות):
+      // פתיחת סרטון חדש, או הרגע שבו הפכה ל"חמה" (סיימה את כל 5 הדקות).
+      const isOpen = body.newAttempt === true
+      const becameHot = body.reachedLimit === true && !existing?.reached_limit
+      if (isOpen || becameHot) {
+        const { data: leadRow } = await supabase
+          .from('hadracot_leads')
+          .select('name,phone')
+          .eq('email', email)
+          .maybeSingle()
+        await pushToSheet({
+          type: becameHot ? 'hot' : 'open',
+          email,
+          name: leadRow?.name || '',
+          phone: leadRow?.phone || '',
+          tutorialId: tid,
+          tutorialTitle: String(body.tutorialTitle || '').slice(0, 300),
+          minutes: Math.round((secs / 60) * 10) / 10,
+          when: new Date().toISOString(),
+        })
+      }
       return res.json({ ok: true })
     }
 
@@ -128,7 +166,10 @@ export default async function handler(req, res) {
           maxSeconds: p.max_seconds,
           reachedLimit: p.reached_limit,
           attempts: p.attempts,
+          openedAt: p.updated_at, // התאריך שבו פתחה את הסרטון לאחרונה
+          firstOpenedAt: p.created_at || p.updated_at, // הפעם הראשונה שפתחה
         })
+        if (!a.lastActivity || (p.updated_at && p.updated_at > a.lastActivity)) a.lastActivity = p.updated_at
       }
       const rows = (leads || []).map((l) => ({
         email: l.email,

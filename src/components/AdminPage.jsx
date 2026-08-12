@@ -125,10 +125,13 @@ export default function AdminPage({ adminKey }) {
                                 {l.items.map((it) => (
                                   <div key={it.tutorialId} className="bg-white rounded-xl border border-gray-100 p-3">
                                     <div className="font-bold text-[13px] mb-1 truncate">{it.title || `הדרכה ${it.tutorialId}`}</div>
-                                    <div className="text-xs text-[#716861] flex items-center gap-2">
-                                      <span>{fmtMin(it.maxSeconds)}</span>
+                                    <div className="text-xs text-[#716861] flex items-center gap-2 flex-wrap">
+                                      <span className="whitespace-nowrap">🕒 {fmtMin(it.maxSeconds)}</span>
                                       {it.reachedLimit && <span className="text-[#9E626C] font-bold">· סיימה טעימה</span>}
                                       {it.attempts > 1 && <span>· {it.attempts} כניסות</span>}
+                                    </div>
+                                    <div className="text-[11px] text-gray-400 mt-1 whitespace-nowrap">
+                                      📅 נצפתה: {fmtDate(it.openedAt)}
                                     </div>
                                   </div>
                                 ))}
