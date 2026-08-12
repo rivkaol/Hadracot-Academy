@@ -109,7 +109,7 @@ export default function TutorialPage({
     setNotes('')
     setIsCompleted(completedTutorials.includes(tutorial.id))
     setIsSaved(false)
-    if (activeTab === 'resources' && !tutorial.pdfUrl) setActiveTab('notes')
+    if (activeTab === 'resources' && !(tutorial.files && tutorial.files.length)) setActiveTab('notes')
 
     if (!userEmail) return
     apiGetNote(cred, tutorial.id)
@@ -241,7 +241,7 @@ export default function TutorialPage({
               {[
                 { id: 'about', label: 'מה תקבלי מההדרכה', Icon: BookOpen },
                 { id: 'notes', label: 'המחברת האישית שלך', Icon: Edit },
-                ...(tutorial.pdfUrl ? [{ id: 'resources', label: 'חומרים להורדה', Icon: Download }] : []),
+                ...(tutorial.files && tutorial.files.length ? [{ id: 'resources', label: 'חומרים להורדה', Icon: Download }] : []),
               ].map(({ id, label, Icon }) => (
                 <button
                   key={id}
@@ -307,25 +307,30 @@ export default function TutorialPage({
                 </div>
               )}
 
-              {activeTab === 'resources' && tutorial.pdfUrl && (
+              {activeTab === 'resources' && tutorial.files && tutorial.files.length > 0 && (
                 <div>
                   <h3 className="text-xl font-bold text-[#3E3935] mb-2">חומרים נלווים להדרכה</h3>
                   <p className="text-[#716861] mb-6 leading-[1.8]">כאן ריכזתי עבורך את כל מה שצריך להשלים את הלמידה.</p>
-                  <a
-                    href={tutorial.pdfUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center p-4 border border-gray-100 rounded-2xl hover:bg-gray-50 hover:border-[#C88F96]/30 transition-all cursor-pointer group"
-                  >
-                    <div className="w-12 h-12 bg-[#FAF7F2] rounded-full flex items-center justify-center text-[#3E3935] group-hover:bg-[#3E3935] group-hover:text-white transition-colors ml-4">
-                      <FileText size={20} />
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-bold text-[#3E3935] group-hover:text-[#C88F96] transition-colors">{tutorial.pdfTitle || 'קובץ מצורף להורדה'}</h4>
-                      <p className="text-sm text-gray-500 mt-0.5">לחצי כאן לפתיחה והורדה</p>
-                    </div>
-                    <Download size={20} className="text-gray-400 group-hover:text-[#C88F96]" />
-                  </a>
+                  <div className="space-y-3">
+                    {tutorial.files.map((file, i) => (
+                      <a
+                        key={i}
+                        href={file.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center p-4 border border-gray-100 rounded-2xl hover:bg-gray-50 hover:border-[#C88F96]/30 transition-all cursor-pointer group"
+                      >
+                        <div className="w-12 h-12 bg-[#FAF7F2] rounded-full flex items-center justify-center text-[#3E3935] group-hover:bg-[#3E3935] group-hover:text-white transition-colors ml-4 shrink-0">
+                          <FileText size={20} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-bold text-[#3E3935] group-hover:text-[#C88F96] transition-colors truncate">{file.title || 'קובץ מצורף להורדה'}</h4>
+                          <p className="text-sm text-gray-500 mt-0.5">לחצי כאן לפתיחה והורדה</p>
+                        </div>
+                        <Download size={20} className="text-gray-400 group-hover:text-[#C88F96] shrink-0" />
+                      </a>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>

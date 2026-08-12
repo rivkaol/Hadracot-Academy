@@ -1,6 +1,31 @@
 import { useState, useCallback } from 'react'
 import { SHEETS_URL, fallbackTutorialsData } from './constants'
 
+// מפרק את עמודת הקבצים לרשימה. תומך בכמה קבצים לשיעור, כל אחד בשורה נפרדת (או מופרד ב-;),
+// בפורמט "כותרת | קישור" (או רק קישור). שומר תאימות לאחור לעמודת "שם הקובץ להורדה" הישנה.
+function parseFiles(tutorial) {
+  const raw =
+    tutorial.files || tutorial['קבצים'] || tutorial['קבצים להורדה'] || tutorial['חומרים להורדה'] || ''
+  const list = String(raw)
+    .split(/[\n;]+/)
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .map((entry) => {
+      const parts = entry.split('|').map((p) => p.trim())
+      return parts.length >= 2
+        ? { title: parts[0], url: parts.slice(1).join('|') }
+        : { title: '', url: parts[0] }
+    })
+    .filter((f) => f.url)
+
+  // תאימות לאחור: קובץ יחיד בעמודה הישנה
+  const legacyUrl = tutorial.pdfUrl || tutorial.pdfurl || tutorial['שם הקובץ להורדה']
+  if (list.length === 0 && legacyUrl) {
+    list.push({ title: tutorial.pdfTitle || tutorial.pdftitle || 'קובץ מצורף', url: legacyUrl })
+  }
+  return list.map((f) => ({ title: f.title || 'קובץ מצורף', url: f.url }))
+}
+
 function parseCatalog(rawCatalog) {
   const catalog = rawCatalog.map((item) => {
     const clean = {}
@@ -59,6 +84,7 @@ function parseCatalog(rawCatalog) {
       imageUrl: tutorial.imageUrl || tutorial.imageurl || tutorial['לינק לתמונה'] || null,
       pdfUrl: tutorial.pdfUrl || tutorial.pdfurl || tutorial['שם הקובץ להורדה'] || null,
       pdfTitle: tutorial.pdfTitle || tutorial.pdftitle || 'קובץ מצורף',
+      files: parseFiles(tutorial), // כמה קבצים לשיעור (מעמודת "קבצים" בגיליון)
       landingPageUrl:
         tutorial.landingPageUrl || tutorial.landingpageurl || tutorial['דף נחיתה רלוונטי'] || null,
       recommendedOrder:
@@ -89,7 +115,7 @@ export function useCatalog() {
   const [catalogLoading, setCatalogLoading] = useState(true)
 
   const fetchCatalog = useCallback(async () => {
-    const cached = localStorage.getItem('cached_catalog_v3')
+    const cached = localStorage.getItem('cached_catalog_v4')
     if (cached) {
       setTutorialsData(JSON.parse(cached))
       setCatalogLoading(false)
@@ -106,7 +132,7 @@ export function useCatalog() {
       }
 
       const finalData = parseCatalog(raw)
-      localStorage.setItem('cached_catalog_v3', JSON.stringify(finalData))
+      localStorage.setItem('cached_catalog_v4', JSON.stringify(finalData))
       setTutorialsData(finalData)
     } catch (err) {
       console.log('שגיאה במשיכת קטלוג. משתמש במטמון.', err)
