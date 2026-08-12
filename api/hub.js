@@ -27,14 +27,20 @@ function normEmail(e = '') {
 async function pushToSheet(payload) {
   const url = process.env.SHEETS_WEBHOOK_URL
   if (!url) return
+  // הגנת timeout: אם הגיליון איטי/תקוע — לא חוסמים את השרת (הנתונים כבר נשמרו ב-Supabase לפני כן).
+  const ctrl = new AbortController()
+  const timer = setTimeout(() => ctrl.abort(), 8000)
   try {
     await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ secret: process.env.SHEETS_WEBHOOK_SECRET || '', ...payload }),
+      signal: ctrl.signal,
     })
   } catch (e) {
     console.error('sheet webhook failed:', e)
+  } finally {
+    clearTimeout(timer)
   }
 }
 
