@@ -178,13 +178,14 @@ export default function TutorialPage({
               />
 
               {!hasAccess && gateOpen && (
-                <div className="absolute inset-0 z-30 flex items-center justify-center text-center px-6 py-8" dir="rtl" style={{ background: 'rgba(43,39,36,0.95)' }}>
-                  <div className="max-w-lg">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white mb-5 shadow-lg mx-auto">
-                      <Crown size={30} />
+                // במובייל: מסך מלא וממורכז (כדי שהכפתור לא ייחתך); במחשב: בתוך הווידאו כמו קודם
+                <div className="fixed inset-0 z-[60] lg:absolute lg:z-30 flex items-center justify-center text-center px-6 py-8 overflow-y-auto" dir="rtl" style={{ background: 'rgba(43,39,36,0.96)' }}>
+                  <div className="max-w-lg w-full my-auto">
+                    <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white mb-4 sm:mb-5 shadow-lg mx-auto">
+                      <Crown size={28} />
                     </div>
                     <h2 className="text-2xl md:text-3xl font-bold text-[#FFFDF9] mb-3">רוצה להמשיך לצפות?</h2>
-                    <p className="text-[#E9E0DB] text-base md:text-lg leading-[1.7] mb-7 max-w-md mx-auto">
+                    <p className="text-[#E9E0DB] text-base md:text-lg leading-[1.7] mb-6 sm:mb-7 max-w-md mx-auto">
                       ההדרכה המלאה וכל ספריית התכנים מחכות לך בתוך המועדון — יחד עם כלים ליישום בריאות טבעית בחיים עצמם.
                     </p>
                     <a
