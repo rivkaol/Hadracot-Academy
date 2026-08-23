@@ -498,6 +498,14 @@ export default function App() {
     if (current) proceedToTutorial(current)
   }
 
+  // "לראות את כל הדרך" ממסך ברוכה הבאה — לפני שראתה בפועל את הטעימה.
+  // לא מנקה pendingTutorial/selectedTutorial: אם תחזרי לבית, "להמשיך לצפות
+  // בטעימה שלך" עדיין יעבוד; ראו fallback ל-watchedTutorialId למטה.
+  const handleShowTrackMapPreview = () => {
+    trackEvent('trial_map_preview_click', { email: lead?.email, tutorialId: pendingTutorial?.id })
+    setView('trialTrackMap')
+  }
+
   const handleBackToHome = () => {
     setView('home')
     setSelectedTutorial(null)
@@ -579,7 +587,9 @@ export default function App() {
       <div dir="rtl" className="min-h-screen font-sans bg-[#FAF7F2] flex flex-col">
         <TrialWelcomeScreen
           tutorial={pendingTutorial}
+          tutorialsData={tutorialsData}
           onStart={handleStartTrialWatch}
+          onShowTrackMap={handleShowTrackMapPreview}
           totalSteps={getTrackTutorials(tutorialsData).length}
         />
       </div>
@@ -592,7 +602,7 @@ export default function App() {
         <Header showBack {...headerProps} />
         <TrialTrackMapScreen
           tutorialsData={tutorialsData}
-          watchedTutorialId={selectedTutorial?.id}
+          watchedTutorialId={selectedTutorial?.id || pendingTutorial?.id}
           onJoin={() => trackEvent('checkout_click', { email: lead?.email })}
         />
       </div>
