@@ -3,6 +3,7 @@ import { Lock, PlayCircle, CheckCircle, ChevronLeft, Search, Lightbulb, Clock } 
 import { themeConfig } from '../constants'
 import { getTrackTutorials } from '../lib/catalogHelpers'
 import StepBadge from './StepBadge'
+import { pricingConfig } from '../pricing'
 
 // "כל ההדרכות" — הארכיון המלא. לא דף הבית. המסלול המומלץ ו"המשך צפייה" חיים
 // ב-MemberDashboard/LandingHome; כאן זו רשימה אחת, לבדיקה חוזרת, בלי כפילויות.
@@ -66,7 +67,7 @@ export default function TutorialsHub({
             <Search size={48} className="mx-auto mb-4 text-gray-300" />
             <p className="text-lg font-medium text-[#3E3935] mb-4">לא מצאנו הדרכות שמתאימות לחיפוש שלך.</p>
             <a
-              href={`https://wa.me/504207702?text=${encodeURIComponent('היי רבקה, חיפשתי הדרכה על "' + searchQuery + '" ואשמח אם תוכלי להכין כזו!')}`}
+              href={`${pricingConfig.whatsappBaseUrl}?text=${encodeURIComponent('היי רבקה, חיפשתי הדרכה על "' + searchQuery + '" ואשמח אם תוכלי להכין כזו!')}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-[#C88F96] font-bold bg-[#C88F96]/10 hover:bg-[#C88F96]/20 px-5 py-2.5 rounded-xl transition-colors shadow-sm"

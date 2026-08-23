@@ -5,12 +5,12 @@ import StepBadge from './StepBadge'
 import JourneyTimeline from './JourneyTimeline'
 import { pricingConfig } from '../pricing'
 
-// דף הבית לחברה/VIP/רוכשת. שום תוכן מכירתי — לא כאן. הדבר הראשון שרואים
-// הוא תמיד "המשך צפייה" (או "המסע שלך מתחיל כאן" לחדשה לגמרי).
+// דף הבית לחברה/VIP בלבד (לא רוכשת בודדת — לה יש אזור נפרד, ראו App.jsx).
+// שום תוכן מכירתי — לא כאן. הדבר הראשון שרואים הוא תמיד "המשך צפייה"
+// (או "המסע שלך מתחיל כאן" לחדשה לגמרי).
 export default function MemberDashboard({
   tutorialsData,
   userName,
-  viewerState, // 'member' | 'vip' | 'purchaser'
   completedTutorials,
   lastWatchedTutorial,
   accessibleTutorialIds,
@@ -18,10 +18,13 @@ export default function MemberDashboard({
 }) {
   const track = useMemo(() => getTrackTutorials(tutorialsData), [tutorialsData])
   const totalSteps = track.length
+  const trackIds = useMemo(() => new Set(track.map((t) => t.id)), [track])
 
   const currentTutorial = lastWatchedTutorial || track[0] || null
   const isFirstEver = !lastWatchedTutorial
-  const completedCount = completedTutorials.length
+  // רק השלמות ששייכות למסלול הראשי — completedTutorials עשוי לכלול גם הדרכות
+  // בריאות/מיוחדות שאינן חלק מ-13 הצעדים, ואז "X מתוך 13" יכול לחרוג מ-13.
+  const completedCount = completedTutorials.filter((id) => trackIds.has(id)).length
 
   const newItems = useMemo(() => {
     const items = []
@@ -30,8 +33,6 @@ export default function MemberDashboard({
     }
     return items.slice(0, 3)
   }, [])
-
-  const isLocked = viewerState === 'purchaser'
 
   return (
     <div className="flex-1 pb-[100px] md:pb-8">
@@ -88,7 +89,7 @@ export default function MemberDashboard({
           </h3>
           <JourneyTimeline
             tutorialsData={tutorialsData}
-            mode={isLocked ? 'locked' : 'open'}
+            mode="open"
             completedTutorials={completedTutorials}
             currentTutorialId={currentTutorial?.id}
             accessibleTutorialIds={accessibleTutorialIds}

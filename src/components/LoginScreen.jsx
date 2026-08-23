@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { ChevronRight, Mail, KeyRound, Loader, Sparkles } from 'lucide-react'
+import { pricingConfig } from '../pricing'
 
 export default function LoginScreen({ onLogin, onCancel, isLoading, error, pendingTutorial, clearError, prefillEmail, knownMember }) {
   const [emailInput, setEmailInput] = useState(prefillEmail || '')
@@ -19,7 +20,7 @@ export default function LoginScreen({ onLogin, onCancel, isLoading, error, pendi
 
   const purchaseUrl =
     pendingTutorial?.landingPageUrl ||
-    `https://wa.me/504207702?text=${encodeURIComponent('היי רבקה, אשמח לקבל פרטים ולינק רכישה להדרכה: ' + (pendingTutorial?.title || ''))}`
+    `${pricingConfig.whatsappBaseUrl}?text=${encodeURIComponent('היי רבקה, אשמח לקבל פרטים ולינק רכישה להדרכה: ' + (pendingTutorial?.title || ''))}`
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center p-4 bg-[#FAF7F2] pb-10">

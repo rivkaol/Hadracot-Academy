@@ -26,6 +26,7 @@ export const apiLogMemberProgress = (cred, p) => call('logMemberProgress', { ...
 
 // לידים ומעקב (פעולות ציבוריות, בלי סיסמה)
 export const apiRegisterLead = (lead) => call('registerLead', lead) // { name, email, phone }
+export const apiGetTrialProgress = (p) => call('getTrialProgress', p) // { email, tutorialId } -> { maxSeconds, reachedLimit }
 export const apiLogProgress = (p) => call('logProgress', p) // { email, tutorialId, tutorialTitle, seconds, reachedLimit, newAttempt }
 export const apiAdminLeads = (adminKey) => call('adminLeads', { adminKey })
 export const apiTrackEvent = (p) => call('trackEvent', p) // { eventName, email, tutorialId, meta }

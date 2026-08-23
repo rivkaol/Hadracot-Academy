@@ -14,7 +14,7 @@ export const pricingConfig = {
   vipCheckoutUrl: null,
 
   whatsappNumber: '972504207702',
-  whatsappBaseUrl: 'https://wa.me/504207702',
+  whatsappBaseUrl: 'https://wa.me/972504207702',
 
   // מפגש חי קרוב — מתעדכן ידנית, לא מערכת אירועים מלאה. null = אין מפגש קרוב, האזור לא מוצג.
   // דוגמה: { date: '2026-09-01T19:00:00+03:00', title: 'מפגש זום חי', joinUrl: 'https://...' }

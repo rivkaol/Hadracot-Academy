@@ -133,6 +133,21 @@ export default async function handler(req, res) {
       return res.json({ ok: true })
     }
 
+    // שליפת ההתקדמות הקיימת בטעימה — כדי שרענון/כניסה חוזרת לא יאפסו את 5 הדקות,
+    // ושמי שכבר הגיעה לגבול תקבל את השער מיד בלי צפייה נוספת.
+    if (action === 'getTrialProgress') {
+      if (!email) return res.json({ maxSeconds: 0, reachedLimit: false })
+      const tid = Number(body.tutorialId)
+      if (isNaN(tid)) return res.json({ maxSeconds: 0, reachedLimit: false })
+      const { data } = await supabase
+        .from('hadracot_lead_progress')
+        .select('max_seconds,reached_limit')
+        .eq('email', email)
+        .eq('tutorial_id', tid)
+        .maybeSingle()
+      return res.json({ maxSeconds: data?.max_seconds || 0, reachedLimit: data?.reached_limit === true })
+    }
+
     // רישום מעורבות: כמה שניות צפתה, האם סיימה, כמה פעמים נכנסה
     if (action === 'logProgress') {
       if (!email) return res.json({ ok: false })

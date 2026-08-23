@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { apiLogin, apiLastWatched, apiRegisterLead, apiMarkOnboardingSeen } from './api'
 import { useCatalog } from './useCatalog'
 import { useViewerState } from './hooks/useViewerState'
 import { trackEvent } from './lib/trackEvent'
+import { findTutorialById } from './lib/catalogHelpers'
 
 import SkeletonGallery from './components/SkeletonGallery'
 import LoginScreen from './components/LoginScreen'
@@ -16,6 +17,7 @@ import LandingHome from './components/LandingHome'
 import OnboardingOverlay from './components/OnboardingOverlay'
 import TrialWelcomeScreen from './components/TrialWelcomeScreen'
 import TrialTrackMapScreen from './components/TrialTrackMapScreen'
+import ClubGateway from './components/ClubGateway'
 import { pricingConfig } from './pricing'
 
 import { ChevronRight, LogOut, User, Library, Search, Crown, Lightbulb } from 'lucide-react'
@@ -53,7 +55,10 @@ function Header({
   onGoProfile,
   onGoLibrary,
 }) {
-  const isMember = hasFullAccess || viewerState === 'purchaser'
+  // רק member/vip מקבלות מסגרת "מועדון" מלאה (מסלול, קהילה). רוכשת בודדת
+  // אינה חברת מועדון — לא מציגים לה את השפה/הניווט הזה (ראו App.jsx viewerState==='purchaser').
+  const isMember = hasFullAccess
+  const isPurchaser = viewerState === 'purchaser'
   return (
     <header className="bg-white sticky top-0 z-50 border-b border-gray-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between relative">
@@ -78,13 +83,28 @@ function Header({
                 </button>
               ))}
               <a
-                href="https://wa.me/504207702?text=היי רבקה, אשמח להצטרף לקבוצת המועדון"
+                href={`${pricingConfig.whatsappBaseUrl}?text=${encodeURIComponent('היי רבקה, אשמח להצטרף לקבוצת המועדון')}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm font-bold text-[#716861] hover:text-[#3E3935] transition-colors"
               >
                 הקהילה
               </a>
+            </nav>
+          ) : isPurchaser ? (
+            <nav className="hidden lg:flex items-center gap-5">
+              <button
+                onClick={onGoLibrary}
+                className="text-sm font-bold text-[#716861] hover:text-[#3E3935] transition-colors"
+              >
+                ההדרכות שלי
+              </button>
+              <button
+                onClick={onGoProfile}
+                className="text-sm font-bold text-[#716861] hover:text-[#3E3935] transition-colors"
+              >
+                החשבון שלי
+              </button>
             </nav>
           ) : isAuthenticated ? (
             <button
@@ -127,7 +147,7 @@ function Header({
                   )}
                 </div>
                 <a
-                  href="https://wa.me/504207702?text=היי רבקה, יש לי רעיון להדרכה חדשה:"
+                  href={`${pricingConfig.whatsappBaseUrl}?text=${encodeURIComponent('היי רבקה, יש לי רעיון להדרכה חדשה:')}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[11px] text-[#C88F96] font-bold hover:underline flex items-center gap-1 mt-0.5"
@@ -197,6 +217,9 @@ export default function App() {
   const [selectedTutorial, setSelectedTutorial] = useState(null)
   const [selectedCategoryName, setSelectedCategoryName] = useState('')
   const [nextTutorial, setNextTutorial] = useState(null)
+  // האם מבקרת לא-מזוהה כבר בחרה "אני עדיין לא חברה" בשער הכניסה — אם לא,
+  // מוצג ClubGateway ולא ה-Landing השיווקי. נשאר true לאורך הביקור, לא נשאל שוב בכל ניווט.
+  const [hasChosenExplore, setHasChosenExplore] = useState(false)
 
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [userEmail, setUserEmail] = useState('')
@@ -204,7 +227,9 @@ export default function App() {
   const [userName, setUserName] = useState('')
   const [accessibleTutorialIds, setAccessibleTutorialIds] = useState([])
   const [completedTutorials, setCompletedTutorials] = useState([])
-  const [lastWatchedTutorial, setLastWatchedTutorial] = useState(null)
+  // נשמר כ-id בלבד (כך מגיע מהשרת) — האובייקט המלא נגזר למטה מ-tutorialsData,
+  // כדי שלא יהיה חלון זמן שבו lastWatchedTutorial הוא מספר ולא אובייקט הדרכה.
+  const [lastWatchedId, setLastWatchedId] = useState(null)
   const [isClubMember, setIsClubMember] = useState(false)
   const [isVip, setIsVip] = useState(false)
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState(true) // true עד שנטען משתמש אמיתי — לא להבזיק onboarding בטעינה
@@ -221,6 +246,12 @@ export default function App() {
   const [adminKey, setAdminKey] = useState('')
 
   const { tutorialsData, catalogLoading, fetchCatalog } = useCatalog()
+
+  // נגזר תמיד מ-tutorialsData העדכני — לעולם לא "תקוע" כמספר גולמי.
+  const lastWatchedTutorial = useMemo(
+    () => (lastWatchedId ? findTutorialById(tutorialsData, lastWatchedId) : null),
+    [tutorialsData, lastWatchedId]
+  )
 
   const { state: viewerState, hasFullAccess } = useViewerState({
     isAuthenticated,
@@ -257,7 +288,7 @@ export default function App() {
     setIsClubMember(user.isClubMember === true)
     setIsVip(user.isVip === true)
     setHasSeenOnboarding(user.hasSeenOnboarding === true)
-    if (user.lastWatched) setLastWatchedTutorial(user.lastWatched)
+    setLastWatchedId(user.lastWatched || null)
     setIsAuthenticated(true)
     localStorage.setItem(
       'cached_user_data',
@@ -285,7 +316,7 @@ export default function App() {
     setHasSeenOnboarding(true)
     setAccessibleTutorialIds([])
     setCompletedTutorials([])
-    setLastWatchedTutorial(null)
+    setLastWatchedId(null)
     localStorage.removeItem('cached_user_data')
   }
 
@@ -306,6 +337,10 @@ export default function App() {
 
     fetchCatalog()
 
+    // נתיב כניסה ישיר לחברות — /login — כדי שקישורים באתר הראשי/במיילים/בוואטסאפ
+    // יוכלו לעקוף לגמרי את השער ואת דף ההיכרות עם המועדון.
+    const isLoginPath = window.location.pathname.replace(/\/+$/, '') === '/login'
+
     const cached = localStorage.getItem('cached_user_data')
     if (cached) {
       try {
@@ -318,7 +353,7 @@ export default function App() {
         setIsClubMember(data.isClubMember || false)
         setIsVip(data.isVip || false)
         setHasSeenOnboarding(data.hasSeenOnboarding || false)
-        if (data.lastWatched) setLastWatchedTutorial(data.lastWatched)
+        setLastWatchedId(data.lastWatched || null)
         setIsAuthenticated(true)
 
         // רענון שקט ברקע — מושך נתונים עדכניים ומאמת שהסיסמה עדיין תקפה
@@ -330,25 +365,13 @@ export default function App() {
       } catch (e) {
         console.error('שגיאה בקריאת מטמון משתמש', e)
       }
+    } else if (isLoginPath) {
+      // אין חברה מזוהה במכשיר הזה — /login פותח ישר את מסך ההתחברות, בלי שער/Landing.
+      // אם כן קיימת חברה מזוהה, לא דורסים את זה — Dashboard תמיד קודם ל-Login.
+      setView('login')
     }
     setAuthLoading(false)
   }, [])
-
-  useEffect(() => {
-    if (
-      isAuthenticated &&
-      tutorialsData.length > 0 &&
-      lastWatchedTutorial &&
-      typeof lastWatchedTutorial === 'number'
-    ) {
-      let found = null
-      tutorialsData.forEach((cat) => {
-        const t = cat.tutorials.find((tut) => tut.id === lastWatchedTutorial)
-        if (t) found = t
-      })
-      if (found) setLastWatchedTutorial(found)
-    }
-  }, [tutorialsData, isAuthenticated])
 
   const proceedToTutorial = (tutorial) => {
     const category = tutorialsData.find((cat) => cat.tutorials.some((t) => t.id === tutorial.id))
@@ -406,7 +429,7 @@ export default function App() {
     if (hasAccess) {
       if (userEmail) {
         apiLastWatched({ email: userEmail, password: userPassword }, tutorial.id).catch(console.error)
-        setLastWatchedTutorial(tutorial)
+        setLastWatchedId(tutorial.id)
       }
       proceedToTutorial(tutorial)
       return
@@ -628,15 +651,23 @@ export default function App() {
 
   return (
     <div dir="rtl" className="flex-1 font-sans bg-[#FAF7F2] text-[#3E3935] flex flex-col">
-      {(viewerState === 'visitor' || viewerState === 'trial') && view !== 'tutorial' && <VisitorTopBar onLogin={goLogin} />}
+      {(viewerState === 'trial' || (viewerState === 'visitor' && hasChosenExplore)) && view !== 'tutorial' && (
+        <VisitorTopBar onLogin={goLogin} />
+      )}
       <Header showBack={view === 'tutorial'} {...headerProps} />
 
-      {view === 'home' && (viewerState === 'visitor' || viewerState === 'trial') && (
+      {view === 'home' && viewerState === 'visitor' && !hasChosenExplore && (
+        <ClubGateway onGoLogin={goLogin} onExploreClub={() => setHasChosenExplore(true)} />
+      )}
+
+      {view === 'home' && (
+        (viewerState === 'trial') || (viewerState === 'visitor' && hasChosenExplore)
+      ) && (
         <LandingHome
           tutorialsData={tutorialsData}
           isReturningTrial={viewerState === 'trial'}
           onStartTrial={(tutorial) => handleSelectTutorial(tutorial)}
-          onLogin={() => setView('login')}
+          onLogin={goLogin}
         />
       )}
 
@@ -655,15 +686,28 @@ export default function App() {
         </div>
       )}
 
-      {view === 'home' && (viewerState === 'member' || viewerState === 'vip' || viewerState === 'purchaser') && (
+      {view === 'home' && (viewerState === 'member' || viewerState === 'vip') && (
         <MemberDashboard
           tutorialsData={tutorialsData}
           userName={userName}
-          viewerState={viewerState}
           completedTutorials={completedTutorials}
           lastWatchedTutorial={lastWatchedTutorial}
           accessibleTutorialIds={accessibleTutorialIds}
           onSelectTutorial={handleSelectTutorial}
+        />
+      )}
+
+      {/* רוכשת בודדת: אינה חברת מועדון — האזור הקיים של ההדרכות שרכשה, לא Dashboard/מסלול/קהילה */}
+      {view === 'home' && viewerState === 'purchaser' && (
+        <TutorialsHub
+          tutorialsData={tutorialsData}
+          onSelectTutorial={handleSelectTutorial}
+          accessibleTutorialIds={accessibleTutorialIds}
+          isAuthenticated={isAuthenticated}
+          searchQuery=""
+          completedTutorials={completedTutorials}
+          lastWatchedTutorial={lastWatchedTutorial}
+          isClubMember={false}
         />
       )}
 
@@ -687,7 +731,9 @@ export default function App() {
         />
       )}
 
-      <BottomNav activeView={view} {...bottomNavProps} />
+      {!(view === 'home' && viewerState === 'visitor' && !hasChosenExplore) && (
+        <BottomNav activeView={view} {...bottomNavProps} />
+      )}
       {showOnboarding && view !== 'tutorial' && <OnboardingOverlay onDismiss={dismissOnboarding} />}
     </div>
   )

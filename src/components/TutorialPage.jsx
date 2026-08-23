@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Sparkles, CheckCircle, ChevronLeft, BookOpen, Edit, Download, Save, Loader, FileText, Crown } from 'lucide-react'
 import confetti from 'canvas-confetti'
 import Player from '@vimeo/player'
-import { apiGetNote, apiSaveNote, apiSetCompleted, apiLogProgress, apiLogMemberProgress } from '../api'
+import { apiGetNote, apiSaveNote, apiSetCompleted, apiLogProgress, apiLogMemberProgress, apiGetTrialProgress } from '../api'
 import { getTrackTutorials, getNextAccessibleTutorial } from '../lib/catalogHelpers'
 import { trackEvent } from '../lib/trackEvent'
 import StepBadge from './StepBadge'
@@ -35,13 +35,18 @@ export default function TutorialPage({
   const [gateOpen, setGateOpen] = useState(false)
   const [trialSecondsWatched, setTrialSecondsWatched] = useState(0)
 
-  // שער הטעימה: למי שאינה מנויה — עצירה פיזית אחרי 5 דק', חסימת גרירה, ומעקב מעורבות
+  // שער הטעימה: למי שאינה מנויה — עצירה פיזית אחרי 5 דק' צפייה מצטברת (לא מיקום
+  // מקסימלי בסרטון), חסימת גרירה, ומעקב מעורבות. נטען קודם ההתקדמות הקיימת
+  // מהשרת — Refresh/כניסה חוזרת לא מאפסים את הטעימה, ומי שכבר הגיעה לגבול
+  // מקבלת את השער מיד בלי צפייה נוספת.
   useEffect(() => {
     if (hasAccess || !iframeRef.current) return
     const player = new Player(iframeRef.current)
+    let cancelled = false
     let locked = false
     let firedQuarter = false
     let firedHalf = false
+    let lastPlayerPos = 0
     maxSecRef.current = 0
     lastSentRef.current = 0
     setTrialSecondsWatched(0)
@@ -58,53 +63,88 @@ export default function TutorialPage({
       }).catch(() => {})
     }
 
-    // רישום כניסה חדשה להדרכה
-    logProgress(false, true)
-    trackEvent('trial_video_started', { email: viewerEmail, tutorialId: tutorial.id })
-
     const enforcePause = () => { player.pause().catch(() => {}) }
 
     const openGate = async () => {
       locked = true
       try { await player.pause() } catch { /* התעלמות משגיאות נגן */ }
       setGateOpen(true)
-      logProgress(true, false) // הגיעה לסוף הטעימה = ליד חמה
-      trackEvent('trial_completed_5min', { email: viewerEmail, tutorialId: tutorial.id })
     }
 
-    // כל עוד נעולה — כל ניסיון המשך/ניגון נעצר מיד (עצירה פיזית)
+    // צפייה מצטברת: סכימת "קפיצות קדימה קטנות" בין טיקים (ניגון אמיתי),
+    // לא מיקום מוחלט בסרטון — כדי שחזרה אחורה וצפייה חוזרת תיספר כצפייה נוספת,
+    // לא "בחינם" כי כבר עברנו שם קודם.
     const onTime = (d) => {
-      if (d.seconds > maxSecRef.current) maxSecRef.current = d.seconds
-      setTrialSecondsWatched(d.seconds)
-      if (!firedQuarter && d.seconds >= PREVIEW_SECONDS * 0.25) {
+      if (locked) { enforcePause(); return } // גיבוי הגנתי — onPlay כבר תופס את רוב המקרים
+      const delta = d.seconds - lastPlayerPos
+      lastPlayerPos = d.seconds
+      if (delta > 0 && delta < 2) maxSecRef.current += delta
+      setTrialSecondsWatched(maxSecRef.current)
+
+      if (!firedQuarter && maxSecRef.current >= PREVIEW_SECONDS * 0.25) {
         firedQuarter = true
         trackEvent('trial_25_percent', { email: viewerEmail, tutorialId: tutorial.id })
       }
-      if (!firedHalf && d.seconds >= PREVIEW_SECONDS * 0.5) {
+      if (!firedHalf && maxSecRef.current >= PREVIEW_SECONDS * 0.5) {
         firedHalf = true
         trackEvent('trial_50_percent', { email: viewerEmail, tutorialId: tutorial.id })
       }
       // שליחת עדכון מעורבות כל ~20 שניות
-      if (!locked && d.seconds - lastSentRef.current >= 20) {
-        lastSentRef.current = d.seconds
+      if (!locked && maxSecRef.current - lastSentRef.current >= 20) {
+        lastSentRef.current = maxSecRef.current
         logProgress(false, false)
       }
-      if (d.seconds >= PREVIEW_SECONDS) { locked ? enforcePause() : openGate() }
+      if (maxSecRef.current >= PREVIEW_SECONDS && !locked) {
+        openGate()
+        logProgress(true, false) // הגיעה לסוף הטעימה = ליד חמה
+        trackEvent('trial_completed_5min', { email: viewerEmail, tutorialId: tutorial.id })
+      }
     }
-    const onSeek = (d) => { if (d.seconds > PREVIEW_SECONDS && !locked) openGate() }
+    // שמירת lastPlayerPos בסנכרון אחרי גרירה, כדי שהטיק הבא לא יספור קפיצה כאילו הייתה צפייה
+    const onSeek = (d) => { lastPlayerPos = d.seconds }
     const onPlay = () => { if (locked) enforcePause() }
 
-    player.on('timeupdate', onTime)
-    player.on('seeking', onSeek)
-    player.on('seeked', onSeek)
-    player.on('play', onPlay)
+    const init = async () => {
+      let startSeconds = 0
+      let alreadyReached = false
+      if (viewerEmail) {
+        try {
+          const progress = await apiGetTrialProgress({ email: viewerEmail, tutorialId: tutorial.id })
+          startSeconds = Math.max(0, Number(progress?.maxSeconds) || 0)
+          alreadyReached = progress?.reachedLimit === true
+        } catch { /* אין התקדמות קודמת זמינה — מתחילים מ-0 */ }
+      }
+      if (cancelled) return
+
+      maxSecRef.current = startSeconds
+      lastSentRef.current = startSeconds
+      setTrialSecondsWatched(startSeconds)
+
+      if (alreadyReached) {
+        locked = true
+        setGateOpen(true)
+        player.on('play', onPlay)
+        return
+      }
+
+      // רישום כניסה חדשה להדרכה
+      logProgress(false, true)
+      trackEvent('trial_video_started', { email: viewerEmail, tutorialId: tutorial.id })
+
+      player.on('timeupdate', onTime)
+      player.on('seeking', onSeek)
+      player.on('seeked', onSeek)
+      player.on('play', onPlay)
+    }
+    init()
 
     return () => {
+      cancelled = true
       player.off('timeupdate', onTime)
       player.off('seeking', onSeek)
       player.off('seeked', onSeek)
       player.off('play', onPlay)
-      logProgress(false, false) // שמירת זמן הצפייה הסופי ביציאה
+      if (!locked) logProgress(false, false) // שמירת זמן הצפייה הסופי ביציאה (רק אם עוד לא ננעלה)
     }
   }, [hasAccess, tutorial.id, viewerEmail])
 
