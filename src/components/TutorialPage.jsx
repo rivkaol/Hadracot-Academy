@@ -35,22 +35,18 @@ export default function TutorialPage({
   const [gateOpen, setGateOpen] = useState(false)
   const [trialSecondsWatched, setTrialSecondsWatched] = useState(0)
 
-  // שער הטעימה: למי שאינה מנויה — עצירה פיזית אחרי 5 דק' צפייה מצטברת נטו.
-  // נמדד בדופק שנייה־שנייה (setInterval) בזמן שהנגן במצב "מנגן" בפועל — לא לפי
-  // deltas של אירועי timeupdate מהנגן. הסיבה: בדיקה בפרודקשן הראתה שאירועי
-  // timeupdate/playProgress של Vimeo לא תמיד מגיעים בקצב קבוע (למשל כשהטאב לא
-  // בפוקוס/ברקע — נפוץ מאוד במובייל), ואז ה-delta בין שני אירועים חורג מהסף
-  // ההגנתי ונזרק בשקט — כך שהמונה מפגר משמעותית מאחורי זמן הצפייה האמיתי, וה-
-  // שער נפתח הרבה יותר מאוחר מ-5 דקות אמיתיות (במקרה הגרוע — כמעט לא נפתח).
-  // גישת ה-heartbeat חסינה לזה: היא סופרת שניות אמיתיות רק כשהנגן מדווח "מנגן",
-  // ולא תלויה בתדירות אירועי timeupdate. כבונוס, קפיצה קדימה (seek) כבר לא
-  // "בחינם" מעצם זה שהיא כמעט מיידית ולא צוברת זמן — אין צורך במעקב seek נפרד.
+  // שער הטעימה: למי שאינה מנויה — עצירה פיזית ברגע שמיקום הנגן מגיע ל-5 דקות.
+  // בכוונה *לא* "זמן צפייה נטו מצטבר" (היה כך בעבר, ורבקה ביקשה לפשט: "ממש
+  // מיד, לא במצטבר") — פשוט בודקים כל שנייה מה המיקום הנוכחי בפועל בנגן
+  // (player.getCurrentTime, בקריאה אקטיבית — לא מסתמכים על תדירות אירועי
+  // timeupdate שהתבררה כלא סדירה, למשל כשהטאב לא בפוקוס/ברקע), וברגע שהוא
+  // מגיע ל-PREVIEW_SECONDS השער נפתח. "כבר הגעת לגבול" נשמר בשרת (reachedLimit)
+  // כדי שרענון/כניסה חוזרת לא ייתנו עוד 5 דקות מאפס.
   useEffect(() => {
     if (hasAccess || !iframeRef.current) return
     const player = new Player(iframeRef.current)
     let cancelled = false
     let locked = false
-    let isPlaying = false
     let firedQuarter = false
     let firedHalf = false
     maxSecRef.current = 0
@@ -73,14 +69,16 @@ export default function TutorialPage({
 
     const openGate = async () => {
       locked = true
-      isPlaying = false
       try { await player.pause() } catch { /* התעלמות משגיאות נגן */ }
       setGateOpen(true)
     }
 
-    const tick = () => {
-      if (locked || !isPlaying) return
-      maxSecRef.current += 1
+    const checkPosition = async () => {
+      if (locked || cancelled) return
+      let seconds
+      try { seconds = await player.getCurrentTime() } catch { return }
+      if (cancelled || locked) return
+      maxSecRef.current = Math.max(maxSecRef.current, seconds)
       setTrialSecondsWatched(maxSecRef.current)
 
       if (!firedQuarter && maxSecRef.current >= PREVIEW_SECONDS * 0.25) {
@@ -102,14 +100,9 @@ export default function TutorialPage({
         trackEvent('trial_completed_5min', { email: viewerEmail, tutorialId: tutorial.id })
       }
     }
-    const intervalId = setInterval(tick, 1000)
+    const intervalId = setInterval(checkPosition, 1000)
 
-    const onPlay = () => {
-      if (locked) { enforcePause(); return }
-      isPlaying = true
-    }
-    const onPause = () => { isPlaying = false }
-    const onEnded = () => { isPlaying = false }
+    const onPlay = () => { if (locked) enforcePause() }
 
     const init = async () => {
       let startSeconds = 0
@@ -142,8 +135,6 @@ export default function TutorialPage({
       trackEvent('trial_video_started', { email: viewerEmail, tutorialId: tutorial.id })
 
       player.on('play', onPlay)
-      player.on('pause', onPause)
-      player.on('ended', onEnded)
     }
     init()
 
@@ -151,8 +142,6 @@ export default function TutorialPage({
       cancelled = true
       clearInterval(intervalId)
       player.off('play', onPlay)
-      player.off('pause', onPause)
-      player.off('ended', onEnded)
       if (!locked) logProgress(false, false) // שמירת זמן הצפייה הסופי ביציאה (רק אם עוד לא ננעלה)
     }
   }, [hasAccess, tutorial.id, viewerEmail])
