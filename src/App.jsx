@@ -3,7 +3,7 @@ import { apiLogin, apiLastWatched, apiRegisterLead, apiMarkOnboardingSeen } from
 import { useCatalog } from './useCatalog'
 import { useViewerState } from './hooks/useViewerState'
 import { trackEvent } from './lib/trackEvent'
-import { findTutorialById } from './lib/catalogHelpers'
+import { findTutorialById, getTrackTutorials } from './lib/catalogHelpers'
 
 import SkeletonGallery from './components/SkeletonGallery'
 import LoginScreen from './components/LoginScreen'
@@ -36,7 +36,7 @@ function VisitorTopBar({ onLogin }) {
     <div className="bg-[#3E3935] text-white text-center py-2.5 px-4 text-sm font-medium sticky top-0 z-[60]">
       כבר חברת מועדון?{' '}
       <button onClick={onLogin} className="underline font-bold hover:text-[#C88F96] transition-colors">
-        💛 התחברי כאן
+        התחברי כאן
       </button>
     </div>
   )
@@ -577,7 +577,11 @@ export default function App() {
   if (view === 'trialWelcome' && pendingTutorial) {
     return (
       <div dir="rtl" className="min-h-screen font-sans bg-[#FAF7F2] flex flex-col">
-        <TrialWelcomeScreen tutorial={pendingTutorial} onStart={handleStartTrialWatch} />
+        <TrialWelcomeScreen
+          tutorial={pendingTutorial}
+          onStart={handleStartTrialWatch}
+          totalSteps={getTrackTutorials(tutorialsData).length}
+        />
       </div>
     )
   }

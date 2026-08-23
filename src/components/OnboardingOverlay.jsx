@@ -13,10 +13,11 @@ export default function OnboardingOverlay({ onDismiss, onJoinCommunity }) {
         <button onClick={onDismiss} className="absolute top-5 left-5 text-gray-400 hover:text-[#3E3935]">
           <X size={22} />
         </button>
-        <div className="text-4xl mb-4">💛</div>
-        <h1 className="text-2xl font-bold text-[#3E3935] mb-3">ברוכה הבאה 💛 בואי נעשה לך סדר</h1>
+        <h1 className="text-2xl font-bold text-[#3E3935] mb-3">ברוכה הבאה. בואי נעשה לך סדר.</h1>
         <p className="text-[#716861] leading-[1.8] mb-6">
-          מהיום לא צריך לחפש בין כל ההדרכות. בכל כניסה תוכלי לראות איפה את נמצאת ומה הצעד הבא שמומלץ לך.
+          מהיום לא צריך לחפש בין כל ההדרכות.
+          <br />
+          בכל כניסה תוכלי לראות איפה את נמצאת ומה הצעד הבא שמומלץ לך.
         </p>
         <ol className="text-right space-y-2 mb-7 text-sm text-[#3E3935] bg-[#FAF7F2] rounded-2xl p-5">
           <li>1. תתחילי מההדרכה הראשונה</li>

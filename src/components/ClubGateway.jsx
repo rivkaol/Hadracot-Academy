@@ -7,7 +7,6 @@ export default function ClubGateway({ onGoLogin, onExploreClub }) {
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-4 py-16 bg-[#FAF7F2] text-center">
       <div className="w-full max-w-md">
-        <div className="text-4xl mb-4">💛</div>
         <h1 className="text-2xl md:text-3xl font-bold text-[#3E3935] mb-10">
           ברוכה הבאה למועדון
           <br />
