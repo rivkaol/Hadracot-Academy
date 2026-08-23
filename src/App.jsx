@@ -338,9 +338,12 @@ export default function App() {
 
     fetchCatalog()
 
-    // נתיב כניסה ישיר לחברות — /login — כדי שקישורים באתר הראשי/במיילים/בוואטסאפ
-    // יוכלו לעקוף לגמרי את השער ואת דף ההיכרות עם המועדון.
-    const isLoginPath = window.location.pathname.replace(/\/+$/, '') === '/login'
+    // כניסה ישירה לחברות — כדי שקישורים באתר הראשי/במיילים/בוואטסאפ יוכלו לעקוף
+    // לגמרי את השער ואת דף ההיכרות עם המועדון. תמיכה גם ב-?login=1 וגם בנתיב
+    // /login עצמו: ה-query param הוא המנגנון האמין (לא תלוי ב-rewrite של השרת —
+    // ל-/ יש תמיד תשובה תקינה), הנתיב נשאר כגיבוי למקרה שה-rewrite הכללי יעבוד.
+    const isLoginPath =
+      window.location.pathname.replace(/\/+$/, '') === '/login' || params.get('login') === '1'
 
     const cached = localStorage.getItem('cached_user_data')
     if (cached) {
