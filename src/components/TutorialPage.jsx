@@ -35,10 +35,13 @@ export default function TutorialPage({
   const [gateOpen, setGateOpen] = useState(false)
   const [trialSecondsWatched, setTrialSecondsWatched] = useState(0)
 
-  // שער הטעימה: למי שאינה מנויה — עצירה פיזית אחרי 5 דק' צפייה מצטברת (לא מיקום
-  // מקסימלי בסרטון), חסימת גרירה, ומעקב מעורבות. נטען קודם ההתקדמות הקיימת
-  // מהשרת — Refresh/כניסה חוזרת לא מאפסים את הטעימה, ומי שכבר הגיעה לגבול
-  // מקבלת את השער מיד בלי צפייה נוספת.
+  // שער הטעימה: למי שאינה מנויה — עצירה פיזית ברגע שמיקום הנגן מגיע ל-5 דקות.
+  // בכוונה *לא* "זמן צפייה נטו מצטבר" (היה כך בעבר, ורבקה ביקשה לפשט: "ממש
+  // מיד, לא במצטבר") — פשוט בודקים כל שנייה מה המיקום הנוכחי בפועל בנגן
+  // (player.getCurrentTime, בקריאה אקטיבית — לא מסתמכים על תדירות אירועי
+  // timeupdate שהתבררה כלא סדירה, למשל כשהטאב לא בפוקוס/ברקע), וברגע שהוא
+  // מגיע ל-PREVIEW_SECONDS השער נפתח. "כבר הגעת לגבול" נשמר בשרת (reachedLimit)
+  // כדי שרענון/כניסה חוזרת לא ייתנו עוד 5 דקות מאפס.
   useEffect(() => {
     if (hasAccess || !iframeRef.current) return
     const player = new Player(iframeRef.current)
@@ -46,7 +49,6 @@ export default function TutorialPage({
     let locked = false
     let firedQuarter = false
     let firedHalf = false
-    let lastPlayerPos = 0
     maxSecRef.current = 0
     lastSentRef.current = 0
     setTrialSecondsWatched(0)
@@ -71,14 +73,12 @@ export default function TutorialPage({
       setGateOpen(true)
     }
 
-    // צפייה מצטברת: סכימת "קפיצות קדימה קטנות" בין טיקים (ניגון אמיתי),
-    // לא מיקום מוחלט בסרטון — כדי שחזרה אחורה וצפייה חוזרת תיספר כצפייה נוספת,
-    // לא "בחינם" כי כבר עברנו שם קודם.
-    const onTime = (d) => {
-      if (locked) { enforcePause(); return } // גיבוי הגנתי — onPlay כבר תופס את רוב המקרים
-      const delta = d.seconds - lastPlayerPos
-      lastPlayerPos = d.seconds
-      if (delta > 0 && delta < 2) maxSecRef.current += delta
+    const checkPosition = async () => {
+      if (locked || cancelled) return
+      let seconds
+      try { seconds = await player.getCurrentTime() } catch { return }
+      if (cancelled || locked) return
+      maxSecRef.current = Math.max(maxSecRef.current, seconds)
       setTrialSecondsWatched(maxSecRef.current)
 
       if (!firedQuarter && maxSecRef.current >= PREVIEW_SECONDS * 0.25) {
@@ -90,18 +90,18 @@ export default function TutorialPage({
         trackEvent('trial_50_percent', { email: viewerEmail, tutorialId: tutorial.id })
       }
       // שליחת עדכון מעורבות כל ~20 שניות
-      if (!locked && maxSecRef.current - lastSentRef.current >= 20) {
+      if (maxSecRef.current - lastSentRef.current >= 20) {
         lastSentRef.current = maxSecRef.current
         logProgress(false, false)
       }
-      if (maxSecRef.current >= PREVIEW_SECONDS && !locked) {
+      if (maxSecRef.current >= PREVIEW_SECONDS) {
         openGate()
         logProgress(true, false) // הגיעה לסוף הטעימה = ליד חמה
         trackEvent('trial_completed_5min', { email: viewerEmail, tutorialId: tutorial.id })
       }
     }
-    // שמירת lastPlayerPos בסנכרון אחרי גרירה, כדי שהטיק הבא לא יספור קפיצה כאילו הייתה צפייה
-    const onSeek = (d) => { lastPlayerPos = d.seconds }
+    const intervalId = setInterval(checkPosition, 1000)
+
     const onPlay = () => { if (locked) enforcePause() }
 
     const init = async () => {
@@ -134,18 +134,13 @@ export default function TutorialPage({
       logProgress(false, true)
       trackEvent('trial_video_started', { email: viewerEmail, tutorialId: tutorial.id })
 
-      player.on('timeupdate', onTime)
-      player.on('seeking', onSeek)
-      player.on('seeked', onSeek)
       player.on('play', onPlay)
     }
     init()
 
     return () => {
       cancelled = true
-      player.off('timeupdate', onTime)
-      player.off('seeking', onSeek)
-      player.off('seeked', onSeek)
+      clearInterval(intervalId)
       player.off('play', onPlay)
       if (!locked) logProgress(false, false) // שמירת זמן הצפייה הסופי ביציאה (רק אם עוד לא ננעלה)
     }
