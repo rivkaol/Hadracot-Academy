@@ -77,10 +77,12 @@ export default function LeadCaptureScreen({ onRegister, onCancel, onLoginRequest
             <Sparkles size={26} />
           </div>
 
-          <h1 className="text-2xl md:text-3xl font-bold text-[#3E3935] mb-2">רוצה להרגיש איך זה עובד לפני שאת מחליטה?</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-[#3E3935] mb-2">רגע לפני שמתחילות</h1>
           <p className="text-[#716861] mb-6 leading-[1.8]">
-            אני מזמינה אותך להתחיל איתי את הצעד הראשון
-            {tutorialTitle ? ` — "${tutorialTitle}"` : ''}. 5 דקות אמיתיות מתוך המועדון, ללא תשלום.
+            השאירי לי את הפרטים שלך.
+            <br />
+            אני אשמור לך את הטעימה
+            {tutorialTitle ? ` — "${tutorialTitle}"` : ''}, כך שגם אם תצאי ותחזרי — מכסת הצפייה שלך לא תתאפס.
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4 text-right" noValidate>
@@ -150,7 +152,7 @@ export default function LeadCaptureScreen({ onRegister, onCancel, onLoginRequest
                   {isLoading ? (
                     <><Loader size={20} className="animate-spin text-white" /> רגע...</>
                   ) : (
-                    'כן, אני רוצה להתחיל'
+                    'מתחילה את הצעד הראשון'
                   )}
                 </button>
               </form>
