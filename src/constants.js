@@ -1,6 +1,11 @@
 export const SHEETS_URL =
   'https://script.google.com/macros/s/AKfycbwcU0zaYy02fKkgbG7nuV-nxpy8PghAshJ__eFO6Zt_NNPSqoGn4Zr156jeD5XAobwK/exec'
 
+// תמונת רבקה — אותה תמונה בדיוק המשמשת ב-public/join.html (Hero + "מי אני"),
+// כדי שהאורחת תפגוש את אותו האדם משני הדפים.
+export const RIVKA_PHOTO_URL =
+  'https://res.cloudinary.com/dyqe95map/image/upload/v1778355572/profile.jpg_zror0m.jpg'
+
 export const themeConfig = {
   'personal-growth': {
     main: '#C88F96',

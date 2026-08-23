@@ -14,16 +14,17 @@ export default function MemberAreaPreview({ tutorialsData }) {
   if (!current) return null
 
   return (
-    <section className="max-w-2xl mx-auto px-4 sm:px-6 py-16 md:py-20">
+    <section className="visitor-landing max-w-2xl mx-auto px-4 sm:px-6 py-16 md:py-20">
       <div className="text-center mb-8">
         <span className="inline-block text-xs font-bold text-[#9E626C] bg-[#C88F96]/10 px-3 py-1 rounded-full mb-4">
           ככה נראה האזור של חברת מועדון
         </span>
-        <h2 className="text-2xl md:text-3xl font-bold text-[#3E3935] leading-[1.4]">
-          ברגע שאת נכנסת —
+        <h2 className="text-[clamp(1.6rem,3.2vw,2.2rem)] font-extrabold text-[#3E3935] leading-[1.4]">
+          ואחרי שנכנסת —
           <br />
-          כבר לא צריך לחפש מה לראות.
+          כבר לא צריך לחפש.
         </h2>
+        <p className="text-[#716861] mt-4 leading-[1.8]">בכל כניסה המועדון מחזיר אותך למקום שבו את נמצאת עכשיו.</p>
       </div>
 
       <div className="bg-white rounded-[2rem] border border-gray-100 shadow-[0_20px_50px_rgba(148,163,136,0.12)] p-6 md:p-8 select-none" aria-hidden="true">
