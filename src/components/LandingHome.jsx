@@ -101,7 +101,7 @@ export default function LandingHome({ tutorialsData, onStartTrial, onLogin, isRe
         <section className="bg-white border-y border-gray-100 py-16">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <h2 className="text-2xl md:text-3xl font-bold text-[#3E3935] mb-8 text-center">קצת ממה שמחכה לך בדרך</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {teaserTutorials.map((t) => (
                 <div key={t.id} className="bg-[#FAF7F2] rounded-2xl overflow-hidden border border-gray-100">
                   <div className="aspect-video bg-[#3E3935]/5 relative">

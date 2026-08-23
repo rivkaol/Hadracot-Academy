@@ -3,6 +3,9 @@ import { pricingConfig } from '../pricing'
 
 // מסך "ברוכה הבאה" — מוצג פעם אחת בלבד (מיזוג של "אחרי רכישה" ו"היכרות ראשונה",
 // כי התוכן כמעט זהה). נסגר עם markOnboardingSeen, לא חוזר בכניסות הבאות.
+// הקופי ניטרלי בכוונה: אחרי ה-migration גם חברות ותיקות יקבלו את המסך הזה
+// פעם אחת (כי has_seen_onboarding מתחיל false לכולן) — לא צריך להישמע כאילו
+// הן הצטרפו הרגע.
 export default function OnboardingOverlay({ onDismiss, onJoinCommunity }) {
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center p-4" style={{ background: 'rgba(43,39,36,0.55)' }}>
@@ -11,9 +14,9 @@ export default function OnboardingOverlay({ onDismiss, onJoinCommunity }) {
           <X size={22} />
         </button>
         <div className="text-4xl mb-4">💛</div>
-        <h1 className="text-2xl font-bold text-[#3E3935] mb-3">איזה כיף שאת בפנים!</h1>
+        <h1 className="text-2xl font-bold text-[#3E3935] mb-3">ברוכה הבאה 💛 בואי נעשה לך סדר</h1>
         <p className="text-[#716861] leading-[1.8] mb-6">
-          עכשיו לא צריך להספיק שום דבר. אני אוביל אותך צעד צעד — לא צריך לראות הכול, מתחילות מהצעד הראשון ומתקדמות בקצב שלך.
+          מהיום לא צריך לחפש בין כל ההדרכות. בכל כניסה תוכלי לראות איפה את נמצאת ומה הצעד הבא שמומלץ לך.
         </p>
         <ol className="text-right space-y-2 mb-7 text-sm text-[#3E3935] bg-[#FAF7F2] rounded-2xl p-5">
           <li>1. תתחילי מההדרכה הראשונה</li>

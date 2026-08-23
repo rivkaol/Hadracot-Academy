@@ -303,16 +303,19 @@ export default async function handler(req, res) {
         .eq('tutorial_id', tid)
         .maybeSingle()
       const nowIso = new Date().toISOString()
-      const nextCompleted = body.completed === true || existing?.completed || false
+      // completed: אם נשלח מפורשות (true/false) — זה הערך; אם לא נשלח (עדכון התקדמות
+      // רגיל בלי סימון) — משמרים את מה שכבר קיים. כך אפשר גם לבטל סימון "הושלם".
+      const hasExplicitCompleted = typeof body.completed === 'boolean'
+      const nextCompleted = hasExplicitCompleted ? body.completed : existing?.completed || false
       await supabase.from('hadracot_member_progress').upsert(
         {
           email,
           tutorial_id: tid,
           watched_seconds: Math.max(secs, existing?.watched_seconds || 0),
-          duration_seconds: body.durationSeconds != null ? Number(body.durationSeconds) : null,
+          duration_seconds: body.durationSeconds != null ? Number(body.durationSeconds) : undefined,
           completed: nextCompleted,
           last_watched_at: nowIso,
-          completed_at: nextCompleted && !existing?.completed ? nowIso : undefined,
+          completed_at: nextCompleted ? (existing?.completed ? undefined : nowIso) : null,
         },
         { onConflict: 'email,tutorial_id' }
       )

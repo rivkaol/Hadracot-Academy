@@ -22,10 +22,11 @@ import { pricingConfig } from './pricing'
 
 import { ChevronRight, LogOut, User, Library, Search, Crown, Lightbulb } from 'lucide-react'
 
+// "חדש במועדון" הוסר מהניווט העליון — אין עדיין destination אמיתי (לא היעד
+// לחיצה, לא מפגש קיים). האזור בתוך ה-Dashboard נשאר conditional על nextLiveSession.
 const MEMBER_NAV_ITEMS = [
   { label: 'המסלול שלי', key: 'home' },
   { label: 'כל ההדרכות', key: 'library' },
-  { label: 'חדש במועדון', key: 'home' },
   { label: 'החשבון שלי', key: 'profile' },
 ]
 
@@ -542,6 +543,9 @@ export default function App() {
   }
 
   const showOnboarding = hasFullAccess && !hasSeenOnboarding && !authLoading
+  // לא-חברה (visitor/trial) לא מקבלת גישה לספרייה/ניווט תחתון בכלל — המסלול שלה
+  // הוא Gateway → Landing → Trial → Track Map → הצטרפות, בלי קיצור דרך למחסן ההדרכות.
+  const showBottomNav = viewerState === 'member' || viewerState === 'vip' || viewerState === 'purchaser'
   const goLogin = () => setView('login')
   const goProfile = () => setView('profile')
   const goLibrary = () => setView('library')
@@ -604,7 +608,7 @@ export default function App() {
           onSelectTutorial={proceedToTutorial}
           onLogout={handleLogout}
         />
-        <BottomNav activeView="profile" {...bottomNavProps} />
+        {showBottomNav && <BottomNav activeView="profile" {...bottomNavProps} />}
         {showOnboarding && <OnboardingOverlay onDismiss={dismissOnboarding} />}
       </div>
     )
@@ -644,7 +648,7 @@ export default function App() {
           lastWatchedTutorial={lastWatchedTutorial}
           isClubMember={hasFullAccess}
         />
-        <BottomNav activeView="library" {...bottomNavProps} />
+        {showBottomNav && <BottomNav activeView="library" {...bottomNavProps} />}
       </div>
     )
   }
@@ -694,6 +698,7 @@ export default function App() {
           lastWatchedTutorial={lastWatchedTutorial}
           accessibleTutorialIds={accessibleTutorialIds}
           onSelectTutorial={handleSelectTutorial}
+          onGoLibrary={goLibrary}
         />
       )}
 
@@ -731,9 +736,7 @@ export default function App() {
         />
       )}
 
-      {!(view === 'home' && viewerState === 'visitor' && !hasChosenExplore) && (
-        <BottomNav activeView={view} {...bottomNavProps} />
-      )}
+      {showBottomNav && <BottomNav activeView={view} {...bottomNavProps} />}
       {showOnboarding && view !== 'tutorial' && <OnboardingOverlay onDismiss={dismissOnboarding} />}
     </div>
   )

@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { PlayCircle, Sparkles, MessageCircle, ChevronLeft, Calendar } from 'lucide-react'
+import { PlayCircle, Sparkles, MessageCircle, ChevronLeft, Calendar, PartyPopper } from 'lucide-react'
 import { getTrackTutorials } from '../lib/catalogHelpers'
 import StepBadge from './StepBadge'
 import JourneyTimeline from './JourneyTimeline'
@@ -15,12 +15,22 @@ export default function MemberDashboard({
   lastWatchedTutorial,
   accessibleTutorialIds,
   onSelectTutorial,
+  onGoLibrary,
 }) {
   const track = useMemo(() => getTrackTutorials(tutorialsData), [tutorialsData])
   const totalSteps = track.length
   const trackIds = useMemo(() => new Set(track.map((t) => t.id)), [track])
 
-  const currentTutorial = lastWatchedTutorial || track[0] || null
+  // "הצעד הנוכחי": ההדרכה שנצפתה לאחרונה — אבל רק אם היא שייכת למסלול הראשי
+  // וגם עוד לא הושלמה. הדרכת בריאות/מיוחדת שנצפתה לאחרונה לא הופכת ל"צעד נוכחי",
+  // וצעד שכבר הושלם לא מוצע שוב — עוברים לראשון הבא שעוד לא הושלם.
+  const lastWatchedInTrack =
+    lastWatchedTutorial && trackIds.has(lastWatchedTutorial.id) ? lastWatchedTutorial : null
+  const lastWatchedIncomplete = lastWatchedInTrack && !completedTutorials.includes(lastWatchedInTrack.id)
+  const firstIncomplete = track.find((t) => !completedTutorials.includes(t.id)) || null
+  const trackFullyCompleted = totalSteps > 0 && !firstIncomplete
+  const currentTutorial = lastWatchedIncomplete ? lastWatchedInTrack : firstIncomplete
+  const isContinuing = !!lastWatchedIncomplete
   const isFirstEver = !lastWatchedTutorial
   // רק השלמות ששייכות למסלול הראשי — completedTutorials עשוי לכלול גם הדרכות
   // בריאות/מיוחדות שאינן חלק מ-13 הצעדים, ואז "X מתוך 13" יכול לחרוג מ-13.
@@ -42,37 +52,54 @@ export default function MemberDashboard({
         </h2>
 
         {/* המשך צפייה — האלמנט הבולט ביותר בדף */}
-        {currentTutorial && (
-          <section className="mb-10 bg-white rounded-[2rem] p-6 md:p-8 border border-gray-100 shadow-[0_20px_50px_rgba(148,163,136,0.12)] relative overflow-hidden">
-            <div className="flex flex-col md:flex-row items-center gap-6">
-              <div
-                onClick={() => onSelectTutorial(currentTutorial)}
-                className="w-full md:w-1/3 aspect-video bg-[#3E3935]/5 rounded-2xl relative overflow-hidden flex items-center justify-center shrink-0 cursor-pointer group"
+        {trackFullyCompleted ? (
+          <section className="mb-10 bg-white rounded-[2rem] p-8 border border-gray-100 shadow-[0_20px_50px_rgba(148,163,136,0.12)] text-center">
+            <PartyPopper size={36} className="text-[#C88F96] mx-auto mb-3" />
+            <h3 className="text-xl font-bold text-[#3E3935] mb-2">איזה יופי 💛 השלמת את מסלול היסוד</h3>
+            <p className="text-[#716861] mb-5">כל 13 הצעדים מאחורייך. שאר הארכיון מחכה לך בכל זמן שתרצי.</p>
+            {onGoLibrary && (
+              <button
+                onClick={onGoLibrary}
+                className="bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white px-7 py-3 rounded-full font-bold inline-flex items-center gap-2 shadow-[0_12px_28px_rgba(158,98,108,0.25)] hover:-translate-y-0.5 transition-all"
               >
-                {currentTutorial.imageUrl ? (
-                  <img src={currentTutorial.imageUrl} alt={currentTutorial.title} className="absolute inset-0 w-full h-full object-cover" />
-                ) : (
-                  <div className="absolute inset-0 bg-gradient-to-tr from-[#3E3935]/10 to-transparent" />
-                )}
-                <div className="w-14 h-14 bg-white/95 rounded-full flex items-center justify-center shadow-lg z-10 group-hover:scale-105 transition-transform">
-                  <PlayCircle size={28} className="text-[#3E3935]" />
+                לכל ההדרכות
+                <ChevronLeft size={18} />
+              </button>
+            )}
+          </section>
+        ) : (
+          currentTutorial && (
+            <section className="mb-10 bg-white rounded-[2rem] p-6 md:p-8 border border-gray-100 shadow-[0_20px_50px_rgba(148,163,136,0.12)] relative overflow-hidden">
+              <div className="flex flex-col md:flex-row items-center gap-6">
+                <div
+                  onClick={() => onSelectTutorial(currentTutorial)}
+                  className="w-full md:w-1/3 aspect-video bg-[#3E3935]/5 rounded-2xl relative overflow-hidden flex items-center justify-center shrink-0 cursor-pointer group"
+                >
+                  {currentTutorial.imageUrl ? (
+                    <img src={currentTutorial.imageUrl} alt={currentTutorial.title} className="absolute inset-0 w-full h-full object-cover" />
+                  ) : (
+                    <div className="absolute inset-0 bg-gradient-to-tr from-[#3E3935]/10 to-transparent" />
+                  )}
+                  <div className="w-14 h-14 bg-white/95 rounded-full flex items-center justify-center shadow-lg z-10 group-hover:scale-105 transition-transform">
+                    <PlayCircle size={28} className="text-[#3E3935]" />
+                  </div>
+                </div>
+                <div className="flex-1 text-center md:text-right">
+                  <p className="text-sm font-bold text-[#9E626C] mb-2">
+                    {isContinuing ? 'ממשיכות מהמקום שבו עצרת?' : isFirstEver ? 'המסע שלך מתחיל כאן 💛' : 'הצעד הבא שלך'}
+                  </p>
+                  <StepBadge tutorial={currentTutorial} totalSteps={totalSteps} size="lg" />
+                  <button
+                    onClick={() => onSelectTutorial(currentTutorial)}
+                    className="mt-5 bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white px-7 py-3 rounded-full font-bold inline-flex items-center gap-2 shadow-[0_12px_28px_rgba(158,98,108,0.25)] hover:-translate-y-0.5 transition-all"
+                  >
+                    {isContinuing ? 'המשיכי לצפות' : isFirstEver ? 'מתחילה את הצעד הראשון' : 'לצעד הבא'}
+                    <ChevronLeft size={18} />
+                  </button>
                 </div>
               </div>
-              <div className="flex-1 text-center md:text-right">
-                <p className="text-sm font-bold text-[#9E626C] mb-2">
-                  {isFirstEver ? 'המסע שלך מתחיל כאן 💛' : 'ממשיכות מהמקום שבו עצרת?'}
-                </p>
-                <StepBadge tutorial={currentTutorial} totalSteps={totalSteps} size="lg" />
-                <button
-                  onClick={() => onSelectTutorial(currentTutorial)}
-                  className="mt-5 bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white px-7 py-3 rounded-full font-bold inline-flex items-center gap-2 shadow-[0_12px_28px_rgba(158,98,108,0.25)] hover:-translate-y-0.5 transition-all"
-                >
-                  {isFirstEver ? 'מתחילה את הצעד הראשון' : 'המשיכי לצפות'}
-                  <ChevronLeft size={18} />
-                </button>
-              </div>
-            </div>
-          </section>
+            </section>
+          )
         )}
 
         {/* התקדמות כללית */}

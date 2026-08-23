@@ -114,6 +114,9 @@ export default function TutorialPage({
           alreadyReached = progress?.reachedLimit === true
         } catch { /* אין התקדמות קודמת זמינה — מתחילים מ-0 */ }
       }
+      // הגנת קצה: אם השרת כבר מכיל 300+ שניות אבל reached_limit לא נשמר כ-true
+      // מסיבה כלשהי — עדיין לא נותנים צפייה נוספת.
+      if (startSeconds >= PREVIEW_SECONDS) alreadyReached = true
       if (cancelled) return
 
       maxSecRef.current = startSeconds
@@ -293,7 +296,7 @@ export default function TutorialPage({
                     >
                       אני רוצה להמשיך במסע
                     </button>
-                    <p className="text-[#B8ADA6] text-sm mt-3">כשתצטרפי נמשיך בדיוק מהמקום שבו עצרת.</p>
+                    <p className="text-[#B8ADA6] text-sm mt-3">כשתצטרפי, המסלול המלא ייפתח לך ותוכלי להמשיך מכאן.</p>
                     <div className="mt-5">
                       <button
                         onClick={() => onLoginRequest && onLoginRequest()}

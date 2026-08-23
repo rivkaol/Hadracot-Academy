@@ -32,7 +32,7 @@ export default function TrialTrackMapScreen({ tutorialsData, watchedTutorialId, 
             אני רוצה להמשיך במסע
             <ChevronLeft size={20} />
           </a>
-          <p className="text-sm text-gray-500 mt-4">כשתצטרפי נמשיך בדיוק מהמקום שבו עצרת.</p>
+          <p className="text-sm text-gray-500 mt-4">כשתצטרפי, המסלול המלא ייפתח לך ותוכלי להמשיך מכאן.</p>
         </div>
       </main>
     </div>
