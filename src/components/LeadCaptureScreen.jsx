@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ChevronRight, User, Phone, Mail, Sparkles, Loader, Crown, Check, AlertCircle } from 'lucide-react'
+import { ChevronRight, User, Phone, Mail, Sparkles, Loader, Check, AlertCircle } from 'lucide-react'
 
 // ---- ולידציה ----
 // טלפון ישראלי: נייד (05X + 8 ספרות) או קווי (0X + 7 ספרות). מקבל גם קידומת 972/+972.
@@ -38,7 +38,6 @@ function emailSuggestions(value) {
 }
 
 export default function LeadCaptureScreen({ onRegister, onCancel, onLoginRequest, isLoading, tutorialTitle }) {
-  const [mode, setMode] = useState('guest') // 'guest' | 'premium'
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
@@ -74,36 +73,17 @@ export default function LeadCaptureScreen({ onRegister, onCancel, onLoginRequest
         <div className="absolute top-0 right-0 w-32 h-32 bg-[#C88F96]/10 rounded-full blur-3xl -translate-y-10 translate-x-10"></div>
 
         <div className="relative z-10 mt-2">
-          {/* בחירת מסלול: אורחת (חינם) או פרימיום (מנויה) */}
-          <div className="flex gap-2 bg-[#FAF7F2] p-1.5 rounded-2xl mb-7 border border-gray-100">
-            <button
-              type="button"
-              onClick={() => setMode('guest')}
-              className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-1.5 ${mode === 'guest' ? 'bg-white text-[#3E3935] shadow-sm' : 'text-[#716861] hover:text-[#3E3935]'}`}
-            >
-              <Sparkles size={15} /> אורחת · חינם
-            </button>
-            <button
-              type="button"
-              onClick={() => setMode('premium')}
-              className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-1.5 ${mode === 'premium' ? 'bg-white text-[#9E626C] shadow-sm' : 'text-[#716861] hover:text-[#3E3935]'}`}
-            >
-              <Crown size={15} /> פרימיום · מנויה
-            </button>
-          </div>
-
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white mb-4 shadow-md mx-auto">
-            {mode === 'guest' ? <Sparkles size={26} /> : <Crown size={26} />}
+            <Sparkles size={26} />
           </div>
 
-          {mode === 'guest' ? (
-            <>
-              <h1 className="text-2xl md:text-3xl font-bold text-[#3E3935] mb-2">רגע לפני שמתחילות</h1>
-              <p className="text-[#716861] mb-6 leading-[1.8]">
-                השאירי פרטים וקבלי גישה מיידית לצפייה בהדרכה{tutorialTitle ? ` "${tutorialTitle}"` : ''}. נשמח להישאר בקשר וללוות אותך בדרך.
-              </p>
+          <h1 className="text-2xl md:text-3xl font-bold text-[#3E3935] mb-2">רוצה להרגיש איך זה עובד לפני שאת מחליטה?</h1>
+          <p className="text-[#716861] mb-6 leading-[1.8]">
+            אני מזמינה אותך להתחיל איתי את הצעד הראשון
+            {tutorialTitle ? ` — "${tutorialTitle}"` : ''}. 5 דקות אמיתיות מתוך המועדון, ללא תשלום.
+          </p>
 
-              <form onSubmit={handleSubmit} className="space-y-4 text-right" noValidate>
+          <form onSubmit={handleSubmit} className="space-y-4 text-right" noValidate>
                 <Field
                   icon={User}
                   placeholder="השם שלך"
@@ -170,42 +150,19 @@ export default function LeadCaptureScreen({ onRegister, onCancel, onLoginRequest
                   {isLoading ? (
                     <><Loader size={20} className="animate-spin text-white" /> רגע...</>
                   ) : (
-                    'לצפייה בהדרכה'
+                    'כן, אני רוצה להתחיל'
                   )}
                 </button>
               </form>
 
-              <div className="mt-6 pt-5 border-t border-gray-100 text-center">
-                <button
-                  onClick={onLoginRequest}
-                  className="text-[#9E626C] text-sm font-bold hover:underline"
-                >
-                  כבר חברת מועדון? התחברי כאן
-                </button>
-              </div>
-            </>
-          ) : (
-            <>
-              <h1 className="text-2xl md:text-3xl font-bold text-[#3E3935] mb-2">כניסת מנויות פרימיום</h1>
-              <p className="text-[#716861] mb-7 leading-[1.8]">
-                חברות המועדון נהנות מצפייה מלאה בכל ההדרכות, ללא הגבלת זמן. התחברי עם המייל והסיסמה שלך כדי להיכנס.
-              </p>
-              <button
-                onClick={onLoginRequest}
-                className="w-full bg-gradient-to-br from-[#C88F96] to-[#9E626C] hover:shadow-lg text-white py-4 rounded-2xl font-bold text-lg shadow-[0_12px_28px_rgba(158,98,108,0.25)] transition-all flex items-center justify-center gap-2"
-              >
-                <Crown size={20} /> להתחברות למועדון
-              </button>
-              <div className="mt-6 pt-5 border-t border-gray-100 text-center">
-                <button
-                  onClick={() => setMode('guest')}
-                  className="text-[#9E626C] text-sm font-bold hover:underline"
-                >
-                  עדיין לא מנויה? היכנסי כאורחת לצפייה חינם
-                </button>
-              </div>
-            </>
-          )}
+          <div className="mt-6 pt-5 border-t border-gray-100 text-center">
+            <button
+              onClick={onLoginRequest}
+              className="text-[#9E626C] text-sm font-bold hover:underline"
+            >
+              כבר חברת מועדון? התחברי כאן
+            </button>
+          </div>
         </div>
       </div>
     </div>

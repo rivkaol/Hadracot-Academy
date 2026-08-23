@@ -21,8 +21,11 @@ export const apiSetCompleted = (cred, tutorialId, done) =>
 export const apiGetNote = (cred, tutorialId) => call('getNote', { ...cred, tutorialId })
 export const apiSaveNote = (cred, tutorialId, text) => call('saveNote', { ...cred, tutorialId, text })
 export const apiListNotes = (cred) => call('listNotes', { ...cred })
+export const apiMarkOnboardingSeen = (cred) => call('markOnboardingSeen', { ...cred })
+export const apiLogMemberProgress = (cred, p) => call('logMemberProgress', { ...cred, ...p }) // p: { tutorialId, seconds, durationSeconds, completed }
 
 // לידים ומעקב (פעולות ציבוריות, בלי סיסמה)
 export const apiRegisterLead = (lead) => call('registerLead', lead) // { name, email, phone }
 export const apiLogProgress = (p) => call('logProgress', p) // { email, tutorialId, tutorialTitle, seconds, reachedLimit, newAttempt }
 export const apiAdminLeads = (adminKey) => call('adminLeads', { adminKey })
+export const apiTrackEvent = (p) => call('trackEvent', p) // { eventName, email, tutorialId, meta }

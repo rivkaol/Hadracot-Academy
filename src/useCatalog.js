@@ -93,6 +93,18 @@ function parseCatalog(rawCatalog) {
               tutorial.recommendedOrder || tutorial.recommendedorder || tutorial['סדרת התחלה']
             )
           : null,
+      // שלב במסע (1-4) — עמודת גיליון "שלב", נערכת ידנית על ידי רבקה בלי deploy.
+      stage:
+        tutorial.stage || tutorial['שלב'] ? Number(tutorial.stage || tutorial['שלב']) : null,
+      // משך ההדרכה בדקות — עמודת גיליון "משך", ידנית (לא נשלף מ-Vimeo).
+      duration: tutorial.duration || tutorial['משך'] || null,
+      // תאריך הוספה — עמודת גיליון "תאריך הוספה", מזין את מודול "חדש במועדון".
+      createdAt: tutorial.createdAt || tutorial.createdat || tutorial['תאריך הוספה'] || null,
+      // האם ההדרכה מפורסמת — עמודה אופציונלית "isPublished"; ריק = מפורסמת כברירת מחדל.
+      isPublished:
+        String(tutorial.isPublished ?? tutorial.ispublished ?? tutorial['פורסם'] ?? '').trim().toLowerCase() === 'false'
+          ? false
+          : true,
     }
 
     if (categoriesMap[catId]) {
@@ -107,7 +119,27 @@ function parseCatalog(rawCatalog) {
     }
   })
 
-  return Object.values(categoriesMap).filter((cat) => cat.tutorials.length > 0)
+  const finalCategories = Object.values(categoriesMap).filter((cat) => cat.tutorials.length > 0)
+
+  // אזהרה קבועה (גם בפרודקשן) נגד מזהי הדרכה כפולים/חסרים — ראו CLAUDE.md.
+  // רץ תמיד, לא רק ב-dev, כדי שהבאג יהיה ניתן לאבחון מקונסול גם מצילום מסך שרבקה שולחת.
+  const seenById = {}
+  finalCategories.forEach((cat) => {
+    cat.tutorials.forEach((t) => {
+      const key = String(t.id)
+      if (!t.id || isNaN(t.id)) {
+        console.error(`⚠️ מזהה הדרכה חסר/לא תקין: "${t.title}" (id=${t.id})`)
+        return
+      }
+      if (seenById[key]) {
+        console.error(`⚠️ מזהה הדרכה כפול (id=${key}): "${seenById[key]}" וגם "${t.title}"`)
+      } else {
+        seenById[key] = t.title
+      }
+    })
+  })
+
+  return finalCategories
 }
 
 export function useCatalog() {
