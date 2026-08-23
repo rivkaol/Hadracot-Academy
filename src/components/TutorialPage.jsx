@@ -2,7 +2,10 @@ import { useState, useEffect, useRef } from 'react'
 import { Sparkles, CheckCircle, ChevronLeft, BookOpen, Edit, Download, Save, Loader, FileText, Crown } from 'lucide-react'
 import confetti from 'canvas-confetti'
 import Player from '@vimeo/player'
-import { apiGetNote, apiSaveNote, apiSetCompleted, apiLogProgress } from '../api'
+import { apiGetNote, apiSaveNote, apiSetCompleted, apiLogProgress, apiLogMemberProgress, apiGetTrialProgress } from '../api'
+import { getTrackTutorials, getNextAccessibleTutorial } from '../lib/catalogHelpers'
+import { trackEvent } from '../lib/trackEvent'
+import StepBadge from './StepBadge'
 
 const PREVIEW_SECONDS = 300 // חמש דקות טעימה חינם
 
@@ -10,7 +13,6 @@ export default function TutorialPage({
   tutorial,
   tutorialsData,
   categoryName,
-  onBack,
   onNext,
   hasNext,
   accessibleTutorialIds,
@@ -18,28 +20,36 @@ export default function TutorialPage({
   userPassword,
   completedTutorials,
   setCompletedTutorials,
-  isClubMember,
+  isClubMember, // בפועל hasFullAccess (חברה או VIP) — נשלח כך מ-App.jsx
   leadEmail,
   onLoginRequest,
+  onShowTrackMap,
 }) {
   const cred = { email: userEmail, password: userPassword }
   const hasAccess = isClubMember || accessibleTutorialIds.includes(tutorial.id)
   const viewerEmail = userEmail || leadEmail || '' // מי שנרשמה/מחוברת — למעקב מעורבות
+  const totalSteps = getTrackTutorials(tutorialsData).length
   const iframeRef = useRef(null)
   const maxSecRef = useRef(0)
   const lastSentRef = useRef(0)
   const [gateOpen, setGateOpen] = useState(false)
+  const [trialSecondsWatched, setTrialSecondsWatched] = useState(0)
 
-  // אחרי טעימה של 5 דק' — בכל הדרכה מפנים לדף ה"חם" שממשיך את הצפייה במועדון
-  const joinUrl = '/join-lesson'
-
-  // שער הטעימה: למי שאינה מנויה — עצירה פיזית אחרי 5 דק', חסימת גרירה, ומעקב מעורבות
+  // שער הטעימה: למי שאינה מנויה — עצירה פיזית אחרי 5 דק' צפייה מצטברת (לא מיקום
+  // מקסימלי בסרטון), חסימת גרירה, ומעקב מעורבות. נטען קודם ההתקדמות הקיימת
+  // מהשרת — Refresh/כניסה חוזרת לא מאפסים את הטעימה, ומי שכבר הגיעה לגבול
+  // מקבלת את השער מיד בלי צפייה נוספת.
   useEffect(() => {
     if (hasAccess || !iframeRef.current) return
     const player = new Player(iframeRef.current)
+    let cancelled = false
     let locked = false
+    let firedQuarter = false
+    let firedHalf = false
+    let lastPlayerPos = 0
     maxSecRef.current = 0
     lastSentRef.current = 0
+    setTrialSecondsWatched(0)
 
     const logProgress = (reachedLimit, newAttempt) => {
       if (!viewerEmail) return
@@ -53,44 +63,119 @@ export default function TutorialPage({
       }).catch(() => {})
     }
 
-    // רישום כניסה חדשה להדרכה
-    logProgress(false, true)
-
     const enforcePause = () => { player.pause().catch(() => {}) }
 
     const openGate = async () => {
       locked = true
-      try { await player.pause() } catch (e) { /* התעלמות משגיאות נגן */ }
+      try { await player.pause() } catch { /* התעלמות משגיאות נגן */ }
       setGateOpen(true)
-      logProgress(true, false) // הגיעה לסוף הטעימה = ליד חמה
     }
 
-    // כל עוד נעולה — כל ניסיון המשך/ניגון נעצר מיד (עצירה פיזית)
+    // צפייה מצטברת: סכימת "קפיצות קדימה קטנות" בין טיקים (ניגון אמיתי),
+    // לא מיקום מוחלט בסרטון — כדי שחזרה אחורה וצפייה חוזרת תיספר כצפייה נוספת,
+    // לא "בחינם" כי כבר עברנו שם קודם.
     const onTime = (d) => {
-      if (d.seconds > maxSecRef.current) maxSecRef.current = d.seconds
+      if (locked) { enforcePause(); return } // גיבוי הגנתי — onPlay כבר תופס את רוב המקרים
+      const delta = d.seconds - lastPlayerPos
+      lastPlayerPos = d.seconds
+      if (delta > 0 && delta < 2) maxSecRef.current += delta
+      setTrialSecondsWatched(maxSecRef.current)
+
+      if (!firedQuarter && maxSecRef.current >= PREVIEW_SECONDS * 0.25) {
+        firedQuarter = true
+        trackEvent('trial_25_percent', { email: viewerEmail, tutorialId: tutorial.id })
+      }
+      if (!firedHalf && maxSecRef.current >= PREVIEW_SECONDS * 0.5) {
+        firedHalf = true
+        trackEvent('trial_50_percent', { email: viewerEmail, tutorialId: tutorial.id })
+      }
       // שליחת עדכון מעורבות כל ~20 שניות
-      if (!locked && d.seconds - lastSentRef.current >= 20) {
-        lastSentRef.current = d.seconds
+      if (!locked && maxSecRef.current - lastSentRef.current >= 20) {
+        lastSentRef.current = maxSecRef.current
         logProgress(false, false)
       }
-      if (d.seconds >= PREVIEW_SECONDS) { locked ? enforcePause() : openGate() }
+      if (maxSecRef.current >= PREVIEW_SECONDS && !locked) {
+        openGate()
+        logProgress(true, false) // הגיעה לסוף הטעימה = ליד חמה
+        trackEvent('trial_completed_5min', { email: viewerEmail, tutorialId: tutorial.id })
+      }
     }
-    const onSeek = (d) => { if (d.seconds > PREVIEW_SECONDS && !locked) openGate() }
+    // שמירת lastPlayerPos בסנכרון אחרי גרירה, כדי שהטיק הבא לא יספור קפיצה כאילו הייתה צפייה
+    const onSeek = (d) => { lastPlayerPos = d.seconds }
     const onPlay = () => { if (locked) enforcePause() }
 
-    player.on('timeupdate', onTime)
-    player.on('seeking', onSeek)
-    player.on('seeked', onSeek)
-    player.on('play', onPlay)
+    const init = async () => {
+      let startSeconds = 0
+      let alreadyReached = false
+      if (viewerEmail) {
+        try {
+          const progress = await apiGetTrialProgress({ email: viewerEmail, tutorialId: tutorial.id })
+          startSeconds = Math.max(0, Number(progress?.maxSeconds) || 0)
+          alreadyReached = progress?.reachedLimit === true
+        } catch { /* אין התקדמות קודמת זמינה — מתחילים מ-0 */ }
+      }
+      // הגנת קצה: אם השרת כבר מכיל 300+ שניות אבל reached_limit לא נשמר כ-true
+      // מסיבה כלשהי — עדיין לא נותנים צפייה נוספת.
+      if (startSeconds >= PREVIEW_SECONDS) alreadyReached = true
+      if (cancelled) return
+
+      maxSecRef.current = startSeconds
+      lastSentRef.current = startSeconds
+      setTrialSecondsWatched(startSeconds)
+
+      if (alreadyReached) {
+        locked = true
+        setGateOpen(true)
+        player.on('play', onPlay)
+        return
+      }
+
+      // רישום כניסה חדשה להדרכה
+      logProgress(false, true)
+      trackEvent('trial_video_started', { email: viewerEmail, tutorialId: tutorial.id })
+
+      player.on('timeupdate', onTime)
+      player.on('seeking', onSeek)
+      player.on('seeked', onSeek)
+      player.on('play', onPlay)
+    }
+    init()
 
     return () => {
+      cancelled = true
       player.off('timeupdate', onTime)
       player.off('seeking', onSeek)
       player.off('seeked', onSeek)
       player.off('play', onPlay)
-      logProgress(false, false) // שמירת זמן הצפייה הסופי ביציאה
+      if (!locked) logProgress(false, false) // שמירת זמן הצפייה הסופי ביציאה (רק אם עוד לא ננעלה)
     }
   }, [hasAccess, tutorial.id, viewerEmail])
+
+  // מעקב התקדמות לחברות/רוכשות עם גישה מלאה — טבלה נפרדת מהלידים, לא הייתה קיימת קודם.
+  useEffect(() => {
+    if (!hasAccess || !userEmail || !iframeRef.current) return
+    const player = new Player(iframeRef.current)
+    let maxSec = 0
+    let lastSent = 0
+    trackEvent('lesson_started', { email: userEmail, tutorialId: tutorial.id })
+
+    const send = () => {
+      apiLogMemberProgress(cred, { tutorialId: tutorial.id, seconds: Math.round(maxSec) }).catch(() => {})
+    }
+    const onTime = (d) => {
+      if (d.seconds > maxSec) maxSec = d.seconds
+      if (d.seconds - lastSent >= 20) {
+        lastSent = d.seconds
+        send()
+      }
+    }
+    player.on('timeupdate', onTime)
+    return () => {
+      player.off('timeupdate', onTime)
+      send()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasAccess, tutorial.id, userEmail])
   const [activeTab, setActiveTab] = useState('notes')
   const [notes, setNotes] = useState('')
   const [isSaved, setIsSaved] = useState(false)
@@ -102,6 +187,11 @@ export default function TutorialPage({
   const categoryTutorials = currentCategory ? currentCategory.tutorials : []
   const completedInCategory = categoryTutorials.filter((t) => completedTutorials.includes(t.id)).length
   const progressPercent = categoryTutorials.length > 0 ? Math.round((completedInCategory / categoryTutorials.length) * 100) : 0
+  // "הדרכה הבאה" לפי סדר אמיתי במסלול, לא אריתמטיקת id+1 (id-ים לא רציפים)
+  const nextAccessibleTutorial = getNextAccessibleTutorial(tutorialsData, tutorial, {
+    hasFullAccess: isClubMember,
+    accessibleTutorialIds,
+  })
 
   useEffect(() => { notesRef.current = notes }, [notes])
 
@@ -155,6 +245,8 @@ export default function TutorialPage({
 
     if (userEmail) {
       apiSetCompleted(cred, tutorial.id, next).catch(console.error)
+      apiLogMemberProgress(cred, { tutorialId: tutorial.id, completed: next }).catch(() => {})
+      if (next) trackEvent('lesson_completed', { email: userEmail, tutorialId: tutorial.id })
     }
   }
 
@@ -177,6 +269,15 @@ export default function TutorialPage({
                 title={`הדרכה - ${tutorial.title}`}
               />
 
+              {/* אינדיקטור טעימה רך — לא ספירה לחוצה מהשנייה הראשונה */}
+              {!hasAccess && !gateOpen && (
+                <div className="absolute top-3 left-3 z-20 bg-black/60 text-white text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-sm">
+                  {trialSecondsWatched >= PREVIEW_SECONDS - 60
+                    ? 'נשארה עוד דקה בטעימה שלך'
+                    : 'טעימת מועדון · 5 דקות'}
+                </div>
+              )}
+
               {!hasAccess && gateOpen && (
                 // במובייל: מסך מלא וממורכז (כדי שהכפתור לא ייחתך); במחשב: בתוך הווידאו כמו קודם
                 <div className="fixed inset-0 z-[60] lg:absolute lg:z-30 flex items-center justify-center text-center px-6 py-8 overflow-y-auto" dir="rtl" style={{ background: 'rgba(43,39,36,0.96)' }}>
@@ -184,18 +285,18 @@ export default function TutorialPage({
                     <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white mb-4 sm:mb-5 shadow-lg mx-auto">
                       <Crown size={28} />
                     </div>
-                    <h2 className="text-2xl md:text-3xl font-bold text-[#FFFDF9] mb-3">רוצה להמשיך לצפות?</h2>
-                    <p className="text-[#E9E0DB] text-base md:text-lg leading-[1.7] mb-6 sm:mb-7 max-w-md mx-auto">
-                      ההדרכה המלאה וכל ספריית התכנים מחכות לך בתוך המועדון — יחד עם כלים ליישום בריאות טבעית בחיים עצמם.
+                    <h2 className="text-2xl md:text-3xl font-bold text-[#FFFDF9] mb-3">רק התחלנו.</h2>
+                    <p className="text-[#E9E0DB] text-base md:text-lg leading-[1.7] mb-2 max-w-md mx-auto">
+                      מה שראית עכשיו הוא הצעד הראשון. בתוך המועדון מחכה לך הדרך המלאה — כדי שלא תישארי רק עם השראה,
+                      אלא תוכלי להמשיך משיעור לשיעור ולבנות שינוי אמיתי.
                     </p>
-                    <a
-                      href={joinUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2 bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white font-bold text-base md:text-lg px-8 py-4 rounded-full shadow-[0_12px_28px_rgba(158,98,108,0.35)] hover:-translate-y-0.5 transition-all"
+                    <button
+                      onClick={() => onShowTrackMap && onShowTrackMap()}
+                      className="mt-5 inline-flex items-center justify-center gap-2 bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white font-bold text-base md:text-lg px-8 py-4 rounded-full shadow-[0_12px_28px_rgba(158,98,108,0.35)] hover:-translate-y-0.5 transition-all"
                     >
-                      להצטרפות למועדון ולצפייה מלאה
-                    </a>
+                      אני רוצה להמשיך במסע
+                    </button>
+                    <p className="text-[#B8ADA6] text-sm mt-3">כשתצטרפי, המסלול המלא ייפתח לך ותוכלי להמשיך מכאן.</p>
                     <div className="mt-5">
                       <button
                         onClick={() => onLoginRequest && onLoginRequest()}
@@ -214,7 +315,7 @@ export default function TutorialPage({
                 <Sparkles size={14} />
                 <span>{categoryName || 'תודעה ושינוי מבפנים'}</span>
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold text-[#3E3935] mb-6 leading-tight text-center">{tutorial.title}</h1>
+              <StepBadge tutorial={tutorial} totalSteps={totalSteps} size="lg" className="mb-6 text-center" />
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 border-b border-gray-200 pb-8 w-full max-w-lg mx-auto">
                 <button
@@ -225,12 +326,12 @@ export default function TutorialPage({
                   {isCompleted ? 'הושלם' : 'סיימתי את ההדרכה'}
                 </button>
 
-                {hasNext && (isClubMember || accessibleTutorialIds.includes(tutorial.id + 1)) && (
+                {hasNext && nextAccessibleTutorial && (
                   <button
                     onClick={onNext}
                     className="flex items-center justify-center gap-2 text-[#3E3935] font-bold bg-white border border-gray-200 hover:border-[#3E3935] hover:bg-gray-50 px-8 py-3.5 rounded-full transition-all duration-300 w-full sm:w-auto shadow-sm"
                   >
-                    להמשך ההדרכה הבאה
+                    לצעד הבא
                     <ChevronLeft size={22} />
                   </button>
                 )}

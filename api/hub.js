@@ -77,6 +77,8 @@ function publicUser(u) {
     email: u.email,
     name: u.name || String(u.email || '').split('@')[0],
     isClubMember: u.is_club_member === true,
+    isVip: u.is_vip === true,
+    hasSeenOnboarding: u.has_seen_onboarding === true,
     purchasedProductIds: csvToIds(u.purchased_products),
     completed: csvToIds(u.completed),
     lastWatched: u.last_watched || null,
@@ -131,6 +133,21 @@ export default async function handler(req, res) {
       return res.json({ ok: true })
     }
 
+    // שליפת ההתקדמות הקיימת בטעימה — כדי שרענון/כניסה חוזרת לא יאפסו את 5 הדקות,
+    // ושמי שכבר הגיעה לגבול תקבל את השער מיד בלי צפייה נוספת.
+    if (action === 'getTrialProgress') {
+      if (!email) return res.json({ maxSeconds: 0, reachedLimit: false })
+      const tid = Number(body.tutorialId)
+      if (isNaN(tid)) return res.json({ maxSeconds: 0, reachedLimit: false })
+      const { data } = await supabase
+        .from('hadracot_lead_progress')
+        .select('max_seconds,reached_limit')
+        .eq('email', email)
+        .eq('tutorial_id', tid)
+        .maybeSingle()
+      return res.json({ maxSeconds: data?.max_seconds || 0, reachedLimit: data?.reached_limit === true })
+    }
+
     // רישום מעורבות: כמה שניות צפתה, האם סיימה, כמה פעמים נכנסה
     if (action === 'logProgress') {
       if (!email) return res.json({ ok: false })
@@ -180,6 +197,22 @@ export default async function handler(req, res) {
           when: new Date().toISOString(),
         })
       }
+      return res.json({ ok: true })
+    }
+
+    // Analytics: אירוע יחיד מהאפליקציה. ציבורי (מותר גם לפני התחברות/הרשמה).
+    // משתמש שוב ב-pushToSheet הקיים (מתאים לסטאק מבוסס-Sheets), נכשל בשקט.
+    if (action === 'trackEvent') {
+      const eventName = String(body.eventName || '').slice(0, 100)
+      if (!eventName) return res.json({ ok: false })
+      await pushToSheet({
+        type: 'event',
+        eventName,
+        email: email || '',
+        tutorialId: body.tutorialId != null ? Number(body.tutorialId) : null,
+        meta: body.meta && typeof body.meta === 'object' ? body.meta : {},
+        when: new Date().toISOString(),
+      })
       return res.json({ ok: true })
     }
 
@@ -248,6 +281,45 @@ export default async function handler(req, res) {
         .update({ completed: idsToCsv(next) })
         .eq('email', email)
       return res.json({ ok: true, completed: Array.from(new Set(next)) })
+    }
+
+    if (action === 'markOnboardingSeen') {
+      await supabase
+        .from('hadracot_users')
+        .update({ has_seen_onboarding: true })
+        .eq('email', email)
+      return res.json({ ok: true })
+    }
+
+    // מעקב התקדמות לחברות/רוכשות מחוברות (מקביל ל-logProgress של לידים, אך בטבלה נפרדת).
+    if (action === 'logMemberProgress') {
+      const tid = Number(body.tutorialId)
+      if (isNaN(tid)) return res.json({ ok: false })
+      const secs = Math.max(0, Math.round(Number(body.seconds) || 0))
+      const { data: existing } = await supabase
+        .from('hadracot_member_progress')
+        .select('watched_seconds,completed')
+        .eq('email', email)
+        .eq('tutorial_id', tid)
+        .maybeSingle()
+      const nowIso = new Date().toISOString()
+      // completed: אם נשלח מפורשות (true/false) — זה הערך; אם לא נשלח (עדכון התקדמות
+      // רגיל בלי סימון) — משמרים את מה שכבר קיים. כך אפשר גם לבטל סימון "הושלם".
+      const hasExplicitCompleted = typeof body.completed === 'boolean'
+      const nextCompleted = hasExplicitCompleted ? body.completed : existing?.completed || false
+      await supabase.from('hadracot_member_progress').upsert(
+        {
+          email,
+          tutorial_id: tid,
+          watched_seconds: Math.max(secs, existing?.watched_seconds || 0),
+          duration_seconds: body.durationSeconds != null ? Number(body.durationSeconds) : undefined,
+          completed: nextCompleted,
+          last_watched_at: nowIso,
+          completed_at: nextCompleted ? (existing?.completed ? undefined : nowIso) : null,
+        },
+        { onConflict: 'email,tutorial_id' }
+      )
+      return res.json({ ok: true })
     }
 
     if (action === 'getNote') {

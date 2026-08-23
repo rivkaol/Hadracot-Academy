@@ -1,8 +1,16 @@
 import { useState, useEffect } from 'react'
-import { BookOpen, Edit, CheckCircle, PlayCircle, Loader, Crown } from 'lucide-react'
+import { BookOpen, Edit, CheckCircle, PlayCircle, Loader, Crown, LogOut, Gift } from 'lucide-react'
 import { apiListNotes } from '../api'
+import { pricingConfig } from '../pricing'
 
-export default function ProfilePage({ userEmail, userPassword, userName, completedTutorials, isClubMember, tutorialsData, onSelectTutorial }) {
+const MEMBERSHIP_LABELS = {
+  vip: 'חברת מועדון VIP',
+  member: 'חברת מועדון',
+  purchaser: 'רוכשת בודדת',
+  inactive: 'מנוי לא פעיל',
+}
+
+export default function ProfilePage({ userEmail, userPassword, userName, completedTutorials, isVip, viewerState, tutorialsData, onSelectTutorial, onLogout }) {
   const [userNotes, setUserNotes] = useState([])
   const [loadingNotes, setLoadingNotes] = useState(true)
 
@@ -35,7 +43,7 @@ export default function ProfilePage({ userEmail, userPassword, userName, complet
 
           <div className="w-24 h-24 bg-[#3E3935] rounded-full flex items-center justify-center text-[#C88F96] font-serif font-bold text-4xl shrink-0 shadow-md relative">
             {userName ? userName.charAt(0) : 'ר'}
-            {isClubMember && (
+            {isVip && (
               <div className="absolute -top-1 -right-1 bg-gradient-to-r from-[#C88F96] to-[#9E626C] w-8 h-8 rounded-full flex items-center justify-center shadow-md border-2 border-white">
                 <Crown size={16} className="text-white" />
               </div>
@@ -45,13 +53,30 @@ export default function ProfilePage({ userEmail, userPassword, userName, complet
           <div className="flex-1 text-center md:text-right z-10 w-full">
             <div className="flex flex-col md:flex-row md:items-center gap-3 mb-2 justify-center md:justify-start">
               <h3 className="text-2xl font-bold text-[#3E3935]">{userName}</h3>
-              {isClubMember && (
+              {isVip ? (
                 <span className="bg-gradient-to-r from-[#C88F96] to-[#9E626C] text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-sm inline-flex items-center gap-1 justify-center w-max mx-auto md:mx-0">
-                  <Crown size={12} /> חברת מועדון VIP
+                  <Crown size={12} /> VIP
                 </span>
+              ) : (
+                viewerState && (
+                  <span className="bg-[#E8EEE5] text-[#3E3935] text-[10px] font-bold px-3 py-1 rounded-full inline-flex items-center gap-1 justify-center w-max mx-auto md:mx-0">
+                    {MEMBERSHIP_LABELS[viewerState] || ''}
+                  </span>
+                )
               )}
             </div>
-            <p className="text-gray-500 mb-6">{userEmail}</p>
+            <p className="text-gray-500 mb-1">{userEmail}</p>
+            <button
+              onClick={() =>
+                window.open(
+                  `${pricingConfig.whatsappBaseUrl}?text=${encodeURIComponent('היי רבקה, אשמח לעדכן פרטים בחשבון שלי')}`,
+                  '_blank'
+                )
+              }
+              className="text-xs text-[#9E626C] font-bold hover:underline mb-6"
+            >
+              עדכון פרטים / ביטול מנוי (בוואטסאפ)
+            </button>
 
             <div className="w-full max-w-md mx-auto md:mx-0 bg-[#FAF7F2] p-5 rounded-2xl border border-gray-200/60">
               <div className="flex justify-between items-center text-sm font-bold text-[#3E3935] mb-3">
@@ -69,6 +94,19 @@ export default function ProfilePage({ userEmail, userPassword, userName, complet
             </div>
           </div>
         </div>
+
+        {isVip && (
+          <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm mb-8">
+            <h3 className="text-lg font-bold text-[#3E3935] mb-4 flex items-center gap-2">
+              <Gift size={20} className="text-[#C88F96]" /> ההטבות שלי
+            </h3>
+            <ul className="space-y-2 text-sm text-[#3E3935]">
+              <li className="flex items-center gap-2"><CheckCircle size={14} className="text-[#687B63]" /> מתנת VIP</li>
+              <li className="flex items-center gap-2"><CheckCircle size={14} className="text-[#687B63]" /> ספר המתכונים המודפס</li>
+              <li className="flex items-center gap-2"><CheckCircle size={14} className="text-[#687B63]" /> הטבות עתידיות</li>
+            </ul>
+          </div>
+        )}
 
         <h3 className="text-2xl font-bold text-[#3E3935] mb-6 flex items-center gap-2">
           <BookOpen size={24} className="text-[#C88F96]" />
@@ -114,6 +152,17 @@ export default function ProfilePage({ userEmail, userPassword, userName, complet
                 </div>
               )
             })}
+          </div>
+        )}
+
+        {onLogout && (
+          <div className="text-center pb-4">
+            <button
+              onClick={onLogout}
+              className="inline-flex items-center gap-2 text-gray-400 hover:text-red-500 text-sm font-medium transition-colors"
+            >
+              <LogOut size={16} /> יציאה מהחשבון
+            </button>
           </div>
         )}
       </main>
