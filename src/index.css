@@ -24,6 +24,15 @@ html, body {
 
 .pb-safe { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
 
+/* דף הבית של האורחת (LandingHome) בלבד — Assistant, לא Heebo, כדי להתקרב לחום
+   ולקצב של public/join.html. שאר האתר (חברות, טעימה, התחברות) לא מושפע. */
+.visitor-landing, .visitor-landing input, .visitor-landing textarea, .visitor-landing button {
+  font-family: 'Assistant', 'Heebo', sans-serif;
+}
+.visitor-landing p, .visitor-landing li {
+  line-height: 1.9;
+}
+
 .skeleton-shimmer {
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 200% 100%;
