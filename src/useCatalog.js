@@ -1,11 +1,20 @@
 import { useState, useCallback } from 'react'
 import { SHEETS_URL, fallbackTutorialsData } from './constants'
 
-// מפרק את עמודת הקבצים לרשימה. תומך בכמה קבצים לשיעור, כל אחד בשורה נפרדת (או מופרד ב-;),
+// מפרק את עמודת הקבצים לרשימה. תומך בכמה קבצים/תמונות לשיעור, כל אחד בשורה נפרדת (או מופרד ב-;),
 // בפורמט "כותרת | קישור" (או רק קישור). שומר תאימות לאחור לעמודת "שם הקובץ להורדה" הישנה.
+// תומך גם בעמודה "כותרת הקובץ | קישור" (השם בפועל בגיליון "ניהול הדרכות") — ובכל כותרת עמודה
+// אחרת שמכילה גם "קובץ" וגם "קישור", כדי לא להישבר משינוי רווחים/ניסוח קטן בגיליון.
 function parseFiles(tutorial) {
+  const filesKey = Object.keys(tutorial).find((k) => k.includes('קובץ') && k.includes('קישור'))
   const raw =
-    tutorial.files || tutorial['קבצים'] || tutorial['קבצים להורדה'] || tutorial['חומרים להורדה'] || ''
+    tutorial.files ||
+    tutorial['קבצים'] ||
+    tutorial['קבצים להורדה'] ||
+    tutorial['חומרים להורדה'] ||
+    tutorial['כותרת הקובץ | קישור'] ||
+    (filesKey ? tutorial[filesKey] : '') ||
+    ''
   const list = String(raw)
     .split(/[\n;]+/)
     .map((s) => s.trim())

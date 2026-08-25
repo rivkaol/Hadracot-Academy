@@ -8,6 +8,7 @@ import { trackEvent } from '../lib/trackEvent'
 import StepBadge from './StepBadge'
 
 const PREVIEW_SECONDS = 300 // חמש דקות טעימה חינם
+const IMAGE_FILE_RE = /\.(jpe?g|png|gif|webp|avif|svg)(\?|#|$)/i
 
 export default function TutorialPage({
   tutorial,
@@ -408,24 +409,47 @@ export default function TutorialPage({
                   <h3 className="text-xl font-bold text-[#3E3935] mb-2">חומרים נלווים להדרכה</h3>
                   <p className="text-[#716861] mb-6 leading-[1.8]">כאן ריכזתי עבורך את כל מה שצריך להשלים את הלמידה.</p>
                   <div className="space-y-3">
-                    {tutorial.files.map((file, i) => (
-                      <a
-                        key={i}
-                        href={file.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center p-4 border border-gray-100 rounded-2xl hover:bg-gray-50 hover:border-[#C88F96]/30 transition-all cursor-pointer group"
-                      >
-                        <div className="w-12 h-12 bg-[#FAF7F2] rounded-full flex items-center justify-center text-[#3E3935] group-hover:bg-[#3E3935] group-hover:text-white transition-colors ml-4 shrink-0">
-                          <FileText size={20} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-bold text-[#3E3935] group-hover:text-[#C88F96] transition-colors truncate">{file.title || 'קובץ מצורף להורדה'}</h4>
-                          <p className="text-sm text-gray-500 mt-0.5">לחצי כאן לפתיחה והורדה</p>
-                        </div>
-                        <Download size={20} className="text-gray-400 group-hover:text-[#C88F96] shrink-0" />
-                      </a>
-                    ))}
+                    {tutorial.files.map((file, i) =>
+                      IMAGE_FILE_RE.test(file.url) ? (
+                        <a
+                          key={i}
+                          href={file.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`תמונה: ${file.title || 'תמונה נלווית להדרכה'} — לחצי לפתיחה בגודל מלא`}
+                          className="block border border-gray-100 rounded-2xl overflow-hidden hover:border-[#C88F96]/30 transition-all group"
+                        >
+                          <img
+                            src={file.url}
+                            alt={file.title || 'תמונה נלווית להדרכה'}
+                            loading="lazy"
+                            className="w-full max-h-[480px] object-contain bg-[#FAF7F2]"
+                          />
+                          {file.title && (
+                            <div className="p-3 text-sm font-bold text-[#3E3935] text-center border-t border-gray-100 group-hover:text-[#C88F96] transition-colors">
+                              {file.title}
+                            </div>
+                          )}
+                        </a>
+                      ) : (
+                        <a
+                          key={i}
+                          href={file.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center p-4 border border-gray-100 rounded-2xl hover:bg-gray-50 hover:border-[#C88F96]/30 transition-all cursor-pointer group"
+                        >
+                          <div className="w-12 h-12 bg-[#FAF7F2] rounded-full flex items-center justify-center text-[#3E3935] group-hover:bg-[#3E3935] group-hover:text-white transition-colors ml-4 shrink-0">
+                            <FileText size={20} />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-bold text-[#3E3935] group-hover:text-[#C88F96] transition-colors truncate">{file.title || 'קובץ מצורף להורדה'}</h4>
+                            <p className="text-sm text-gray-500 mt-0.5">לחצי כאן לפתיחה והורדה</p>
+                          </div>
+                          <Download size={20} className="text-gray-400 group-hover:text-[#C88F96] shrink-0" />
+                        </a>
+                      )
+                    )}
                   </div>
                 </div>
               )}
