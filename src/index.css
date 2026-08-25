@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 html, body {
-  font-family: 'Heebo', sans-serif;
+  font-family: "Segoe UI", Arial, sans-serif;
   background-color: #FAF7F2;
   margin: 0;
   padding: 0;
@@ -11,6 +11,10 @@ html, body {
   overflow-x: hidden;
   width: 100%;
   min-height: 100dvh;
+}
+
+button, input, textarea, select {
+  font: inherit;
 }
 
 #root {
@@ -24,13 +28,23 @@ html, body {
 
 .pb-safe { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
 
-/* דף הבית של האורחת (LandingHome) בלבד — Assistant, לא Heebo, כדי להתקרב לחום
-   ולקצב של public/join.html. שאר האתר (חברות, טעימה, התחברות) לא מושפע. */
-.visitor-landing, .visitor-landing input, .visitor-landing textarea, .visitor-landing button {
-  font-family: 'Assistant', 'Heebo', sans-serif;
+/* המבקרת והמועדון משתמשים באותו פונט מערכת יציב — אין תלות ב-Google Fonts. */
+.visitor-landing,
+.visitor-landing input,
+.visitor-landing textarea,
+.visitor-landing button,
+.visitor-showroom,
+.visitor-showroom input,
+.visitor-showroom textarea,
+.visitor-showroom button {
+  font-family: inherit;
 }
-.visitor-landing p, .visitor-landing li {
-  line-height: 1.9;
+
+.visitor-landing p,
+.visitor-landing li,
+.visitor-showroom p,
+.visitor-showroom li {
+  line-height: 1.85;
 }
 
 .skeleton-shimmer {
