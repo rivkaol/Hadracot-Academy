@@ -10,6 +10,14 @@ import StepBadge from './StepBadge'
 const PREVIEW_SECONDS = 300 // חמש דקות טעימה חינם
 const IMAGE_FILE_RE = /\.(jpe?g|png|gif|webp|avif|svg)(\?|#|$)/i
 
+// עבור תמונות מ-Cloudinary: מוסיפים fl_attachment כדי שהדפדפן יוריד את הקובץ בפועל
+// (Content-Disposition: attachment) במקום רק לפתוח אותו בטאב — כפתור "שמירה" אחד וברור,
+// בלי להסתמך על "לחיצה ימנית ← שמירת תמונה" שקשה למי שפחות בטוחה טכנולוגית.
+function toImageDownloadUrl(url) {
+  const m = url.match(/^(https?:\/\/res\.cloudinary\.com\/[^/]+\/image\/upload\/)(.*)$/)
+  return m ? `${m[1]}fl_attachment/${m[2]}` : url
+}
+
 export default function TutorialPage({
   tutorial,
   tutorialsData,
@@ -411,26 +419,36 @@ export default function TutorialPage({
                   <div className="space-y-3">
                     {tutorial.files.map((file, i) =>
                       IMAGE_FILE_RE.test(file.url) ? (
-                        <a
-                          key={i}
-                          href={file.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          aria-label={`תמונה: ${file.title || 'תמונה נלווית להדרכה'} — לחצי לפתיחה בגודל מלא`}
-                          className="block border border-gray-100 rounded-2xl overflow-hidden hover:border-[#C88F96]/30 transition-all group"
-                        >
-                          <img
-                            src={file.url}
-                            alt={file.title || 'תמונה נלווית להדרכה'}
-                            loading="lazy"
-                            className="w-full max-h-[480px] object-contain bg-[#FAF7F2]"
-                          />
-                          {file.title && (
-                            <div className="p-3 text-sm font-bold text-[#3E3935] text-center border-t border-gray-100 group-hover:text-[#C88F96] transition-colors">
-                              {file.title}
-                            </div>
-                          )}
-                        </a>
+                        <div key={i} className="border border-gray-100 rounded-2xl overflow-hidden">
+                          <a
+                            href={file.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`תמונה: ${file.title || 'תמונה נלווית להדרכה'} — לחצי לפתיחה בגודל מלא`}
+                            className="block"
+                          >
+                            <img
+                              src={file.url}
+                              alt={file.title || 'תמונה נלווית להדרכה'}
+                              loading="lazy"
+                              className="w-full max-h-[480px] object-contain bg-[#FAF7F2]"
+                            />
+                          </a>
+                          <div className="flex items-center justify-between gap-3 p-3 border-t border-gray-100">
+                            <span className="text-sm font-bold text-[#3E3935] truncate">
+                              {file.title || 'תמונה נלווית להדרכה'}
+                            </span>
+                            <a
+                              href={toImageDownloadUrl(file.url)}
+                              download
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1.5 text-sm font-bold text-[#9E626C] hover:text-white hover:bg-[#9E626C] border border-[#C88F96]/40 px-3 py-1.5 rounded-full transition-colors shrink-0"
+                            >
+                              <Download size={16} /> שמירת התמונה
+                            </a>
+                          </div>
+                        </div>
                       ) : (
                         <a
                           key={i}
