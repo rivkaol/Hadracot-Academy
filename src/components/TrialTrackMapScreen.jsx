@@ -2,7 +2,7 @@ import JourneyTimeline from './JourneyTimeline'
 import IntroOfferCard from './IntroOfferCard'
 
 // אחרי הטעימה: קודם ההצעה, ורק אחריה מפת המסלול כהוכחת עומק נוספת.
-// כך ליד חמה לא צריכה לגלול דרך מסלול שלם לפני שהיא בכלל רואה את 29 ₪.
+// כך ליד חמה לא צריכה לגלול דרך מסלול שלם לפני שהיא בכלל רואה את ההצעה.
 export default function TrialTrackMapScreen({ tutorialsData, watchedTutorialId, onJoin }) {
   return (
     <div className="flex-1 pb-[100px] md:pb-8">

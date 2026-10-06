@@ -58,8 +58,8 @@ export default function VisitorTutorialModal({ tutorial, categoryTitle, onClose,
             <p className="text-sm text-[#716861] leading-relaxed">יחד איתה נפתח לך כל המסלול, ההדרכות הנוספות, המפגשים החיים והקהילה — הכול במקום אחד.</p>
           </div>
 
-          <a href={pricingConfig.introCheckoutUrl} target="_blank" rel="noopener noreferrer" onClick={join} className="w-full min-h-[60px] rounded-full bg-gradient-to-br from-[#C88F96] to-[#A96874] text-white font-extrabold text-lg shadow-[0_14px_32px_rgba(169,104,116,.28)] flex items-center justify-center text-center px-5 hover:-translate-y-0.5 transition-transform">להצטרף למסלול ב־{pricingConfig.introPrice} ₪</a>
-          <p className="text-center text-xs text-[#8D837D] mt-2.5">לחודש הראשון · אחר כך {pricingConfig.membershipPrice} ₪ לחודש · אפשר לבטל בכל עת</p>
+          <a href={pricingConfig.membershipCheckoutUrl} target="_blank" rel="noopener noreferrer" onClick={join} className="w-full min-h-[60px] rounded-full bg-gradient-to-br from-[#C88F96] to-[#A96874] text-white font-extrabold text-lg shadow-[0_14px_32px_rgba(169,104,116,.28)] flex items-center justify-center text-center px-5 hover:-translate-y-0.5 transition-transform">להצטרף למועדון</a>
+          <p className="text-center text-xs text-[#8D837D] mt-2.5">{pricingConfig.membershipPriceLabel} · אפשר לבטל בכל עת</p>
 
           <button onClick={trial} className="mt-5 w-full inline-flex items-center justify-center gap-2 text-[#9E626C] font-extrabold text-sm py-2 hover:underline"><PlayCircle size={18} /> רוצה גם להרגיש איך רבקה מלמדת? אפשר לצפות ב־5 דקות</button>
         </div>
