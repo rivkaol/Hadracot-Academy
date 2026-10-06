@@ -180,12 +180,12 @@ export default function VisitorShowroom({ tutorialsData, onStartTrial, onLogin }
             </div>
 
             <div className="max-w-[560px] mx-auto bg-white rounded-[1.6rem] border border-white shadow-[0_18px_50px_rgba(74,61,54,.11)] p-5 md:p-6">
-              <p className="text-[13px] font-bold text-[#9E626C] mb-2">חודש ראשון במחיר היכרות</p>
+              <p className="text-[13px] font-bold text-[#9E626C] mb-2">חברות חודשית · ביטול בכל עת</p>
               <div className="flex items-end justify-center gap-3 mb-4">
-                <p className="text-[64px] leading-none font-bold text-[#A96874]">{pricingConfig.introPrice}<span className="text-[22px]"> ₪</span></p>
-                <div className="text-right pb-1"><p className="line-through text-[#9B918B] text-[17px]">{pricingConfig.membershipPrice} ₪</p><p className="text-[11px] text-[#716861]">מהחודש השני</p></div>
+                <p className="text-[64px] leading-none font-bold text-[#A96874]">{pricingConfig.membershipPrice}<span className="text-[22px]"> ₪</span></p>
+                <div className="text-right pb-1"><p className="text-[13px] text-[#716861]">לחודש</p></div>
               </div>
-              <a href={pricingConfig.introCheckoutUrl} target="_blank" rel="noopener noreferrer" onClick={() => checkoutClick('showroom_hero')} className="w-full min-h-[58px] rounded-full bg-gradient-to-br from-[#C88F96] to-[#A96874] text-white font-bold text-[18px] flex items-center justify-center shadow-[0_14px_32px_rgba(169,104,116,.25)]">אני רוצה להתחיל את המסלול</a>
+              <a href={pricingConfig.membershipCheckoutUrl} target="_blank" rel="noopener noreferrer" onClick={() => checkoutClick('showroom_hero')} className="w-full min-h-[58px] rounded-full bg-gradient-to-br from-[#C88F96] to-[#A96874] text-white font-bold text-[18px] flex items-center justify-center shadow-[0_14px_32px_rgba(169,104,116,.25)]">אני רוצה להתחיל את המסלול</a>
               <p className="text-[11px] text-[#8D837D] mt-3">גישה מיידית · אפשר לבטל בכל עת</p>
             </div>
           </div>
@@ -299,8 +299,8 @@ export default function VisitorShowroom({ tutorialsData, onStartTrial, onLogin }
             ))}
           </div>
 
-          <a href={pricingConfig.introCheckoutUrl} target="_blank" rel="noopener noreferrer" onClick={() => checkoutClick('showroom_final')} className="w-full max-w-lg mx-auto min-h-[64px] rounded-full bg-gradient-to-br from-[#C88F96] to-[#A96874] text-white font-bold text-[19px] flex items-center justify-center shadow-[0_15px_35px_rgba(169,104,116,.28)]">אני רוצה להתחיל ב־{pricingConfig.introPrice} ₪</a>
-          <p className="text-[11px] text-[#8D837D] mt-3">לחודש הראשון · אחר כך {pricingConfig.membershipPrice} ₪ לחודש</p>
+          <a href={pricingConfig.membershipCheckoutUrl} target="_blank" rel="noopener noreferrer" onClick={() => checkoutClick('showroom_final')} className="w-full max-w-lg mx-auto min-h-[64px] rounded-full bg-gradient-to-br from-[#C88F96] to-[#A96874] text-white font-bold text-[19px] flex items-center justify-center shadow-[0_15px_35px_rgba(169,104,116,.28)]">אני רוצה להצטרף למועדון</a>
+          <p className="text-[11px] text-[#8D837D] mt-3">{pricingConfig.membershipPriceLabel} · אפשר לבטל בכל עת</p>
           <button onClick={onLogin} className="mt-6 text-[13px] font-bold text-[#716861] hover:text-[#9E626C] hover:underline">כבר חברת מועדון? כניסה לאזור שלך</button>
         </div>
       </section>

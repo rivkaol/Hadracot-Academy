@@ -21,8 +21,8 @@ const FAQ_ITEMS = [
     a: 'הודעה אחת בוואטסאפ, בלי התחייבות לתקופה קבועה ובלי טפסים.',
   },
   {
-    q: 'מה קורה אחרי החודש הראשון ב-29 ₪?',
-    a: `מהחודש השני המחיר עובר אוטומטית ל-${pricingConfig.membershipPriceLabel} — המחיר הרגיל של המועדון. אפשר לבטל בכל שלב, גם לפני שזה קורה.`,
+    q: 'כמה זה עולה?',
+    a: `${pricingConfig.membershipPriceLabel}, חברות חודשית שמתחדשת עד לביטול. אפשר לבטל בכל שלב, בהודעה אחת.`,
   },
 ]
 
@@ -68,13 +68,13 @@ export default function LandingFAQ({ onJoinClick }) {
             מוכנה להתחיל?
           </h3>
           <a
-            href={pricingConfig.introCheckoutUrl}
+            href={pricingConfig.membershipCheckoutUrl}
             target="_blank"
             rel="noopener noreferrer"
             onClick={onJoinClick}
             className="inline-flex items-center justify-center gap-2 bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white px-8 py-4 rounded-full font-bold text-lg shadow-[0_12px_28px_rgba(158,98,108,0.3)] hover:-translate-y-0.5 transition-all"
           >
-            אני רוצה להיכנס למועדון ב-{pricingConfig.introPrice} ₪
+            אני רוצה להיכנס למועדון
             <ChevronLeft size={20} />
           </a>
           <p className="text-sm text-[#716861] mt-4">
