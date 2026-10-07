@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>מועדון בריאות שבאה מהלב | רבקה הולצברג</title>
-<meta name="description" content="מפחד — לביטחון. בלב, בבית ובגוף. שיטה של שיעור אחרי שיעור עם רבקה הולצברג: כל הדרכות המועדון, 2 שיעורים חדשים בכל חודש וקבוצת המועדון. 69 ₪ לחודש, ביטול בכל עת.">
-<meta property="og:title" content="מועדון בריאות שבאה מהלב — מפחד לביטחון">
-<meta property="og:description" content="שיטה של שיעור אחרי שיעור, שמחליפה דאגה בשקט — בלב, בבית ובגוף.">
+<meta name="description" content="מפחד לביטחון. בלב, בבית ובגוף. שיטה של שיעור אחרי שיעור עם רבקה הולצברג: כל הדרכות המועדון, 2 שיעורים חדשים בכל חודש וקבוצת המועדון. 69 ₪ לחודש, ביטול בכל עת.">
+<meta property="og:title" content="מועדון בריאות שבאה מהלב: מפחד לביטחון">
+<meta property="og:description" content="שיטה של שיעור אחרי שיעור, שמחליפה דאגה בשקט, בלב, בבית ובגוף.">
 <meta property="og:image" content="https://res.cloudinary.com/dyqe95map/image/upload/v1778355572/profile.jpg_zror0m.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Assistant:wght@400;600;700;800&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
@@ -110,12 +110,11 @@ section { padding: 84px 0; }
 .tool p { font-size: .95rem; color: var(--muted); line-height: 1.6; }
 
 
-.placeholder {
-  border: 2px dashed rgba(200, 143, 150, .6); border-radius: 22px; padding: 26px; text-align: center;
-  color: var(--rose-deep); background: rgba(241, 223, 225, .35); font-weight: 600;
-}
-.placeholder small { display: block; font-weight: 400; color: var(--muted); margin-top: 6px; }
 
+
+.recog { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 30px; }
+.recog p { margin: 0; background: #fff; border: 1px solid var(--line); border-right: 4px solid var(--rose); border-radius: 16px; padding: 16px 20px; line-height: 1.7; font-size: 1.02rem; text-align: right; }
+.recog-end { margin-top: 30px; font-weight: 700; color: var(--green); font-size: 1.1rem; }
 
 .offer { background: var(--paper); border-radius: 34px; box-shadow: var(--shadow); padding: 48px 36px; text-align: center; max-width: 720px; margin: 0 auto; }
 .price { display: flex; justify-content: center; align-items: flex-end; gap: 14px; margin: 18px 0 26px; }
@@ -198,6 +197,7 @@ details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
   .stage li { padding-right: 20px; position: relative; margin-bottom: 4px; }
   .stage li::before { content: '•'; position: absolute; right: 4px; color: var(--rose); font-weight: 800; }
   .stage .result { color: var(--green); }
+  .stage .home { margin-top: 12px; font-size: .92rem; background: var(--sage-light); color: var(--green); border-radius: 12px; padding: 8px 12px; line-height: 1.6; font-weight: 600; }
 
   .weeks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
   .weeks .wk { font: 800 .85rem 'Assistant', sans-serif; color: var(--rose-deep); }
@@ -225,7 +225,7 @@ details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
   footer.site-foot a { color: #F0D57A; text-decoration: none; }
   footer.site-foot strong { color: #fff; }
   @media (max-width: 860px) {
-    .shift, .month, .weeks { grid-template-columns: 1fr; }
+    .shift, .month, .weeks, .recog { grid-template-columns: 1fr; }
     .shift .row { grid-template-columns: 1fr; }
     .shift .ar { transform: rotate(-90deg); padding: 2px 0; }
   }
@@ -242,32 +242,49 @@ details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
   <div class="wrap hero-grid">
     <div class="center-m">
       <span class="eyebrow">מועדון בריאות שבאה מהלב · עם רבקה הולצברג</span>
-      <h1>מפחד — לביטחון.<br><span class="gold">בלב, בבית ובגוף.</span></h1>
-      <p class="lead">מקום שבו מפסיקות להילחם בעצמנו, ולומדות — שיעור אחרי שיעור — להחליף דאגה בשקט, ביקורת באהבה, ו"ככה זה" ב"זה מתחיל לזוז".</p>
+      <h1>מפחד לביטחון.<br><span class="gold">בלב, בבית ובגוף.</span></h1>
+      <p class="lead">להירדם בלילה, גם כשהבן לא התקשר. לשמוע הערה מהכלה, ולא לסחוב אותה איתך כל השבוע. להתחיל משהו בשביל עצמך, ולהמשיך גם אחרי היום השלישי.</p>
       <a class="btn" href="#offer">אני רוצה להצטרף למועדון</a>
       <p class="micro">כל ההדרכות פתוחות מיד · 2 שיעורים חדשים בכל חודש · 69 ₪ לחודש · ביטול בכל עת</p>
     </div>
     <div class="hero-photo">
       <img src="https://res.cloudinary.com/dyqe95map/image/upload/v1778355572/profile.jpg_zror0m.jpg" alt="רבקה הולצברג">
-      <div class="photo-note">רבקה הולצברג<small>מדע המוח · התניא · שער הביטחון</small></div>
+      <div class="photo-note">רבקה הולצברג<small>בריאות שבאה מהלב</small></div>
     </div>
   </div>
 </header>
+
+<!-- 1א. את מכירה את זה? -->
+<section class="alt">
+  <div class="narrow center">
+    <span class="eyebrow sage">אולי זה נשמע לך מוכר</span>
+    <h2>את מכירה את הרגעים האלה?</h2>
+    <div class="recog">
+      <p>השעה כבר אחרי חצות, ואת עדיין ערה. הראש לא מפסיק: מה עם השידוך של הבת, מה יגידו בבדיקה, למה הוא לא עונה.</p>
+      <p>את מחכה שהבן יתקשר. לא רוצה להיות שוב זאת שמתקשרת ראשונה. והטלפון שותק.</p>
+      <p>הכלה אמרה משפט אחד בשבת. עכשיו כבר יום רביעי, ואת עדיין מסובבת אותו בראש.</p>
+      <p>מאז שבעלך יצא לפנסיה הוא בבית כל היום, ופתאום אין לך אף פינה משלך.</p>
+      <p>ביום ראשון את מתחילה מחדש: הליכה, אוכל נכון, סדר. ביום רביעי זה כבר נגמר, ושוב את כועסת על עצמך.</p>
+      <p>כולם יודעים שאפשר לסמוך עלייך. רק את כבר לא זוכרת מתי עשית משהו בשביל עצמך.</p>
+    </div>
+    <p class="recog-end">אם עצרת לרגע על אחד מהמשפטים האלה, הדף הזה נכתב בשבילך.</p>
+  </div>
+</section>
 
 <!-- 2. לפני ← אחרי -->
 <section>
   <div class="wrap">
     <div class="center" style="margin-bottom:38px">
       <span class="eyebrow sage">מה משתנה</span>
-      <h2>מהמשפטים שמלווים אותך היום —<br>אל המשפטים שנבנים במועדון</h2>
+      <h2>מהמשפטים שאת אומרת לעצמך היום,<br>אל מה שתתחילי להגיד במועדון</h2>
     </div>
     <div class="shift">
-      <div class="row"><div class="from">"אין לי משמעת. אני מתחילה ונשברת."</div><div class="ar">←</div><div class="to">"אני אישה של מילה — גם כלפי עצמי."</div></div>
-      <div class="row"><div class="from">"הדאגה לא נותנת לי לישון."</div><div class="ar">←</div><div class="to">"לדאגה יש מקום, ושאר היום שלי."</div></div>
-      <div class="row"><div class="from">"הבן התרחק, ואני לא יודעת מה לעשות."</div><div class="ar">←</div><div class="to">"אני יודעת איך לפתוח את הלב — קודם את שלי."</div></div>
-      <div class="row"><div class="from">"כל הערה של הכלה נכנסת בי."</div><div class="ar">←</div><div class="to">"אני רואה את הטוב שבה, ונשארת רגועה."</div></div>
-      <div class="row"><div class="from">"זה הגיל, ככה זה ונגמר."</div><div class="ar">←</div><div class="to">"שום דבר לא נעול. גם אני מתחדשת."</div></div>
-      <div class="row"><div class="from">"לא מגיע לי. אני לא מספיקה."</div><div class="ar">←</div><div class="to">"בגלל מי שאני — מגיע לי."</div></div>
+      <div class="row"><div class="from">"אני מתחילה בהתלהבות, ואחרי כמה ימים נשברת."</div><div class="ar">←</div><div class="to">"מה שאני מבטיחה לעצמי, אני עושה. גם כשאין לי כוח."</div></div>
+      <div class="row"><div class="from">"הדאגה לא נותנת לי לישון."</div><div class="ar">←</div><div class="to">"יש לי חמש דקות ביום לדאוג. אחר כך אני חוזרת לחיים שלי."</div></div>
+      <div class="row"><div class="from">"הבן התרחק, ואני לא יודעת מה לעשות."</div><div class="ar">←</div><div class="to">"הפסקתי לחכות ליד הטלפון. אני יודעת מה כן בידיים שלי."</div></div>
+      <div class="row"><div class="from">"כל הערה של הכלה נכנסת בי כמו סכין."</div><div class="ar">←</div><div class="to">"היא אמרה מה שאמרה, ואני נשארתי רגועה. השבת עברה בשלום."</div></div>
+      <div class="row"><div class="from">"בגיל שלי כבר מאוחר להשתנות."</div><div class="ar">←</div><div class="to">"התחלתי משהו חדש בגיל הזה, ואני ממשיכה."</div></div>
+      <div class="row"><div class="from">"לא מגיע לי. אני תמיד אחרונה בתור."</div><div class="ar">←</div><div class="to">"אני יכולה להגיד 'לא היום', בלי רגשות אשמה."</div></div>
     </div>
   </div>
 </section>
@@ -276,7 +293,7 @@ details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
 <section class="alt">
   <div class="narrow center">
     <h2>זה לא חוסר אופי.<br><span class="accent">ידע לבד פשוט נשאר בראש.</span></h2>
-    <p class="lead">קראת, הקשבת, הבנת — ובכל זאת חזרת לאותו מקום. כי מה שמנהל אותנו באמת יושב עמוק יותר: ההרגלים, הפחדים, האופן שבו אנחנו רואות את עצמנו ואת האנשים שלנו. במועדון עובדות בדיוק שם — בכלים קטנים ויומיים, בלי להילחם בעצמך. מדע המוח לצד התניא, שער הביטחון ו"חשוב טוב ויהיה טוב".</p>
+    <p class="lead">קראת, שמעת שיעורים, אולי אפילו רשמת לעצמך. ובכל זאת, כשהטלפון לא מצלצל או כשההערה נאמרת, את מגיבה בדיוק כמו פעם. זה קורה כי ההרגלים והפחדים יושבים עמוק יותר מהידע. במועדון עובדות בדיוק שם: כמה דקות ביום, עם תרגיל פשוט, עד שהתגובה החדשה נעשית טבעית. בלי להילחם בעצמך, ומתוך מה שמדע המוח יודע היום ומה שהמקורות שלנו לימדו תמיד.</p>
   </div>
 </section>
 
@@ -286,20 +303,24 @@ details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
     <div class="center" style="margin-bottom:40px">
       <span class="eyebrow">זה לא אוסף הרצאות. זו שיטה.</span>
       <h2>ארבעה שלבים, שכבה על שכבה</h2>
-      <p class="lead">כל שיעור נבנה על זה שלפניו, וכל שיעור נגמר בכלי אחד שעושים בבית — כמה דקות ביום.</p>
+      <p class="lead">כל שיעור נבנה על זה שלפניו, וכל שיעור נגמר בתרגיל אחד שעושים בבית, כמה דקות ביום. אלה השאלות שעליהן תשמעי תשובות:</p>
     </div>
     <div class="cards c4">
-      <article class="card stage"><div class="num">01</div><span class="tag">שיעורים 1–3</span><h3>המנוע</h3>
-        <ul><li>3 הבטחות קטנות כל ערב</li><li>דף כאב · דף עונג</li><li>15 דקות שמחזירות לך את היום</li></ul>
-        <p class="result">"אני אישה של מילה."</p></article>
-      <article class="card stage"><div class="num">02</div><span class="tag">שיעורים 4–6</span><h3>הקוד הפנימי</h3>
-        <ul><li>משפט הגישור</li><li>3 תחנות ביום, 30 יום</li><li>שינון ברגעי השקט של הבוקר</li></ul>
-        <p class="result">"אני כבר לא חוזרת לאותו מקום."</p></article>
-      <article class="card stage"><div class="num">03</div><span class="tag">שיעורים 7–12</span><h3>ביטחון</h3>
-        <ul><li>5 דקות לדאגה</li><li>מחברת החוטים</li><li>"גם זו לטובה" — כנוסח מעשי</li></ul>
-        <p class="result">"מפחד — לביטחון."</p></article>
-      <article class="card stage"><div class="num">04</div><span class="tag">שיעורים 13–17</span><h3>הלב והאנשים</h3>
-        <ul><li>מפתח ללב — 5 שלבים</li><li>מודל המראה — 4 כיסאות</li><li>מכתב בהירות מול ניגוד</li></ul>
+      <article class="card stage"><div class="num">01</div><span class="tag">שיעורים 1 עד 3</span><h3>לעמוד במה שהבטחתי לעצמי</h3>
+        <ul><li>למה אני מתחילה בהתלהבות ונשברת אחרי כמה ימים?</li><li>למה אני יודעת מה טוב לי, ובכל זאת דוחה?</li><li>איך מוצאים זמן לעצמי כשכולם צריכים אותי?</li></ul>
+        <p class="home">בבית: שלוש הבטחות קטנות לעצמך כל ערב</p>
+        <p class="result">"אני כבר לא מתחילה ונשברת."</p></article>
+      <article class="card stage"><div class="num">02</div><span class="tag">שיעורים 4 עד 6</span><h3>להפסיק לחזור לאותו מקום</h3>
+        <ul><li>למה אני תמיד מגיעה לאותה נקודה, גם כשאני מנסה אחרת?</li><li>איך מחליפים את הקול שאומר "את לא מספיק טובה"?</li><li>למה משפטים חיוביים הרגישו לי מזויפים?</li></ul>
+        <p class="home">בבית: משפט אחד, שלוש פעמים ביום</p>
+        <p class="result">"אני מתחילה לראות את עצמי אחרת."</p></article>
+      <article class="card stage"><div class="num">03</div><span class="tag">שיעורים 7 עד 12</span><h3>לישון בשקט גם כשיש דאגות</h3>
+        <ul><li>מה עושים עם דאגה לילדים שלא נותנת להירדם?</li><li>איך לא לתת לדבר קטן שהשתבש להרוס לי שבוע?</li><li>למה אני מרגישה ש"לא מגיע לי"?</li></ul>
+        <p class="home">בבית: חמש דקות ביום שבהן מותר לדאוג</p>
+        <p class="result">"הדאגה כבר לא מנהלת לי את היום."</p></article>
+      <article class="card stage"><div class="num">04</div><span class="tag">שיעורים 13 עד 17</span><h3>הבן, הכלה, הבעל, ואני</h3>
+        <ul><li>אני אוהבת אותו. אז למה הוא סגור אליי?</li><li>מה עושים כשהיא חצופה אליי, במקום להיפגע?</li><li>איך מבקשים בבית את מה שאני צריכה, בלי ריב?</li></ul>
+        <p class="home">בבית: דף אחד על אדם אחד שיקר לך</p>
         <p class="result">"הקשר מתחיל להיפתח."</p></article>
     </div>
   </div>
@@ -311,13 +332,13 @@ details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
     <div class="center" style="margin-bottom:34px">
       <span class="eyebrow sage">"ואם זה עוד דבר שאתחיל ולא אתמיד?"</span>
       <h2>ככה נראה החודש הראשון שלך</h2>
-      <p class="lead">כמעט כל כלי אצלנו בנוי על 30 יום. הנה מסלול מומלץ — וכל השיעורים פתוחים לך גם מעבר לו.</p>
+      <p class="lead">כמעט כל כלי אצלנו בנוי על 30 יום. הנה מסלול מומלץ, וכל השיעורים פתוחים לך גם מעבר לו.</p>
     </div>
     <div class="weeks">
-      <div class="card"><span class="wk">שבוע 1 · המנוע</span><h3>לעמוד במילה שלי</h3><div class="do">3 הבטחות קטנות כל ערב</div></div>
-      <div class="card"><span class="wk">שבוע 2 · הקוד הפנימי</span><h3>כתובת חדשה</h3><div class="do">משפט גישור, 3 פעמים ביום</div></div>
-      <div class="card"><span class="wk">שבוע 3 · ביטחון</span><h3>מקום לדאגה</h3><div class="do">5 דקות ביום, ושאר היום שלך</div></div>
-      <div class="card"><span class="wk">שבוע 4 · הלב</span><h3>מפתח ללב</h3><div class="do">דף אחד על אדם אחד שיקר לך</div></div>
+      <div class="card"><span class="wk">שבוע 1</span><h3>לעמוד במה שהבטחתי לעצמי</h3><div class="do">3 הבטחות קטנות כל ערב</div></div>
+      <div class="card"><span class="wk">שבוע 2</span><h3>להחליף את הקול שאומר "את לא מספיק"</h3><div class="do">משפט אחד, 3 פעמים ביום</div></div>
+      <div class="card"><span class="wk">שבוע 3</span><h3>להחזיר לעצמי את השינה</h3><div class="do">5 דקות ביום לדאגה, ושאר היום שלך</div></div>
+      <div class="card"><span class="wk">שבוע 4</span><h3>לרכך לב שנסגר</h3><div class="do">דף אחד על אדם אחד שיקר לך</div></div>
     </div>
   </div>
 </section>
@@ -330,10 +351,10 @@ details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
       <h2>מה מחכה לך במועדון</h2>
     </div>
     <div class="month">
-      <div class="card"><div class="big">17</div><h3>שיעורי השיטה</h3><p class="muted">וכל שאר הדרכות המועדון — פתוחים מהיום הראשון.</p></div>
+      <div class="card"><div class="big">17</div><h3>שיעורי השיטה</h3><p class="muted">וכל שאר הדרכות המועדון פתוחים מהיום הראשון.</p></div>
       <div class="card"><div class="big">2</div><h3>שיעורים חדשים</h3><p class="muted">שיעור חדש פעמיים בחודש, שממשיך מאיפה שעצרנו.</p></div>
       <div class="card"><div class="big">∞</div><h3>בקצב שלך</h3><p class="muted">כל שיעור נשאר אצלך, לצפייה מתי שנוח.</p></div>
-      <div class="card"><div class="big">♡</div><h3>קבוצת המועדון</h3><p class="muted">נשים שהולכות באותה דרך — לשאלות, לחיזוק ולשיתוף.</p></div>
+      <div class="card"><div class="big">♡</div><h3>קבוצת המועדון</h3><p class="muted">נשים שהולכות באותה דרך, לשאלות, לחיזוק ולשיתוף.</p></div>
     </div>
   </div>
 </section>
@@ -344,18 +365,10 @@ details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
     <div class="hero-photo"><img src="https://res.cloudinary.com/dyqe95map/image/upload/v1778355572/profile.jpg_zror0m.jpg" alt="רבקה הולצברג"></div>
     <div class="note">
       <span class="eyebrow">מילה ממני</span>
-      <p>הייתי בדיוק שם. ידעתי, קראתי, ניסיתי — עד שהבנתי שכל הידע שאספתי לא חדר באמת פנימה.</p>
-      <p>כשלמדתי איך להכניס אותו לשם, הכל התחיל לזרום. את זה אני מלמדת במועדון — בגובה העיניים, לנשים שרוצות לחיות אחרת, בכל גיל.</p>
-      <p><strong>— רבקה</strong></p>
+      <p>הייתי בדיוק שם. ידעתי, קראתי, ניסיתי, עד שהבנתי שכל הידע שאספתי לא חדר באמת פנימה.</p>
+      <p>כשלמדתי איך להכניס אותו לשם, הכל התחיל לזרום. את זה אני מלמדת במועדון, בגובה העיניים, לנשים שרוצות לחיות אחרת, בכל גיל.</p>
+      <p><strong>רבקה</strong></p>
     </div>
-  </div>
-</section>
-
-<!-- 8. עדויות -->
-<section>
-  <div class="narrow center">
-    <h2>מתוך המועדון</h2>
-    <div class="placeholder">מקום לעדויות אמיתיות ומאושרות של חברות<small>ממתין לחומר מרבקה</small></div>
   </div>
 </section>
 
