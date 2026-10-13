@@ -2,6 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="utf-8">
+<script>document.documentElement.className += ' js';</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>מועדון בריאות שבאה מהלב | רבקה הולצברג</title>
 <meta name="description" content="מפחד לביטחון. בלב, בבית ובגוף. שיטה של שיעור אחרי שיעור עם רבקה הולצברג: כל הדרכות המועדון, 2 שיעורים חדשים בכל חודש וקבוצת המועדון. 69 ₪ לחודש, ביטול בכל עת.">
@@ -87,12 +88,6 @@ section { padding: 84px 0; }
 .photo-note small { display: block; font-weight: 400; color: var(--muted); }
 
 
-.pains { list-style: none; display: grid; gap: 12px; margin: 30px 0; }
-.pains li {
-  background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 14px 20px;
-  position: relative; padding-right: 48px;
-}
-.pains li::before { content: '“'; position: absolute; right: 18px; top: 4px; font-size: 2rem; color: var(--rose); font-weight: 800; }
 .cards { display: grid; gap: 18px; }
 .cards.c2 { grid-template-columns: repeat(2, 1fr); }
 .cards.c3 { grid-template-columns: repeat(3, 1fr); }
@@ -102,19 +97,10 @@ section { padding: 84px 0; }
 .card .tag { font-size: .85rem; font-weight: 700; color: var(--sage); }
 .card ul { margin: 12px 18px 0 0; font-size: .95rem; color: var(--muted); }
 .card .result { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line); font-weight: 700; font-size: .98rem; }
-.tool { display: flex; gap: 14px; align-items: flex-start; }
-.tool .ico {
-  flex: none; width: 46px; height: 46px; border-radius: 50%; background: var(--blush); color: var(--rose-deep);
-  display: grid; place-items: center; font-size: 1.3rem;
-}
-.tool p { font-size: .95rem; color: var(--muted); line-height: 1.6; }
 
 
 
 
-.recog { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 30px; }
-.recog p { margin: 0; background: #fff; border: 1px solid var(--line); border-right: 4px solid var(--rose); border-radius: 16px; padding: 16px 20px; line-height: 1.7; font-size: 1.02rem; text-align: right; }
-.recog-end { margin-top: 30px; font-weight: 700; color: var(--green); font-size: 1.1rem; }
 
 .offer { background: var(--paper); border-radius: 34px; box-shadow: var(--shadow); padding: 48px 36px; text-align: center; max-width: 720px; margin: 0 auto; }
 .price { display: flex; justify-content: center; align-items: flex-end; gap: 14px; margin: 18px 0 26px; }
@@ -122,9 +108,6 @@ section { padding: 84px 0; }
 .price .big span { font-size: 2rem; }
 .price .old { text-align: right; font-size: .9rem; color: var(--muted); line-height: 1.5; }
 .price .old s { font-size: 1.3rem; }
-.includes { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 22px; text-align: right; max-width: 560px; margin: 0 auto 30px; }
-.includes li { padding-right: 28px; position: relative; font-weight: 600; font-size: .98rem; }
-.includes li::before { content: '✓'; position: absolute; right: 0; color: var(--sage); font-weight: 800; }
 
 
 details { background: #fff; border: 1px solid var(--line); border-radius: 18px; margin-bottom: 12px; overflow: hidden; }
@@ -144,10 +127,6 @@ details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
 .sticky .p small { display: block; font: 400 .7rem 'Heebo', sans-serif; color: var(--muted); margin-top: 3px; }
 .sticky .btn { flex: 1; min-height: 50px; font-size: 1rem; padding: 0 16px; }
 
-.unused-draft-tag {
-  position: fixed; top: 12px; left: 12px; z-index: 60; background: var(--ink); color: #fff;
-  font-size: .8rem; font-weight: 700; padding: 6px 12px; border-radius: 999px; opacity: .85;
-}
 
 @media (max-width: 860px) {
   body { font-size: 17px; }
@@ -159,7 +138,6 @@ details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
   .hero .center-m { text-align: center; }
   .hero .center-m .lead { margin-inline: auto; }
   .cards.c2, .cards.c3, .cards.c4 { grid-template-columns: 1fr; }
-  .includes { grid-template-columns: 1fr; }
   .offer { padding: 36px 20px; }
   .price .big { font-size: 4.4rem; }
   .sticky { display: flex; }
@@ -183,27 +161,9 @@ details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
   .hero.dark .hero-photo::before { background: rgba(212,175,55,.35); }
   .hero.dark .photo-note { color: var(--ink); }
 
-  .shift { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-  .shift .row { display: grid; grid-template-columns: 1fr 34px 1fr; align-items: stretch; background: #fff; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
-  .shift .from, .shift .to { padding: 16px 18px; font-size: .98rem; line-height: 1.6; display: flex; align-items: center; }
-  .shift .from { color: var(--muted); }
-  .shift .to { background: var(--sage-light); color: var(--green); font-weight: 700; }
-  .shift .ar { display: grid; place-items: center; color: var(--rose); font-size: 1.3rem; }
 
-  .stage { border-top: 4px solid var(--rose); }
-  .stage .num { color: rgba(212,175,55,.35); }
-  .stage .tag { color: var(--rose-deep); }
-  .stage ul { list-style: none; margin: 12px 0 0; }
-  .stage li { padding-right: 20px; position: relative; margin-bottom: 4px; }
-  .stage li::before { content: '•'; position: absolute; right: 4px; color: var(--rose); font-weight: 800; }
-  .stage .result { color: var(--green); }
 
-  .weeks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-  .weeks .wk { font: 800 .85rem 'Assistant', sans-serif; color: var(--rose-deep); }
 
-  .month { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-  .month .card { text-align: center; }
-  .month .big { font: 800 2.6rem/1 'Assistant', sans-serif; color: var(--green); margin-bottom: 8px; }
 
   .note { font-family: 'Frank Ruhl Libre', serif; font-size: 1.2rem; line-height: 2; }
   .note p { margin-bottom: 1em; color: var(--ink); }
@@ -223,9 +183,69 @@ details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
   footer.site-foot a { color: #F0D57A; text-decoration: none; }
   footer.site-foot strong { color: #fff; }
   @media (max-width: 860px) {
-    .shift, .month, .weeks, .recog { grid-template-columns: 1fr; }
-    .shift .row { grid-template-columns: 1fr; }
-    .shift .ar { transform: rotate(-90deg); padding: 2px 0; }
+  }
+</style>
+<style>
+  /* קצר וחי: כרטיסי רגעים, מסלול, ותנועה עדינה בגלילה */
+  .moments { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 34px; }
+  .moment { background: #fff; border: 1px solid var(--line); border-radius: 22px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 8px 24px rgba(27, 77, 62, .06); }
+  .moment .now { padding: 22px 22px 18px; font-size: 1.05rem; line-height: 1.65; flex: 1; position: relative; padding-right: 50px; }
+  .moment .now::before { content: '“'; position: absolute; right: 18px; top: 8px; font: 800 2.4rem/1 'Assistant', sans-serif; color: var(--rose); }
+  .moment .after { background: var(--sage-light); color: var(--green); font-weight: 700; padding: 16px 22px 20px; line-height: 1.55; }
+  .moment .after span { display: block; font: 700 .78rem 'Heebo', sans-serif; color: var(--rose-deep); margin-bottom: 4px; }
+  .dots { display: none; justify-content: center; gap: 7px; margin-top: 14px; }
+  .dots i { width: 8px; height: 8px; border-radius: 50%; background: rgba(27, 77, 62, .2); transition: all .25s; }
+  .dots i.on { width: 22px; border-radius: 4px; background: var(--rose); }
+  .moments-end { margin-top: 26px; font-weight: 700; color: var(--green); font-size: 1.1rem; }
+
+  .me { display: flex; gap: 26px; align-items: center; }
+  .me img { flex: none; width: 128px; height: 128px; border-radius: 50%; object-fit: cover; border: 4px solid var(--blush); box-shadow: var(--shadow); }
+  .me .note p { margin-bottom: .5em; }
+  .me .sign { font-weight: 700; color: var(--green); margin: 0; }
+
+  .path { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; position: relative; }
+  .step { background: #fff; border-radius: 22px; padding: 22px 20px; box-shadow: 0 8px 24px rgba(27, 77, 62, .07); position: relative; }
+  .step .dot { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; margin-bottom: 12px;
+    background: linear-gradient(135deg, #E2BF4A, #C49A22); color: #1B2E28; font: 800 1.2rem 'Assistant', sans-serif; }
+  .step .wk { font: 800 .82rem 'Assistant', sans-serif; color: var(--rose-deep); }
+  .step h3 { font-size: 1.15rem; color: var(--green); }
+  .step .res { font-size: .95rem; color: var(--muted); line-height: 1.5; }
+  .step details { background: none; border: 0; border-radius: 0; margin: 10px 0 0; border-top: 1px dashed var(--line); }
+  .step summary { padding: 10px 0 0; font-size: .9rem; color: var(--rose-deep); justify-content: flex-start; }
+  .step summary::after { font-size: 1.1rem; }
+  .step ul { list-style: none; padding: 8px 0 0; font-size: .92rem; color: var(--muted); line-height: 1.55; }
+  .step li { padding-right: 16px; position: relative; margin-bottom: 6px; }
+  .step li::before { content: '•'; position: absolute; right: 2px; color: var(--rose); font-weight: 800; }
+
+  .gets { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; text-align: right; max-width: 580px; margin: 0 auto 30px; }
+  .gets li { display: flex; gap: 12px; align-items: center; background: var(--sage-light); border-radius: 16px; padding: 12px 14px; font-size: .95rem; line-height: 1.45; font-weight: 600; }
+  .gets b { flex: none; width: 42px; height: 42px; border-radius: 50%; background: #fff; display: grid; place-items: center; font: 800 1.15rem 'Assistant', sans-serif; color: var(--green); }
+
+  .js .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; transition-delay: var(--d, 0s); }
+  .js .reveal.in { opacity: 1; transform: none; }
+  .hero .center-m > * { animation: rise .8s ease both; }
+  .hero .center-m > :nth-child(2) { animation-delay: .1s; }
+  .hero .center-m > :nth-child(3) { animation-delay: .2s; }
+  .hero .center-m > :nth-child(n+4) { animation-delay: .3s; }
+  @keyframes rise { from { opacity: 0; transform: translateY(16px); } }
+  @media (prefers-reduced-motion: reduce) {
+    .js .reveal, .hero .center-m > * { opacity: 1; transform: none; transition: none; animation: none; }
+  }
+
+  @media (max-width: 860px) {
+    .hero.dark { padding: 96px 0 56px; }
+    .hero-photo { max-width: 190px; }
+    .moments { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px; margin: 26px -20px 0; padding: 4px 20px 10px; scrollbar-width: none; }
+    .moments::-webkit-scrollbar { display: none; }
+    .moment { flex: 0 0 84%; scroll-snap-align: center; }
+    .dots { display: flex; }
+    .me { flex-direction: column; text-align: center; gap: 16px; }
+    .me img { width: 104px; height: 104px; }
+    .path { grid-template-columns: 1fr; gap: 12px; }
+    .path::before { content: ''; position: absolute; top: 30px; bottom: 30px; right: 39px; width: 2px; background: rgba(212, 175, 55, .45); }
+    .step { display: grid; grid-template-columns: 44px 1fr; gap: 14px; padding: 18px; }
+    .step .dot { margin: 0; position: relative; z-index: 1; }
+    .gets { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -243,7 +263,7 @@ details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
       <h1>מפחד לביטחון.<br><span class="gold">בלב, בבית ובגוף.</span></h1>
       <p class="lead">להירדם בלילה, גם כשהבן לא התקשר. לשמוע הערה מהכלה, ולא לסחוב אותה איתך כל השבוע. להתחיל משהו בשביל עצמך, ולהמשיך גם אחרי היום השלישי.</p>
       <a class="btn" href="#offer">אני רוצה להצטרף למועדון</a>
-      <p class="micro">כל ההדרכות פתוחות מיד · 2 שיעורים חדשים בכל חודש · 69 ₪ לחודש · ביטול בכל עת</p>
+      <p class="micro">69 ₪ לחודש · כל ההדרכות פתוחות מיד · ביטול בכל עת</p>
     </div>
     <div class="hero-photo">
       <img src="https://res.cloudinary.com/dyqe95map/image/upload/v1778355572/profile.jpg_zror0m.jpg" alt="רבקה הולצברג">
@@ -252,117 +272,81 @@ details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
   </div>
 </header>
 
-<!-- 1א. את מכירה את זה? -->
+<!-- 2. הרגעים, ומה משתנה -->
 <section class="alt">
-  <div class="narrow center">
-    <span class="eyebrow sage">אולי זה נשמע לך מוכר</span>
-    <h2>את מכירה את הרגעים האלה?</h2>
-    <div class="recog">
-      <p>השעה כבר אחרי חצות, ואת עדיין ערה. הראש לא מפסיק: מה עם השידוך של הבת, מה יגידו בבדיקה, למה הוא לא עונה.</p>
-      <p>את מחכה שהבן יתקשר. לא רוצה להיות שוב זאת שמתקשרת ראשונה. והטלפון שותק.</p>
-      <p>הכלה אמרה משפט אחד בשבת. עכשיו כבר יום רביעי, ואת עדיין מסובבת אותו בראש.</p>
-      <p>מאז שבעלך יצא לפנסיה הוא בבית כל היום, ופתאום אין לך אף פינה משלך.</p>
-      <p>ביום ראשון את מתחילה מחדש: הליכה, אוכל נכון, סדר. ביום רביעי זה כבר נגמר, ושוב את כועסת על עצמך.</p>
-      <p>כולם יודעים שאפשר לסמוך עלייך. רק את כבר לא זוכרת מתי עשית משהו בשביל עצמך.</p>
-    </div>
-    <p class="recog-end">אם עצרת לרגע על אחד מהמשפטים האלה, הדף הזה נכתב בשבילך.</p>
-  </div>
-</section>
-
-<!-- 2. לפני ← אחרי -->
-<section>
   <div class="wrap">
-    <div class="center" style="margin-bottom:38px">
-      <span class="eyebrow sage">מה משתנה</span>
-      <h2>מהמשפטים שאת אומרת לעצמך היום,<br>אל מה שתתחילי להגיד במועדון</h2>
+    <div class="center reveal">
+      <span class="eyebrow sage">אולי זה נשמע לך מוכר</span>
+      <h2>את מכירה את הרגעים האלה?</h2>
     </div>
-    <div class="shift">
-      <div class="row"><div class="from">"אני מתחילה בהתלהבות, ואחרי כמה ימים נשברת."</div><div class="ar">←</div><div class="to">"מה שאני מבטיחה לעצמי, אני עושה. גם כשאין לי כוח."</div></div>
-      <div class="row"><div class="from">"הדאגה לא נותנת לי לישון."</div><div class="ar">←</div><div class="to">"יש לי חמש דקות ביום לדאוג. אחר כך אני חוזרת לחיים שלי."</div></div>
-      <div class="row"><div class="from">"הבן התרחק, ואני לא יודעת מה לעשות."</div><div class="ar">←</div><div class="to">"הפסקתי לחכות ליד הטלפון. אני יודעת מה כן בידיים שלי."</div></div>
-      <div class="row"><div class="from">"כל הערה של הכלה נכנסת בי כמו סכין."</div><div class="ar">←</div><div class="to">"היא אמרה מה שאמרה, ואני נשארתי רגועה. השבת עברה בשלום."</div></div>
-      <div class="row"><div class="from">"בגיל שלי כבר מאוחר להשתנות."</div><div class="ar">←</div><div class="to">"התחלתי משהו חדש בגיל הזה, ואני ממשיכה."</div></div>
-      <div class="row"><div class="from">"לא מגיע לי. אני תמיד אחרונה בתור."</div><div class="ar">←</div><div class="to">"אני יכולה להגיד 'לא היום', בלי רגשות אשמה."</div></div>
+    <div class="moments reveal" id="moments">
+      <article class="moment">
+        <p class="now">אחרי חצות, ואת עדיין ערה. הראש לא מפסיק לדאוג לילדים.</p>
+        <p class="after"><span>אחרי כמה שבועות במועדון</span>"יש לי חמש דקות ביום לדאוג. אחר כך אני חוזרת לחיים שלי."</p>
+      </article>
+      <article class="moment">
+        <p class="now">את מחכה שהבן יתקשר. לא רוצה שוב להתקשר ראשונה. והטלפון שותק.</p>
+        <p class="after"><span>אחרי כמה שבועות במועדון</span>"הפסקתי לחכות ליד הטלפון. אני יודעת מה כן בידיים שלי."</p>
+      </article>
+      <article class="moment">
+        <p class="now">הכלה אמרה משפט אחד בשבת. ביום רביעי את עדיין מסובבת אותו בראש.</p>
+        <p class="after"><span>אחרי כמה שבועות במועדון</span>"היא אמרה מה שאמרה, ואני נשארתי רגועה. השבת עברה בשלום."</p>
+      </article>
+      <article class="moment">
+        <p class="now">ביום ראשון את מתחילה מחדש: הליכה, אוכל נכון, סדר. ביום רביעי זה כבר נגמר.</p>
+        <p class="after"><span>אחרי כמה שבועות במועדון</span>"מה שאני מבטיחה לעצמי, אני עושה. גם כשאין לי כוח."</p>
+      </article>
     </div>
+    <div class="dots" id="dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
+    <p class="moments-end center reveal">אם עצרת על אחד מהרגעים האלה, הדף הזה נכתב בשבילך.</p>
   </div>
 </section>
 
-<!-- 3. למה זה עובד -->
-<section class="alt">
-  <div class="narrow center">
-    <h2>זה לא חוסר אופי.<br><span class="accent">ידע לבד פשוט נשאר בראש.</span></h2>
-    <p class="lead">קראת, שמעת שיעורים, אולי אפילו רשמת לעצמך. ובכל זאת, כשהטלפון לא מצלצל או כשההערה נאמרת, את מגיבה בדיוק כמו פעם. זה קורה כי ההרגלים והפחדים יושבים עמוק יותר מהידע. במועדון עובדות בדיוק שם: כמה דקות ביום, עם תרגיל פשוט, עד שהתגובה החדשה נעשית טבעית. בלי להילחם בעצמך, ומתוך מה שמדע המוח יודע היום ומה שהמקורות שלנו לימדו תמיד.</p>
+<!-- 3. מילה ממני -->
+<section>
+  <div class="narrow">
+    <div class="me reveal">
+      <img src="https://res.cloudinary.com/dyqe95map/image/upload/v1778355572/profile.jpg_zror0m.jpg" alt="רבקה הולצברג">
+      <div class="note">
+        <p>הייתי בדיוק שם. ידעתי, קראתי, ניסיתי. ובכל זאת, ברגע האמת הגבתי בדיוק כמו פעם.</p>
+        <p>כשלמדתי איך להפוך ידע להרגל, הכל התחיל לזרום. את זה אני מלמדת במועדון, בגובה העיניים.</p>
+        <p class="sign">רבקה</p>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- 4. השיטה -->
-<section>
-  <div class="wrap">
-    <div class="center" style="margin-bottom:40px">
-      <span class="eyebrow">זה לא אוסף הרצאות. זו שיטה.</span>
-      <h2>ארבעה שלבים, שכבה על שכבה</h2>
-      <p class="lead">כל שיעור נבנה על זה שלפניו, וכל שיעור נגמר בתרגיל אחד שעושים בבית, כמה דקות ביום. אלה השאלות שעליהן תשמעי תשובות:</p>
-    </div>
-    <div class="cards c4">
-      <article class="card stage"><div class="num">01</div><span class="tag">שיעורים 1 עד 3</span><h3>לעמוד במה שהבטחתי לעצמי</h3>
-        <ul><li>למה אני מתחילה בהתלהבות ונשברת אחרי כמה ימים?</li><li>למה אני יודעת מה טוב לי, ובכל זאת דוחה?</li><li>איך מוצאים זמן לעצמי כשכולם צריכים אותי?</li></ul>
-        <p class="result">"אני כבר לא מתחילה ונשברת."</p></article>
-      <article class="card stage"><div class="num">02</div><span class="tag">שיעורים 4 עד 6</span><h3>להפסיק לחזור לאותו מקום</h3>
-        <ul><li>למה אני תמיד מגיעה לאותה נקודה, גם כשאני מנסה אחרת?</li><li>איך מחליפים את הקול שאומר "את לא מספיק טובה"?</li><li>למה משפטים חיוביים הרגישו לי מזויפים?</li></ul>
-        <p class="result">"אני מתחילה לראות את עצמי אחרת."</p></article>
-      <article class="card stage"><div class="num">03</div><span class="tag">שיעורים 7 עד 12</span><h3>לישון בשקט גם כשיש דאגות</h3>
-        <ul><li>מה עושים עם דאגה לילדים שלא נותנת להירדם?</li><li>איך לא לתת לדבר קטן שהשתבש להרוס לי שבוע?</li><li>למה אני מרגישה ש"לא מגיע לי"?</li></ul>
-        <p class="result">"הדאגה כבר לא מנהלת לי את היום."</p></article>
-      <article class="card stage"><div class="num">04</div><span class="tag">שיעורים 13 עד 17</span><h3>הבן, הכלה, הבעל, ואני</h3>
-        <ul><li>אני אוהבת אותו. אז למה הוא סגור אליי?</li><li>מה עושים כשהיא חצופה אליי, במקום להיפגע?</li><li>איך מבקשים בבית את מה שאני צריכה, בלי ריב?</li></ul>
-        <p class="result">"הקשר מתחיל להיפתח."</p></article>
-    </div>
-  </div>
-</section>
-
-<!-- 5. החודש הראשון -->
 <section class="sage-bg">
   <div class="wrap">
-    <div class="center" style="margin-bottom:34px">
-      <span class="eyebrow sage">"ואם זה עוד דבר שאתחיל ולא אתמיד?"</span>
-      <h2>ככה נראה החודש הראשון שלך</h2>
-      <p class="lead">כמעט כל כלי אצלנו בנוי על 30 יום. הנה מסלול מומלץ, וכל השיעורים פתוחים לך גם מעבר לו.</p>
+    <div class="center reveal" style="margin-bottom:36px">
+      <span class="eyebrow">זה לא אוסף הרצאות. זו שיטה.</span>
+      <h2>ידע לבד נשאר בראש.<br><span class="accent">לכן כל שיעור נגמר בתרגיל קטן.</span></h2>
+      <p class="lead">כמה דקות ביום בבית, עד שהתגובה החדשה נעשית טבעית. ככה נראה החודש הראשון שלך:</p>
     </div>
-    <div class="weeks">
-      <div class="card"><span class="wk">שבוע 1</span><h3>לעמוד במה שהבטחתי לעצמי</h3></div>
-      <div class="card"><span class="wk">שבוע 2</span><h3>להחליף את הקול שאומר "את לא מספיק"</h3></div>
-      <div class="card"><span class="wk">שבוע 3</span><h3>להחזיר לעצמי את השינה</h3></div>
-      <div class="card"><span class="wk">שבוע 4</span><h3>לרכך לב שנסגר</h3></div>
-    </div>
-  </div>
-</section>
-
-<!-- 6. חודש במועדון -->
-<section>
-  <div class="wrap">
-    <div class="center" style="margin-bottom:36px">
-      <span class="eyebrow">ובכל חודש</span>
-      <h2>מה מחכה לך במועדון</h2>
-    </div>
-    <div class="month">
-      <div class="card"><div class="big">17</div><h3>שיעורי השיטה</h3><p class="muted">וכל שאר הדרכות המועדון פתוחים מהיום הראשון.</p></div>
-      <div class="card"><div class="big">2</div><h3>שיעורים חדשים</h3><p class="muted">שיעור חדש פעמיים בחודש, שממשיך מאיפה שעצרנו.</p></div>
-      <div class="card"><div class="big">∞</div><h3>בקצב שלך</h3><p class="muted">כל שיעור נשאר אצלך, לצפייה מתי שנוח.</p></div>
-      <div class="card"><div class="big">♡</div><h3>קבוצת המועדון</h3><p class="muted">נשים שהולכות באותה דרך, לשאלות, לחיזוק ולשיתוף.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- 7. רבקה -->
-<section class="alt">
-  <div class="wrap hero-grid" style="grid-template-columns:.7fr 1.3fr">
-    <div class="hero-photo"><img src="https://res.cloudinary.com/dyqe95map/image/upload/v1778355572/profile.jpg_zror0m.jpg" alt="רבקה הולצברג"></div>
-    <div class="note">
-      <span class="eyebrow">מילה ממני</span>
-      <p>הייתי בדיוק שם. ידעתי, קראתי, ניסיתי, עד שהבנתי שכל הידע שאספתי לא חדר באמת פנימה.</p>
-      <p>כשלמדתי איך להכניס אותו לשם, הכל התחיל לזרום. את זה אני מלמדת במועדון, בגובה העיניים, לנשים שרוצות לחיות אחרת, בכל גיל.</p>
-      <p><strong>רבקה</strong></p>
-    </div>
+    <ol class="path">
+      <li class="step reveal"><b class="dot">1</b><div>
+        <span class="wk">שבוע 1</span><h3>לעמוד במה שהבטחתי לעצמי</h3>
+        <p class="res">"אני כבר לא מתחילה ונשברת."</p>
+        <details><summary>מה לומדים כאן</summary><ul><li>למה אני מתחילה בהתלהבות ונשברת אחרי כמה ימים?</li><li>למה אני יודעת מה טוב לי, ובכל זאת דוחה?</li><li>איך מוצאים זמן לעצמי כשכולם צריכים אותי?</li></ul></details>
+      </div></li>
+      <li class="step reveal" style="--d:.08s"><b class="dot">2</b><div>
+        <span class="wk">שבוע 2</span><h3>להחליף את הקול שאומר "את לא מספיק"</h3>
+        <p class="res">"אני מתחילה לראות את עצמי אחרת."</p>
+        <details><summary>מה לומדים כאן</summary><ul><li>למה אני תמיד מגיעה לאותה נקודה, גם כשאני מנסה אחרת?</li><li>איך מחליפים את הקול שאומר "את לא מספיק טובה"?</li><li>למה משפטים חיוביים הרגישו לי מזויפים?</li></ul></details>
+      </div></li>
+      <li class="step reveal" style="--d:.16s"><b class="dot">3</b><div>
+        <span class="wk">שבוע 3</span><h3>לישון בשקט גם כשיש דאגות</h3>
+        <p class="res">"הדאגה כבר לא מנהלת לי את היום."</p>
+        <details><summary>מה לומדים כאן</summary><ul><li>מה עושים עם דאגה לילדים שלא נותנת להירדם?</li><li>איך לא לתת לדבר קטן שהשתבש להרוס לי שבוע?</li><li>למה אני מרגישה ש"לא מגיע לי"?</li></ul></details>
+      </div></li>
+      <li class="step reveal" style="--d:.24s"><b class="dot">4</b><div>
+        <span class="wk">שבוע 4</span><h3>הבן, הכלה, הבעל, ואני</h3>
+        <p class="res">"הקשר מתחיל להיפתח."</p>
+        <details><summary>מה לומדים כאן</summary><ul><li>אני אוהבת אותו. אז למה הוא סגור אליי?</li><li>מה עושים כשהיא חצופה אליי, במקום להיפגע?</li><li>איך מבקשים בבית את מה שאני צריכה, בלי ריב?</li></ul></details>
+      </div></li>
+    </ol>
+    <p class="center muted reveal" style="margin-top:22px;font-size:.95rem">כל השיעורים פתוחים לך מהיום הראשון, גם מעבר למסלול.</p>
   </div>
 </section>
 
@@ -372,8 +356,13 @@ details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
     <div class="offer">
       <span class="eyebrow sage">חברות חודשית · בלי התחייבות</span>
       <h2>תני לזה חודש אחד</h2>
-      <div class="price"><div class="big">69<span> ₪</span></div><div class="old">לחודש<br>ביטול בכל עת</div></div>
-      <ul class="includes"><li>כל ההדרכות במועדון, פתוחות מיד</li><li>2 שיעורים חדשים בכל חודש</li><li>קבוצת המועדון</li><li>ביטול בהודעת וואטסאפ</li></ul>
+      <div class="price"><div class="big">69<span> ₪</span></div><div class="old">לחודש<br>ביטול בהודעת וואטסאפ</div></div>
+      <ul class="gets">
+        <li><b>17</b><span>שיעורי השיטה וכל הדרכות המועדון, פתוחים מיד</span></li>
+        <li><b>2</b><span>שיעורים חדשים בכל חודש, שממשיכים מאיפה שעצרנו</span></li>
+        <li><b>♡</b><span>קבוצת המועדון: נשים שהולכות באותה דרך</span></li>
+        <li><b>∞</b><span>כל שיעור נשאר אצלך, לצפייה מתי שנוח</span></li>
+      </ul>
       <a class="btn" href="https://private.invoice4u.co.il/newsite/he/clearing/public/i4u-clearing?ProductGuid=550b937f-ac6b-4fc0-bb03-99139eb0193f">כן, אני מצטרפת למועדון</a>
       <p class="micro">תשלום מאובטח · בלי התחייבות</p>
     </div>
@@ -406,6 +395,25 @@ details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
 </div></footer>
 
 <div class="sticky"><div class="p" style="color:var(--green)">69 ₪<small>לחודש</small></div><a class="btn" href="#offer">להצטרפות</a></div>
+<script>
+// Fade sections in as they scroll into view, and keep the swipe dots in sync with the moment cards.
+(function () {
+  var items = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) { items.forEach(function (el) { el.classList.add('in'); }); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  items.forEach(function (el) { io.observe(el); });
+
+  var track = document.getElementById('moments'), dots = document.querySelectorAll('#dots i');
+  if (!track || !dots.length) return;
+  track.addEventListener('scroll', function () {
+    var card = track.children[0], step = card.offsetWidth + 14;
+    var i = Math.min(dots.length - 1, Math.round(Math.abs(track.scrollLeft) / step));
+    dots.forEach(function (d, k) { d.classList.toggle('on', k === i); });
+  }, { passive: true });
+})();
+</script>
 <script>
 // Funnel tracking: page view and button clicks, tagged with ?src= (e.g. wa-2010 for a WhatsApp send on 20.10).
 // Fire-and-forget through /api/hub; never blocks the page or the payment link.
