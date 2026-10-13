@@ -200,17 +200,28 @@ export default async function handler(req, res) {
       return res.json({ ok: true })
     }
 
-    // Analytics: אירוע יחיד מהאפליקציה. ציבורי (מותר גם לפני התחברות/הרשמה).
-    // משתמש שוב ב-pushToSheet הקיים (מתאים לסטאק מבוסס-Sheets), נכשל בשקט.
+    // Analytics: אירוע יחיד מהאפליקציה או מדף /join. ציבורי (מותר גם לפני התחברות/הרשמה).
+    // נשמר בטבלת hadracot_events (מדידת משפך ההצטרפות) וגם נשלח לגיליון כמו קודם. נכשל בשקט.
     if (action === 'trackEvent') {
       const eventName = String(body.eventName || '').slice(0, 100)
       if (!eventName) return res.json({ ok: false })
+      const tutorialId = body.tutorialId != null ? Number(body.tutorialId) : null
+      let meta = body.meta && typeof body.meta === 'object' ? body.meta : {}
+      if (JSON.stringify(meta).length > 1000) meta = {}
+      const { error: eventError } = await supabase.from('hadracot_events').insert({
+        event_name: eventName,
+        email: email || null,
+        tutorial_id: Number.isFinite(tutorialId) ? tutorialId : null,
+        src: String(meta.src || '').slice(0, 60) || null,
+        meta,
+      })
+      if (eventError) console.error('event insert failed:', eventError.message)
       await pushToSheet({
         type: 'event',
         eventName,
         email: email || '',
-        tutorialId: body.tutorialId != null ? Number(body.tutorialId) : null,
-        meta: body.meta && typeof body.meta === 'object' ? body.meta : {},
+        tutorialId,
+        meta,
         when: new Date().toISOString(),
       })
       return res.json({ ok: true })
