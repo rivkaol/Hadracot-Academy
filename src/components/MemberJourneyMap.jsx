@@ -2,7 +2,7 @@ import { groupByStage, getTrackTutorials } from '../lib/catalogHelpers'
 import MemberJourneyStep from './MemberJourneyStep'
 
 // מפת המסלול לחברות/VIP בלבד — לא JourneyTimeline (שנשאר כמו שהוא למסכי
-// טעימה/נעילה). שביל מתפתל עם תחנות אמיתיות, לא רשימת שיעורים.
+// טעימה/נעילה). רשת של תחנות אמיתיות (עד 3 בשורה), לא רשימת שיעורים.
 // מקור נתונים יחיד: groupByStage/getTrackTutorials מ-catalogHelpers — בדיוק
 // כמו JourneyTimeline, כדי שהסדר לעולם לא יתפצל לשני מקורות אמת.
 const STAGE_LABELS = {
@@ -37,15 +37,8 @@ export default function MemberJourneyMap({
 
   if (totalSteps === 0) return null
 
-  const indexById = new Map(
-    stageKeys.flatMap((stageKey) => stages[stageKey]).map((tutorial, i) => [tutorial.id, i])
-  )
-
   return (
-    <div className="relative max-w-[1000px] mx-auto">
-      <div className="hidden md:block absolute top-6 bottom-6 left-1/2 -translate-x-1/2 w-px bg-gradient-to-b from-transparent via-[#C88F96]/35 to-transparent" />
-      <div className="md:hidden absolute top-6 bottom-6 right-[19px] w-px bg-gradient-to-b from-transparent via-[#C88F96]/35 to-transparent" />
-
+    <div className="relative max-w-[1200px] mx-auto">
       {!hasStages && (
         <div className="relative mb-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm font-bold text-[#9E626C]">
           {PRINCIPLES.map((p, i) => (
@@ -59,7 +52,7 @@ export default function MemberJourneyMap({
 
       <div className="space-y-10 md:space-y-14">
         {stageKeys.map((stageKey) => (
-          <div key={stageKey} className="space-y-10 md:space-y-14">
+          <div key={stageKey} className="space-y-6 md:space-y-8">
             {stageKey !== 'unassigned' && (
               <div className="relative text-center py-2">
                 <span className="block text-6xl md:text-7xl font-black text-[#E8EEE5] leading-none select-none">
@@ -74,8 +67,8 @@ export default function MemberJourneyMap({
               </div>
             )}
 
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
             {stages[stageKey].map((tutorial) => {
-              const globalIndex = indexById.get(tutorial.id)
               const isCompleted = completedTutorials.includes(tutorial.id)
               const isCurrent = tutorial.id === currentTutorialId
               const status = isCompleted ? 'completed' : isCurrent ? 'current' : 'future'
@@ -94,11 +87,11 @@ export default function MemberJourneyMap({
                   totalSteps={totalSteps}
                   status={status}
                   ctaLabel={ctaLabel}
-                  align={globalIndex % 2 === 0 ? 'right' : 'left'}
                   onSelect={() => onSelectTutorial(tutorial)}
                 />
               )
             })}
+            </div>
           </div>
         ))}
       </div>
