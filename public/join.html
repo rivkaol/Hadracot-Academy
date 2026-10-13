@@ -248,8 +248,74 @@ details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
     .gets { grid-template-columns: 1fr; }
   }
 </style>
+<style>
+  /* Polished layer (body.pro): gold hairline labels, line icons, dark method band, face in the first phone screen */
+  .hero-who, .gets svg { display: none; }
+
+  /* ===== גרסה מקצועית ===== */
+  body.pro { font-size: 17.5px; line-height: 1.75; }
+  .pro h1, .pro h2, .pro h3 { font-weight: 700; letter-spacing: -.015em; }
+  .pro h2 { font-size: clamp(1.75rem, 3.4vw, 2.6rem); }
+  .pro section h2::after { content: ''; display: block; width: 44px; height: 2px; background: var(--rose); margin: 18px auto 0; border-radius: 2px; }
+  .pro section { padding: 96px 0; }
+
+  /* כותרות קטנות: קו זהב דק במקום "כדור" צבעוני */
+  .pro .eyebrow { background: none; padding: 0; border-radius: 0; font-size: .82rem; letter-spacing: .08em; color: var(--rose-deep);
+    display: inline-flex; align-items: center; gap: 10px; }
+  .pro .eyebrow::before, .pro .eyebrow::after { content: ''; width: 22px; height: 1px; background: currentColor; opacity: .6; }
+  .pro .dark .eyebrow { background: none; color: #F0D57A; }
+
+  /* כפתור עם חץ, צל עדין יותר */
+  .pro .btn { box-shadow: 0 10px 24px rgba(196, 154, 34, .26); letter-spacing: .01em; }
+  .pro .btn::after { content: '←'; font-weight: 400; transition: transform .2s; }
+  .pro .btn:hover::after { transform: translateX(-4px); }
+
+  /* תמונה: מסגרת זהב דקה במקום ריבוע מסובב */
+  .pro .hero.dark .hero-photo::before { background: none; border: 1.5px solid rgba(233, 198, 83, .6); transform: none; inset: 14px -14px -14px 14px; }
+  .pro .photo-note { border-radius: 12px; border-right: 3px solid var(--rose); }
+
+  /* כרטיסים: אחידים, עם צל רך ושכבתי */
+  .pro .moment, .pro .step { border-radius: 20px; border: 1px solid var(--line); box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 12px 32px rgba(27, 77, 62, .07); }
+  .pro .moment .after span { letter-spacing: .03em; }
+
+  /* מילה ממני: כרטיס אישי עם חתימה */
+  .pro .me { background: #fff; border-radius: 24px; padding: 30px; box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 16px 40px rgba(27, 77, 62, .08); border-top: 3px solid var(--rose); }
+  .pro .me .sign { font-family: 'Frank Ruhl Libre', serif; font-size: 1.35rem; color: var(--rose-deep); }
+
+  /* השיטה: פס ירוק כהה שמשנה קצב בדף */
+  .pro section.sage-bg:not(#offer) { background: radial-gradient(circle at 90% 0%, #2A6B57, #1B4D3E 55%, #133A2F); }
+  .pro section.sage-bg:not(#offer) h2 { color: #fff; }
+  .pro section.sage-bg:not(#offer) .accent { color: #E9C653; }
+  .pro section.sage-bg:not(#offer) .lead, .pro section.sage-bg:not(#offer) .muted { color: rgba(255,255,255,.78); }
+  .pro section.sage-bg:not(#offer) .eyebrow { color: #F0D57A; }
+  .pro .step { border: 0; }
+
+  /* הצעה: פס זהב עליון, מסגרת דקה וסמלים במקום אימוג'י */
+  .pro .offer { position: relative; overflow: hidden; border: 1px solid rgba(212, 175, 55, .45); box-shadow: 0 30px 60px rgba(27, 77, 62, .12); }
+  .pro .offer::before { content: ''; position: absolute; top: 0; inset-inline: 0; height: 6px; background: linear-gradient(90deg, #E2BF4A, #C49A22); }
+  .pro .gets li { background: #fff; border: 1px solid var(--line); }
+  .pro .gets b { background: var(--blush); color: var(--rose-deep); }
+  .pro .gets .t { display: none; }
+  .pro .gets svg { display: block; width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+  .pro details { border-radius: 14px; }
+  .pro summary::after { color: var(--rose); }
+
+  @media (max-width: 860px) {
+    .pro section { padding: 64px 0; }
+    /* בטלפון: הפנים שלך כבר במסך הראשון, והכפתור עולה למעלה */
+    .pro .hero-who { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 18px; text-align: right; }
+    .pro .hero-who img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 2px solid #E9C653; }
+    .pro .hero-who span { font: 700 1rem/1.3 'Assistant', sans-serif; color: #fff; }
+    .pro .hero-who small { display: block; font: 400 .8rem 'Heebo', sans-serif; color: rgba(255,255,255,.7); }
+    .pro .hero .hero-photo { display: none; }
+    .pro .hero .eyebrow { display: none; }
+    .pro .hero.dark { padding-bottom: 64px; }
+    .pro .me { padding: 26px 20px; }
+  }
+</style>
 </head>
-<body>
+<body class="pro">
 
 <!-- 1. HERO -->
 <header class="hero dark">
@@ -259,6 +325,7 @@ details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
   </div></nav>
   <div class="wrap hero-grid">
     <div class="center-m">
+      <div class="hero-who"><img src="https://res.cloudinary.com/dyqe95map/image/upload/v1778355572/profile.jpg_zror0m.jpg" alt="רבקה הולצברג"><span>רבקה הולצברג<small>בריאות שבאה מהלב</small></span></div>
       <span class="eyebrow">מועדון בריאות שבאה מהלב · עם רבקה הולצברג</span>
       <h1>מפחד לביטחון.<br><span class="gold">בלב, בבית ובגוף.</span></h1>
       <p class="lead">לדאוג לילדים מתוך אמונה, ולא מתוך פחד. לראות את הכלה בעין טובה. להיות הלב השקט שכל הבית נשען עליו.</p>
@@ -358,10 +425,10 @@ details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
       <h2>תני לזה חודש אחד</h2>
       <div class="price"><div class="big">69<span> ₪</span></div><div class="old">לחודש<br>ביטול בהודעת וואטסאפ</div></div>
       <ul class="gets">
-        <li><b>17</b><span>שיעורי השיטה וכל הדרכות המועדון, פתוחים מיד</span></li>
-        <li><b>2</b><span>שיעורים חדשים בכל חודש, שממשיכים מאיפה שעצרנו</span></li>
-        <li><b>♡</b><span>קבוצת המועדון: נשים שהולכות באותה דרך</span></li>
-        <li><b>∞</b><span>כל שיעור נשאר אצלך, לצפייה מתי שנוח</span></li>
+        <li><b><i class="t">17</i><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M10 8.5v5l4-2.5z"/><path d="M8 21h8"/></svg></b><span>שיעורי השיטה וכל הדרכות המועדון, פתוחים מיד</span></li>
+        <li><b><i class="t">2</i><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></b><span>שיעורים חדשים בכל חודש, שממשיכים מאיפה שעצרנו</span></li>
+        <li><b><i class="t">♡</i><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2c2.9.3 5 2.6 5 5.8"/></svg></b><span>קבוצת המועדון: נשים שהולכות באותה דרך</span></li>
+        <li><b><i class="t">∞</i><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></b><span>כל שיעור נשאר אצלך, לצפייה מתי שנוח</span></li>
       </ul>
       <a class="btn" href="https://private.invoice4u.co.il/newsite/he/clearing/public/i4u-clearing?ProductGuid=550b937f-ac6b-4fc0-bb03-99139eb0193f">כן, אני מצטרפת למועדון</a>
       <p class="micro">תשלום מאובטח · בלי התחייבות</p>
