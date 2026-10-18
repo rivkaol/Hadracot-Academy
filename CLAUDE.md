@@ -19,6 +19,7 @@
 | `api/hub.js` | **"השומר"** — הפונקציה היחידה שניגשת ל-Supabase עם `service_role`. מנתב לפי `action`. |
 | `migration/*.sql` | הקמת טבלאות: `hadracot_users` (+`is_vip`, `has_seen_onboarding`), `hadracot_notes`, `hadracot_leads`, `hadracot_lead_progress`, `hadracot_member_progress`. |
 | `public/join*.html` | דפי טעימה סטטיים בנתיב `/join` — **fallback בלבד** מאז שהמעבר אחרי טעימה עבר to in-app (`TrialTrackMapScreen`). תוכן לא מסונכרן אוטומטית עם הקטלוג — לעדכן ידנית אם מקשרים אליהם. |
+| `public/live/<series>.html` | דפי "כרטיס לשיעור החי" לכל סדרה (`/live/bitachon-briut`). עיצוב משותף ב-`live.css`, התנהגות ב-`live.js`. **לכל שיעור חדש עורכים רק את `window.SESSION` בראש הדף** (תאריך, מחיר, קישור Invoice4U, ימי ההטבה). `draft` לא ריק = פס צהוב "טיוטה". אחרי שעת השיעור הדף נסגר לבד ומפנה ל-`/join`. מדידה: `live_view` / `live_offer_click` / `live_pay_click` עם `meta.series`. סדרה חדשה = עותק של קובץ עם קופי חדש. |
 | `vercel.json` | `cleanUrls` + rewrite של כל נתיב (מלבד `/api` ו-`/join`) ל-`index.html`. |
 
 ## 4 מצבי משתמשת (`useViewerState`)
