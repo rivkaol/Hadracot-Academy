@@ -5,7 +5,7 @@
 <script>document.documentElement.className += ' js';</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>מפחד לביטחון בפרנסה · רבקה הולצברג</title>
-<meta name="description" content="את בוטחת בה׳. אז למה בכל פעם שאת חושבת על הכסף, הלב שוב מתמלא בדאגה? הדרכה חדשה במועדון של רבקה הולצברג: מפחד לביטחון בפרנסה.">
+<meta name="description" content="את בוטחת בה׳. אז למה בכל פעם שאת חושבת על הכסף, הלב שוב מתמלא בדאגה? שיעור חי בזום עם רבקה הולצברג: מפחד לביטחון בפרנסה. כרטיס לשיעור אחד, כולל הקלטה.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="מפחד לביטחון בפרנסה · לפתוח את צינורות השפע">
 <meta property="og:description" content="את בוטחת בה׳. אז למה בכל פעם שאת חושבת על הכסף, הלב שוב מתמלא בדאגה?">
@@ -15,12 +15,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
 <script>
 // ===== Offer details =====
-// checkoutUrl: the Invoice4U page for the club offer (first month 29 ILS, then 69 ILS/month).
+// start: date and time of the live session (Israel time). Once it has passed, the offer hides and the page points to /join.
+// price: ticket price in ILS. checkoutUrl: the Invoice4U ticket page.
 // draft: what is still missing. While it is not empty, a yellow banner shows on the page. Empty it ([]) before publishing.
 window.SESSION = {
-  series: 'bitachon-parnasa-club',
-  checkoutUrl: '',
-  draft: ['קישור תשלום להצעה של 29 ₪ לחודש הראשון'],
+  series: 'bitachon-parnasa',
+  start: '2026-10-28T20:00:00+02:00',
+  price: 37,
+  checkoutUrl: 'https://private.invoice4u.co.il/newsite/he/clearing/public/i4u-clearing?ProductGuid=020300ef-3dda-42a5-9b94-2e40fecf9f97',
+  draft: [],
 };
 </script>
 <style>
@@ -144,7 +147,9 @@ section { padding: 96px 0; }
 .invite .sign svg { width: 18px; height: 18px; fill: var(--blush); }
 .offer { position: relative; max-width: 560px; margin: 0 auto; background: var(--cream); color: var(--ink); border-radius: 16px; padding: 48px 48px 40px; text-align: center; box-shadow: 0 24px 48px rgba(0, 0, 0, .18); }
 .offer::before { content: ""; position: absolute; inset: 8px; border: 1px solid var(--gold); border-radius: 12px; pointer-events: none; }
-.offer .what { font-size: 20px; line-height: 1.5; font-weight: 500; color: var(--forest); }
+.offer .what { font-size: 25px; line-height: 1.3; font-weight: 600; color: var(--forest); }
+.offer .what small { display: block; margin-top: 8px; font-size: 19px; font-weight: 500; color: var(--plum); }
+.offer .when { margin-top: 16px; font-size: 19px; font-weight: 500; color: var(--ink); }
 .gift { display: inline-flex; align-items: center; gap: 8px; margin-top: 32px; background: var(--blush); color: var(--plum); border-radius: 999px; padding: 8px 16px; font-size: 14px; font-weight: 500; }
 .gift svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .price { margin-top: 16px; display: flex; justify-content: center; align-items: baseline; gap: 8px; color: var(--plum); }
@@ -153,6 +158,11 @@ section { padding: 96px 0; }
 .price .cur { font-size: 31px; font-weight: 600; }
 .price .only { font-size: 20px; font-weight: 500; color: var(--ink); }
 .then { margin: 16px 0 32px; font-size: 17px; color: var(--muted); }
+
+/* After the session: hide the offer, show the club link */
+.closed { display: none; }
+.is-closed .open-only { display: none !important; }
+.is-closed .closed { display: block; }
 
 /* Footer + sticky */
 .foot { background: #173a2d; color: rgba(248, 243, 236, .8); font-size: 14px; padding: 32px 0 112px; }
@@ -227,9 +237,9 @@ section { padding: 96px 0; }
       <div>
         <span class="eyebrow">מפחד לביטחון בפרנסה</span>
         <h1>את בוטחת בה׳.<span class="q">אז למה בכל פעם שאת חושבת על הכסף, הלב שוב מתמלא בדאגה?</span></h1>
-        <div class="hero-cta">
-          <a class="btn" href="#offer">הצטרפי למועדון</a>
-          <span class="note">חודש ראשון ב־29 ₪ · אפשר לבטל בכל עת</span>
+        <div class="hero-cta open-only">
+          <a class="btn" href="#offer">להרשמה</a>
+          <span class="note">שיעור חי בזום · <span data-field="date"></span> · <span data-field="time"></span> · כולל הקלטה</span>
         </div>
       </div>
       <figure class="arch">
@@ -330,11 +340,19 @@ section { padding: 96px 0; }
       </div>
     </div>
     <div class="offer reveal">
-      <p class="what">הצטרפי למועדון וקבלי גישה להדרכה הזו ולספריית ההדרכות של המועדון.</p>
-      <span class="gift"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="9" width="18" height="12" rx="1.5"/><path d="M3 13h18M12 9v12M12 9c-2-4-6-4-6-1.5S10 9 12 9zM12 9c2-4 6-4 6-1.5S14 9 12 9z"/></svg>חודש ראשון</span>
-      <div class="price"><span class="n">29</span><span class="cur">₪</span><span class="only">בלבד!</span></div>
-      <p class="then">לאחר מכן 69 ₪ לחודש. אפשר לבטל בכל&nbsp;עת.</p>
-      <a class="btn btn-wide" data-checkout href="#offer">כן, אני רוצה ללמוד לחיות עם יותר ביטחון <svg aria-hidden="true"><use href="#heart"/></svg></a>
+      <div class="open-only">
+        <p class="what">מפחד לביטחון בפרנסה<small>לפתוח את צינורות השפע</small></p>
+        <span class="gift"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10.5l5-3v9l-5-3z"/></svg>שיעור חי בזום</span>
+        <p class="when"><span data-field="date"></span> · <span data-field="time"></span></p>
+        <div class="price"><span class="n" data-field="price"></span><span class="cur">₪</span></div>
+        <p class="then">כולל הקלטה</p>
+        <a class="btn btn-wide" data-checkout href="#offer">כן, אני רוצה ללמוד לחיות עם יותר ביטחון <svg aria-hidden="true"><use href="#heart"/></svg></a>
+      </div>
+      <div class="closed">
+        <p class="what">השיעור הזה כבר התקיים</p>
+        <p class="then">אבל הדלת למועדון פתוחה. במועדון מחכים לך כל השיעורים של הסדרה "מפחד לביטחון", ושני שיעורים חיים חדשים בכל חודש.</p>
+        <a class="btn btn-wide" href="/join?src=live-bitachon-parnasa">לפרטים על המועדון</a>
+      </div>
     </div>
   </div>
 </section>
@@ -344,7 +362,7 @@ section { padding: 96px 0; }
   <div><a href="https://wa.me/972504207702" target="_blank" rel="noopener">יש לי שאלה</a> · <a href="https://rivkaholtsberg.co.il">האתר של רבקה</a> · © רבקה הולצברג</div>
 </div></footer>
 
-<div class="sticky" id="sticky"><div class="p">29 ₪<small>חודש ראשון</small></div><a class="btn" href="#offer">הצטרפי למועדון</a></div>
+<div class="sticky open-only" id="sticky"><div class="p"><span data-field="price"></span> ₪<small>שיעור חי + הקלטה</small></div><a class="btn" href="#offer">להרשמה</a></div>
 
 <script src="/live/live.js"></script>
 <script>
