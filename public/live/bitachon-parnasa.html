@@ -15,7 +15,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
 <script>
 // ===== Offer details =====
-// start: date and time of the live session (Israel time). Once it has passed, the offer hides and the page points to /join.
+// start: date and time of the live session (Israel time). Once it has passed, the page keeps selling, as a recording
+// (.live-only hides, .rec-only shows). closeAfter: true instead hides the offer and points to /join.
 // price: ticket price in ILS. checkoutUrl: the Invoice4U ticket page.
 // draft: what is still missing. While it is not empty, a yellow banner shows on the page. Empty it ([]) before publishing.
 window.SESSION = {
@@ -163,6 +164,8 @@ section { padding: 96px 0; }
 .closed { display: none; }
 .is-closed .open-only { display: none !important; }
 .is-closed .closed { display: block; }
+body:not(.is-recorded) .rec-only { display: none !important; }
+.is-recorded .live-only { display: none !important; }
 
 /* Footer + sticky */
 .foot { background: #173a2d; color: rgba(248, 243, 236, .8); font-size: 14px; padding: 32px 0 112px; }
@@ -239,7 +242,7 @@ section { padding: 96px 0; }
         <h1>את בוטחת בה׳.<span class="q">אז למה בכל פעם שאת חושבת על הכסף, הלב שוב מתמלא בדאגה?</span></h1>
         <div class="hero-cta open-only">
           <a class="btn" href="#offer">להרשמה</a>
-          <span class="note">שיעור חי בזום · <span data-field="date"></span> · <span data-field="time"></span> · כולל הקלטה</span>
+          <span class="note"><span class="live-only">שיעור חי בזום · <span data-field="date"></span> · <span data-field="time"></span> · כולל הקלטה</span><span class="rec-only">שיעור מוקלט · לצפייה מתי שנוח לך</span></span>
         </div>
       </div>
       <figure class="arch">
@@ -342,10 +345,11 @@ section { padding: 96px 0; }
     <div class="offer reveal">
       <div class="open-only">
         <p class="what">מפחד לביטחון בפרנסה<small>לפתוח את צינורות השפע</small></p>
-        <span class="gift"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10.5l5-3v9l-5-3z"/></svg>שיעור חי בזום</span>
-        <p class="when"><span data-field="date"></span> · <span data-field="time"></span></p>
+        <span class="gift"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10.5l5-3v9l-5-3z"/></svg><span class="live-only">שיעור חי בזום</span><span class="rec-only">שיעור מוקלט</span></span>
+        <p class="when live-only"><span data-field="date"></span> · <span data-field="time"></span></p>
         <div class="price"><span class="n" data-field="price"></span><span class="cur">₪</span></div>
-        <p class="then">כולל הקלטה</p>
+        <p class="then live-only">כולל הקלטה</p>
+        <p class="then rec-only">לצפייה מתי שנוח לך</p>
         <a class="btn btn-wide" data-checkout href="#offer">כן, אני רוצה ללמוד לחיות עם יותר ביטחון <svg aria-hidden="true"><use href="#heart"/></svg></a>
       </div>
       <div class="closed">
@@ -362,7 +366,7 @@ section { padding: 96px 0; }
   <div><a href="https://wa.me/972504207702" target="_blank" rel="noopener">יש לי שאלה</a> · <a href="https://rivkaholtsberg.co.il">האתר של רבקה</a> · © רבקה הולצברג</div>
 </div></footer>
 
-<div class="sticky open-only" id="sticky"><div class="p"><span data-field="price"></span> ₪<small>שיעור חי + הקלטה</small></div><a class="btn" href="#offer">להרשמה</a></div>
+<div class="sticky open-only" id="sticky"><div class="p"><span data-field="price"></span> ₪<small class="live-only">שיעור חי + הקלטה</small><small class="rec-only">שיעור מוקלט</small></div><a class="btn" href="#offer">להרשמה</a></div>
 
 <script src="/live/live.js"></script>
 <script>

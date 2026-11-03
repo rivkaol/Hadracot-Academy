@@ -1,5 +1,5 @@
 // Shared behaviour for /live/<series> pages. Reads window.SESSION (set in each page's <head>):
-// fills dates and prices, closes the page once the session has started, wires the checkout links,
+// fills dates and prices, switches to selling the recording once the session has started, wires the checkout links,
 // shows a draft banner while details are missing, and reports views and pay clicks to /api/hub.
 (function () {
   var S = window.SESSION || {};
@@ -19,7 +19,8 @@
     if (v) el.textContent = v;
   });
 
-  if (!isNaN(start) && Date.now() >= start.getTime()) document.body.classList.add('is-closed');
+  // After the session the page keeps selling the recording; closeAfter: true restores the old "closed" mode.
+  if (!isNaN(start) && Date.now() >= start.getTime()) document.body.classList.add(S.closeAfter ? 'is-closed' : 'is-recorded');
 
   document.querySelectorAll('a[data-checkout]').forEach(function (a) {
     if (S.checkoutUrl) a.href = S.checkoutUrl;
