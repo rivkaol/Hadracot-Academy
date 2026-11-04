@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { Sparkles, Leaf, ChevronDown } from 'lucide-react'
-import { getTrackTutorials } from '../lib/catalogHelpers'
-import { buildShelves } from '../lib/series'
+import { getTrackTutorials, findTutorialById } from '../lib/catalogHelpers'
+import { buildShelves, DOOR_COVERS } from '../lib/series'
 import { pricingConfig } from '../pricing'
 import CurrentStepHero from './CurrentStepHero'
 import SeriesShelf from './SeriesShelf'
@@ -14,6 +14,34 @@ import CommunityCard from './CommunityCard'
 // 2. שתי דלתות: נפש / גוף — קפיצה למדף המתאים
 // 3. הסדרות, כל סדרה מדף משלה (src/lib/series.js)
 // 4. מדף הבריאות, בירוק
+// "דלת" עם תמונה גדולה — נפש או גוף. לחיצה קופצת למדף המתאים במסך.
+function DoorCard({ image, Icon, title, subtitle, accent, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className="group relative block w-full h-52 md:h-64 rounded-[1.75rem] overflow-hidden text-right shadow-[0_14px_36px_rgba(0,0,0,0.12)] focus-visible:outline-none focus-visible:ring-4"
+      style={{ '--tw-ring-color': accent, background: accent }}
+    >
+      {image && (
+        <img src={image} alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+      )}
+      <span className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
+      <span className="absolute bottom-0 inset-x-0 p-5 md:p-6 flex items-end gap-3 text-white">
+        <span className="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shrink-0" style={{ color: accent }}>
+          <Icon size={26} />
+        </span>
+        <span className="flex-1">
+          <span className="block text-[26px] md:text-[30px] font-bold leading-tight drop-shadow">{title}</span>
+          <span className="block text-lg mt-0.5 opacity-95">{subtitle}</span>
+        </span>
+        <span className="w-11 h-11 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center shrink-0">
+          <ChevronDown size={26} aria-hidden="true" />
+        </span>
+      </span>
+    </button>
+  )
+}
+
 export default function MemberDashboard({
   tutorialsData,
   userName,
@@ -43,6 +71,7 @@ export default function MemberDashboard({
   const nextLiveSession = pricingConfig.nextLiveSession
 
   const jumpTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  const coverOf = (id) => findTutorialById(tutorialsData, id)?.imageUrl || null
 
   return (
     <div className="flex-1 pb-[110px] md:pb-8">
@@ -71,34 +100,24 @@ export default function MemberDashboard({
           />
         )}
 
-        <nav aria-label="מה בא לך לראות" className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
-          <button
+        <nav aria-label="מה בא לך לראות" className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-12">
+          <DoorCard
+            image={coverOf(DOOR_COVERS.mind)}
+            Icon={Sparkles}
+            title="נפש ושינוי מבפנים"
+            subtitle={`${series.length} סדרות · ${seriesCount} הדרכות`}
+            accent="#9E626C"
             onClick={() => jumpTo('series')}
-            className="flex items-center gap-4 text-right bg-white rounded-[1.5rem] border-2 border-[#C88F96]/40 hover:border-[#C88F96] p-5 md:p-6 shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C88F96]"
-          >
-            <span className="w-14 h-14 rounded-full bg-[#F6ECEE] text-[#9E626C] flex items-center justify-center shrink-0">
-              <Sparkles size={28} />
-            </span>
-            <span className="flex-1">
-              <span className="block text-[22px] font-bold text-[#3E3935]">נפש ושינוי מבפנים</span>
-              <span className="block text-base text-[#5E5650] mt-0.5">{series.length} סדרות · {seriesCount} הדרכות</span>
-            </span>
-            <ChevronDown size={26} className="text-[#9E626C] shrink-0" aria-hidden="true" />
-          </button>
+          />
           {health.tutorials.length > 0 && (
-            <button
+            <DoorCard
+              image={coverOf(DOOR_COVERS.body)}
+              Icon={Leaf}
+              title="גוף ובריאות"
+              subtitle={`${health.tutorials.length} הדרכות`}
+              accent="#4F6249"
               onClick={() => jumpTo('health')}
-              className="flex items-center gap-4 text-right bg-white rounded-[1.5rem] border-2 border-[#687B63]/40 hover:border-[#687B63] p-5 md:p-6 shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#687B63]"
-            >
-              <span className="w-14 h-14 rounded-full bg-[#E8EEE5] text-[#4F6249] flex items-center justify-center shrink-0">
-                <Leaf size={28} />
-              </span>
-              <span className="flex-1">
-                <span className="block text-[22px] font-bold text-[#3E3935]">גוף ובריאות</span>
-                <span className="block text-base text-[#5E5650] mt-0.5">{health.tutorials.length} הדרכות</span>
-              </span>
-              <ChevronDown size={26} className="text-[#4F6249] shrink-0" aria-hidden="true" />
-            </button>
+            />
           )}
         </nav>
 
@@ -107,7 +126,7 @@ export default function MemberDashboard({
           <p className="text-[19px] text-[#5E5650] leading-relaxed mb-6 max-w-xl">
             כל סדרה בנויה חלק אחרי חלק. מומלץ לצפות לפי הסדר, ותמיד אפשר לחזור לכל חלק.
           </p>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+          <div className="flex flex-col gap-8">
             {series.map((shelf) => (
               <SeriesShelf
                 key={shelf.id}

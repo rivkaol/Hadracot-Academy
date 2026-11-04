@@ -17,7 +17,14 @@ export const HEALTH_SHELF = {
   ids: [55376, 56242, 51216, 52271, 53803, 55930],
 }
 
-const OTHER_SHELF = { id: 'other', title: 'עוד הדרכות' }
+// התמונה על שתי "הדלתות" במסך הבית — לקוחה מתמונת ההדרכה שה-id שלה כאן.
+// להחלפת תמונה: לשים כאן id של הדרכה אחרת.
+export const DOOR_COVERS = {
+  mind: 55235, // לשנות את הקוד שבמוח
+  body: 55376, // לב שמח - גוף בריא
+}
+
+const OTHER_SHELF ={ id: 'other', title: 'עוד הדרכות' }
 
 function resolve(byId, ids) {
   return ids.map((id) => byId.get(id)).filter(Boolean)
