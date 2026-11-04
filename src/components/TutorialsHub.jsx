@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import { Lock, PlayCircle, CheckCircle, ChevronLeft, Search, Lightbulb, Clock } from 'lucide-react'
 import { themeConfig } from '../constants'
 import { getTrackTutorials } from '../lib/catalogHelpers'
+import { buildShelves } from '../lib/series'
 import StepBadge from './StepBadge'
 import { pricingConfig } from '../pricing'
 
@@ -21,10 +22,21 @@ export default function TutorialsHub({
 
   const totalSteps = useMemo(() => getTrackTutorials(tutorialsData).length, [tutorialsData])
 
+  // חלוקה לפי סדרות + מדף בריאות (src/lib/series.js), לא לפי הקטגוריה בגיליון —
+  // שם כל ההדרכות רשומות כ-personal-growth, והבריאות נבלעה בתוכן.
+  const groups = useMemo(() => {
+    const { series, health, other } = buildShelves(tutorialsData)
+    return [
+      ...series.map((s) => ({ id: s.id, tab: 'mind', title: `סדרה ${s.number} · ${s.title}`, tutorials: s.tutorials })),
+      { id: 'health', tab: 'body', title: health.title, tutorials: health.tutorials },
+      { id: 'other', tab: 'mind', title: other.title, tutorials: other.tutorials },
+    ].filter((g) => g.tutorials.length)
+  }, [tutorialsData])
+
   const visibleData = useMemo(() => {
-    return tutorialsData
+    return groups
       .map((category) => {
-        if (activeTab !== 'all' && activeTab !== category.id) return null
+        if (activeTab !== 'all' && activeTab !== category.tab) return null
         const query = (searchQuery || '').toLowerCase()
         const filtered = category.tutorials.filter((t) => {
           const title = (t?.title || '').toLowerCase()
@@ -34,7 +46,7 @@ export default function TutorialsHub({
         return filtered.length === 0 ? null : { ...category, tutorials: filtered }
       })
       .filter(Boolean)
-  }, [tutorialsData, activeTab, searchQuery])
+  }, [groups, activeTab, searchQuery])
 
   return (
     <div className="flex-1">
@@ -46,13 +58,12 @@ export default function TutorialsHub({
 
         <div className="flex overflow-x-auto hide-scrollbar border-b border-gray-200 mb-10 pb-1">
           <div className="flex gap-6 min-w-max px-2">
-            {['all', ...tutorialsData.map((c) => c.id)].map((tabId) => {
-              const label = tabId === 'all' ? 'הכול' : tutorialsData.find((c) => c.id === tabId)?.title
+            {[['all', 'הכול'], ['mind', 'נפש ושינוי מבפנים'], ['body', 'גוף ובריאות']].map(([tabId, label]) => {
               return (
                 <button
                   key={tabId}
                   onClick={() => setActiveTab(tabId)}
-                  className={`pb-3 text-sm md:text-base font-medium transition-all relative ${activeTab === tabId ? 'text-[#3E3935]' : 'text-gray-500 hover:text-[#3E3935]'}`}
+                  className={`pb-3 text-base md:text-lg font-bold transition-all relative ${activeTab === tabId ? 'text-[#3E3935]' : 'text-[#716861] hover:text-[#3E3935]'}`}
                 >
                   {label}
                   {activeTab === tabId && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#3E3935] rounded-t-full"></span>}
@@ -80,15 +91,14 @@ export default function TutorialsHub({
 
         <div className="space-y-16">
           {visibleData.map((category) => {
-            const theme = themeConfig[category.id] || themeConfig['personal-growth']
+            const theme = category.tab === 'body' ? themeConfig.health : themeConfig['personal-growth']
             return (
               <section key={category.id}>
-                {activeTab === 'all' && !searchQuery && (
+                {!searchQuery && (
                   <div className="flex items-start gap-4 mb-8 relative">
                     <div className="flex flex-col">
                       <h3 className="text-2xl md:text-3xl font-bold text-[#3E3935] leading-tight tracking-tight">{category.title}</h3>
-                      <p className="text-[#716861] text-sm md:text-base mt-1.5 max-w-lg leading-[1.8]">{category.description}</p>
-                      <div className="h-1 w-16 bg-gradient-to-l from-[#C88F96] to-transparent mt-3 rounded-full"></div>
+                      <div className={`h-1 w-16 bg-gradient-to-l ${category.tab === 'body' ? 'from-[#687B63]' : 'from-[#C88F96]'} to-transparent mt-3 rounded-full`}></div>
                     </div>
                   </div>
                 )}
@@ -143,17 +153,17 @@ export default function TutorialsHub({
                           <div className="mt-8 pt-5 border-t border-gray-100 flex items-center justify-between">
                             <div>
                               {isCompleted && !isLocked && (
-                                <div className="flex items-center gap-1 text-[#687B63] text-xs font-bold">
-                                  <CheckCircle size={14} /> הושלם
+                                <div className="flex items-center gap-1 text-[#4F6249] text-sm font-bold">
+                                  <CheckCircle size={16} /> צפית
                                 </div>
                               )}
                               {isContinuing && (
-                                <div className="flex items-center gap-1 text-[#9E626C] text-xs font-bold">
-                                  <PlayCircle size={14} /> המשך צפייה
+                                <div className="flex items-center gap-1 text-[#9E626C] text-sm font-bold">
+                                  <PlayCircle size={16} /> המשך צפייה
                                 </div>
                               )}
                               {!isCompleted && !isContinuing && !isLocked && isAuthenticated && (
-                                <div className="text-gray-400 text-xs font-medium">לא התחלת</div>
+                                <div className="text-[#716861] text-sm font-medium">לא התחלת</div>
                               )}
                             </div>
                             {isLocked ? (

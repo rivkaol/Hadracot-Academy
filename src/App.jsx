@@ -4,6 +4,7 @@ import { useCatalog } from './useCatalog'
 import { useViewerState } from './hooks/useViewerState'
 import { trackEvent } from './lib/trackEvent'
 import { findTutorialById, getTrackTutorials } from './lib/catalogHelpers'
+import { getNextInShelf } from './lib/series'
 
 import SkeletonGallery from './components/SkeletonGallery'
 import LoginScreen from './components/LoginScreen'
@@ -20,15 +21,19 @@ import TrialTrackMapScreen from './components/TrialTrackMapScreen'
 import ClubGateway from './components/ClubGateway'
 import { pricingConfig } from './pricing'
 
-import { ChevronRight, LogOut, User, Library, Search, Crown, Lightbulb } from 'lucide-react'
+import { ChevronRight, LogOut, User, Library, Search, Crown, Lightbulb, MessageCircle, Home, Users } from 'lucide-react'
 
 // "חדש במועדון" הוסר מהניווט העליון — אין עדיין destination אמיתי (לא היעד
 // לחיצה, לא מפגש קיים). האזור בתוך ה-Dashboard נשאר conditional על nextLiveSession.
 const MEMBER_NAV_ITEMS = [
-  { label: 'המסלול שלי', key: 'home' },
-  { label: 'כל ההדרכות', key: 'library' },
-  { label: 'החשבון שלי', key: 'profile' },
+  { label: 'דף הבית', key: 'home', Icon: Home },
+  { label: 'כל ההדרכות', key: 'library', Icon: Search },
+  { label: 'החשבון שלי', key: 'profile', Icon: User },
 ]
+// כפתורי התפריט העליון לחברה: כפתורים ממשיים עם אייקון ורקע — לא טקסט חופשי שלא נקלט כלחיץ
+const NAV_PILL = 'flex items-center gap-2 text-lg font-bold px-5 py-2.5 rounded-full border transition-colors'
+const NAV_PILL_IDLE = 'bg-[#FAF7F2] text-[#3E3935] border-[#E8E0D6] hover:bg-[#F3ECE3] hover:border-[#C88F96]'
+const NAV_PILL_ACTIVE = 'bg-[#3E3935] text-white border-[#3E3935]'
 
 // פס עליון סטיקי מעל הכול, למי שעדיין לא חברה — לעולם לא חבוי בתפריט.
 function VisitorTopBar({ onLogin }) {
@@ -44,6 +49,7 @@ function VisitorTopBar({ onLogin }) {
 
 function Header({
   showBack = false,
+  activeView,
   viewerState,
   hasFullAccess,
   isAuthenticated,
@@ -60,35 +66,40 @@ function Header({
   // אינה חברת מועדון — לא מציגים לה את השפה/הניווט הזה (ראו App.jsx viewerState==='purchaser').
   const isMember = hasFullAccess
   const isPurchaser = viewerState === 'purchaser'
+  // לחברה: התפריט תופס את כל הצד, והשורה החיוורת באמצע יורדת (הלוגו לא קיים בשרת ממילא)
+  const wideNav = isMember && !showBack
   return (
-    <header className="bg-white sticky top-0 z-50 border-b border-gray-100 shadow-sm">
+    <header className="bg-white md:sticky md:top-0 z-50 border-b border-gray-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between relative">
-        <div className="w-1/3 flex items-center gap-3">
+        <div className={`${wideNav ? 'flex-1' : 'w-1/3'} flex items-center gap-3`}>
           {showBack ? (
             <button
               onClick={onBack}
-              className="hidden lg:flex items-center gap-1.5 md:gap-2 text-[#3E3935] font-bold bg-[#E8EEE5] hover:bg-[#3E3935] hover:text-[#C88F96] px-3 md:px-5 py-2 rounded-full transition-all duration-300 shadow-sm border border-[#3E3935]/10"
+              className="flex items-center gap-1.5 md:gap-2 text-[#3E3935] font-bold bg-[#E8EEE5] hover:bg-[#3E3935] hover:text-[#C88F96] px-4 md:px-5 py-2.5 rounded-full transition-all duration-300 shadow-sm border border-[#3E3935]/10"
             >
               <ChevronRight size={24} />
-              <span className="hidden md:inline text-base">חזרה</span>
+              <span className="text-base md:text-lg">חזרה</span>
             </button>
           ) : isMember ? (
-            <nav className="hidden lg:flex items-center gap-5">
-              {MEMBER_NAV_ITEMS.map((item) => (
+            <nav className="hidden lg:flex items-center gap-3">
+              {MEMBER_NAV_ITEMS.map(({ label, key, Icon }) => (
                 <button
-                  key={item.label}
-                  onClick={item.key === 'library' ? onGoLibrary : item.key === 'profile' ? onGoProfile : onGoHome}
-                  className="text-sm font-bold text-[#716861] hover:text-[#3E3935] transition-colors"
+                  key={key}
+                  onClick={key === 'library' ? onGoLibrary : key === 'profile' ? onGoProfile : onGoHome}
+                  aria-current={activeView === key ? 'page' : undefined}
+                  className={`${NAV_PILL} ${activeView === key ? NAV_PILL_ACTIVE : NAV_PILL_IDLE}`}
                 >
-                  {item.label}
+                  <Icon size={22} />
+                  {label}
                 </button>
               ))}
               <a
                 href={`${pricingConfig.whatsappBaseUrl}?text=${encodeURIComponent('היי רבקה, אשמח להצטרף לקבוצת המועדון')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm font-bold text-[#716861] hover:text-[#3E3935] transition-colors"
+                className={`${NAV_PILL} ${NAV_PILL_IDLE}`}
               >
+                <Users size={22} />
                 הקהילה
               </a>
             </nav>
@@ -96,13 +107,13 @@ function Header({
             <nav className="hidden lg:flex items-center gap-5">
               <button
                 onClick={onGoLibrary}
-                className="text-sm font-bold text-[#716861] hover:text-[#3E3935] transition-colors"
+                className="text-base font-bold text-[#5E5650] hover:text-[#3E3935] transition-colors"
               >
                 ההדרכות שלי
               </button>
               <button
                 onClick={onGoProfile}
-                className="text-sm font-bold text-[#716861] hover:text-[#3E3935] transition-colors"
+                className="text-base font-bold text-[#5E5650] hover:text-[#3E3935] transition-colors"
               >
                 החשבון שלי
               </button>
@@ -119,7 +130,7 @@ function Header({
           ) : null}
         </div>
 
-        <div className="w-1/3 flex justify-center">
+        <div className={`${wideNav ? 'hidden' : 'w-1/3 flex'} justify-center`}>
           <div className="cursor-pointer flex flex-col items-center" onClick={onGoHome}>
             <img
               src="/logo.jpg.png"
@@ -138,7 +149,7 @@ function Header({
             {isAuthenticated ? (
               <div className="flex flex-col items-end">
                 <div className="flex items-center gap-2">
-                  <p className="text-sm font-bold text-[#3E3935] truncate max-w-[120px]" title={userName}>
+                  <p className="text-lg font-bold text-[#3E3935] truncate max-w-[160px]" title={userName}>
                     שלום {userName}
                   </p>
                   {isVip && (
@@ -151,9 +162,9 @@ function Header({
                   href={`${pricingConfig.whatsappBaseUrl}?text=${encodeURIComponent('היי רבקה, יש לי רעיון להדרכה חדשה:')}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[11px] text-[#C88F96] font-bold hover:underline flex items-center gap-1 mt-0.5"
+                  className="text-sm text-[#9E626C] font-bold hover:underline flex items-center gap-1 mt-0.5"
                 >
-                  <Lightbulb size={10} /> יש לי רעיון להדרכה
+                  <Lightbulb size={14} /> יש לי רעיון להדרכה
                 </a>
               </div>
             ) : (
@@ -190,25 +201,34 @@ function BottomNav({ activeView, isAuthenticated, isKeyboardOpen, onGoHome, onGo
     >
       <button
         onClick={onGoHome}
-        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'home' ? 'text-[#3E3935]' : 'text-gray-400 hover:text-[#3E3935]'}`}
+        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'home' ? 'text-[#3E3935]' : 'text-[#716861] hover:text-[#3E3935]'}`}
       >
-        <Library size={22} />
-        <span className="text-[11px] mt-1 font-medium">בית</span>
+        <Library size={26} />
+        <span className="text-[14px] mt-1 font-bold">בית</span>
       </button>
       <button
         onClick={onGoLibrary}
-        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'library' ? 'text-[#3E3935]' : 'text-gray-400 hover:text-[#3E3935]'}`}
+        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'library' ? 'text-[#3E3935]' : 'text-[#716861] hover:text-[#3E3935]'}`}
       >
-        <Search size={22} />
-        <span className="text-[11px] mt-1 font-medium">כל ההדרכות</span>
+        <Search size={26} />
+        <span className="text-[14px] mt-1 font-bold">כל ההדרכות</span>
       </button>
       <button
         onClick={() => (!isAuthenticated ? onGoLogin() : onGoProfile())}
-        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'profile' ? 'text-[#3E3935]' : 'text-gray-400 hover:text-[#3E3935]'}`}
+        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'profile' ? 'text-[#3E3935]' : 'text-[#716861] hover:text-[#3E3935]'}`}
       >
-        <User size={22} />
-        <span className="text-[11px] mt-1 font-medium">האזור שלי</span>
+        <User size={26} />
+        <span className="text-[14px] mt-1 font-bold">האזור שלי</span>
       </button>
+      <a
+        href={`${pricingConfig.whatsappBaseUrl}?text=${encodeURIComponent('היי רבקה, אני צריכה עזרה באתר המועדון')}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex flex-col items-center justify-center w-full h-full pt-2 pb-1 text-[#716861] hover:text-[#3E3935]"
+      >
+        <MessageCircle size={26} />
+        <span className="text-[14px] mt-1 font-bold">עזרה</span>
+      </a>
     </nav>
   )
 }
@@ -216,7 +236,6 @@ function BottomNav({ activeView, isAuthenticated, isKeyboardOpen, onGoHome, onGo
 export default function App() {
   const [view, setView] = useState('home')
   const [selectedTutorial, setSelectedTutorial] = useState(null)
-  const [selectedCategoryName, setSelectedCategoryName] = useState('')
   const [nextTutorial, setNextTutorial] = useState(null)
   // האם מבקרת לא-מזוהה כבר בחרה "אני עדיין לא חברה" בשער הכניסה — אם לא,
   // מוצג ClubGateway ולא ה-Landing השיווקי. נשאר true לאורך הביקור, לא נשאל שוב בכל ניווט.
@@ -378,15 +397,9 @@ export default function App() {
   }, [])
 
   const proceedToTutorial = (tutorial) => {
-    const category = tutorialsData.find((cat) => cat.tutorials.some((t) => t.id === tutorial.id))
     setSelectedTutorial(tutorial)
-    setSelectedCategoryName(category ? category.title : '')
-    if (category) {
-      const idx = category.tutorials.findIndex((t) => t.id === tutorial.id)
-      setNextTutorial(
-        idx !== -1 && idx < category.tutorials.length - 1 ? category.tutorials[idx + 1] : null
-      )
-    }
+    // "החלק הבא" לפי הסדרה/המדף (src/lib/series.js), לא לפי סדר השורות בגיליון
+    setNextTutorial(getNextInShelf(tutorialsData, tutorial.id))
     setView('tutorial')
     window.scrollTo(0, 0)
   }
@@ -515,7 +528,7 @@ export default function App() {
   }
 
   const handleNextTutorial = () => {
-    if (nextTutorial) handleSelectTutorial(nextTutorial)
+    if (nextTutorial) handleSelectTutorial(nextTutorial.tutorial)
   }
 
   if (view === 'admin') return <AdminPage adminKey={adminKey} />
@@ -561,6 +574,7 @@ export default function App() {
   const goProfile = () => setView('profile')
   const goLibrary = () => setView('library')
   const headerProps = {
+    activeView: view,
     viewerState,
     hasFullAccess,
     isAuthenticated,
@@ -636,7 +650,7 @@ export default function App() {
       <div dir="rtl" className="min-h-screen font-sans bg-[#FAF7F2] text-[#3E3935] flex flex-col">
         {(viewerState === 'visitor' || viewerState === 'trial') && <VisitorTopBar onLogin={goLogin} />}
         <Header showBack {...headerProps} />
-        <div className="bg-white/80 backdrop-blur-md border-b border-gray-100 py-3 sticky top-20 z-40 shadow-sm">
+        <div className="bg-white/80 backdrop-blur-md border-b border-gray-100 py-3 sticky top-0 md:top-20 z-40 shadow-sm">
           <div className="max-w-xl mx-auto px-4 sm:px-6">
             <div className="flex items-center bg-[#FAF7F2] rounded-full px-4 py-2.5 border border-gray-200 focus-within:border-[#C88F96] focus-within:bg-white focus-within:shadow-md transition-all">
               <Search size={18} className="text-gray-400" />
@@ -737,10 +751,10 @@ export default function App() {
         <TutorialPage
           tutorial={selectedTutorial}
           tutorialsData={tutorialsData}
-          categoryName={selectedCategoryName}
           onBack={handleBackToHome}
           onNext={handleNextTutorial}
-          hasNext={!!nextTutorial}
+          nextInfo={nextTutorial}
+          onSelectTutorial={handleSelectTutorial}
           accessibleTutorialIds={accessibleTutorialIds}
           userEmail={userEmail}
           userPassword={userPassword}
