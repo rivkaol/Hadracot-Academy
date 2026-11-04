@@ -44,12 +44,12 @@ export function buildShelves(tutorialsData) {
 }
 
 // תווית קצרה לפי ההגדרה הקבועה בלבד (בלי קטלוג) — לשימוש בתגיות קטנות.
-// "סדרה 2 · לחזור לעצמי ולביטחון", "חלק 3 מתוך 7". null אם ההדרכה לא בסדרה ולא במדף הבריאות.
+// "לחזור לעצמי ולביטחון", "חלק 3 מתוך 7". null אם ההדרכה לא בסדרה ולא במדף הבריאות.
 export function seriesLabelFor(tutorialId) {
   const s = SERIES.find((x) => x.ids.includes(tutorialId))
   if (s) {
     return {
-      shelfTitle: `סדרה ${s.number} · ${s.title}`,
+      shelfTitle: s.title,
       partLabel: `חלק ${s.ids.indexOf(tutorialId) + 1} מתוך ${s.ids.length}`,
       isHealth: false,
     }

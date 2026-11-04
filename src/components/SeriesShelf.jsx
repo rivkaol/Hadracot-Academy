@@ -15,6 +15,7 @@ export default function SeriesShelf({
   canWatch = () => true,
   onSelectTutorial,
   layout = 'auto', // 'auto' = רשימה בנייד וכרטיסים לרוחב מ-md; 'list' = תמיד רשימה (לצד דף ההדרכה)
+  showHeader = true, // false כשכותרת המדף כבר מופיעה ממש מעליו (מדף הבריאות במסך הבית)
 }) {
   const cards = layout === 'auto'
   const c = (listCls, cardCls) => (cards ? `${listCls} ${cardCls}` : listCls)
@@ -25,24 +26,25 @@ export default function SeriesShelf({
 
   return (
     <section className="bg-white rounded-[1.5rem] border border-gray-100 shadow-[0_10px_30px_rgba(0,0,0,0.04)] overflow-hidden">
-      <header className="px-5 md:px-7 pt-6 pb-5" style={{ background: t.soft }}>
-        {isNumbered && (
-          <p className="text-lg font-bold mb-1" style={{ color: t.accent }}>
-            סדרה {shelf.number} · {total} חלקים
-          </p>
-        )}
-        <h4 className="text-[26px] md:text-[30px] font-bold text-[#3E3935] leading-tight">{shelf.title}</h4>
-        {isNumbered && (
-          <div className="mt-3">
-            <div className="flex justify-between text-lg text-[#5E5650] mb-2">
-              <span>{done === total ? 'סיימת את כל הסדרה' : done === 0 ? 'עוד לא התחלת' : `צפית ב-${done} מתוך ${total}`}</span>
+      {showHeader && (
+        <header className="px-5 md:px-7 pt-6 pb-5" style={{ background: t.soft }}>
+          <h4 className="text-[26px] md:text-[30px] font-bold text-[#3E3935] leading-tight">
+            {isNumbered && <span style={{ color: t.accent }}>סדרה {shelf.number}: </span>}
+            {shelf.title}
+          </h4>
+          {/* התקדמות רק אחרי שהתחילה — "עוד לא התחלת" על כל סדרה הוא רק רעש */}
+          {isNumbered && done > 0 && (
+            <div className="mt-3">
+              <p className="text-lg text-[#5E5650] mb-2">
+                {done === total ? 'סיימת את כל הסדרה' : `צפית ב-${done} מתוך ${total}`}
+              </p>
+              <div className="w-full bg-white rounded-full h-3 overflow-hidden" aria-hidden="true">
+                <div className="h-3 rounded-full transition-all" style={{ width: `${(done / total) * 100}%`, background: t.bar }} />
+              </div>
             </div>
-            <div className="w-full bg-white rounded-full h-3 overflow-hidden" aria-hidden="true">
-              <div className="h-3 rounded-full transition-all" style={{ width: `${total ? (done / total) * 100 : 0}%`, background: t.bar }} />
-            </div>
-          </div>
-        )}
-      </header>
+          )}
+        </header>
+      )}
 
       <ol className={c('divide-y divide-gray-100', 'md:divide-y-0 md:grid md:grid-cols-3 lg:grid-cols-4 md:gap-5 md:p-6')}>
         {shelf.tutorials.map((tutorial, i) => {
