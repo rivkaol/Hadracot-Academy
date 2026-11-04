@@ -4,6 +4,7 @@ import { useCatalog } from './useCatalog'
 import { useViewerState } from './hooks/useViewerState'
 import { trackEvent } from './lib/trackEvent'
 import { findTutorialById, getTrackTutorials } from './lib/catalogHelpers'
+import { getNextInShelf } from './lib/series'
 
 import SkeletonGallery from './components/SkeletonGallery'
 import LoginScreen from './components/LoginScreen'
@@ -20,12 +21,12 @@ import TrialTrackMapScreen from './components/TrialTrackMapScreen'
 import ClubGateway from './components/ClubGateway'
 import { pricingConfig } from './pricing'
 
-import { ChevronRight, LogOut, User, Library, Search, Crown, Lightbulb } from 'lucide-react'
+import { ChevronRight, LogOut, User, Library, Search, Crown, Lightbulb, MessageCircle } from 'lucide-react'
 
 // "חדש במועדון" הוסר מהניווט העליון — אין עדיין destination אמיתי (לא היעד
 // לחיצה, לא מפגש קיים). האזור בתוך ה-Dashboard נשאר conditional על nextLiveSession.
 const MEMBER_NAV_ITEMS = [
-  { label: 'המסלול שלי', key: 'home' },
+  { label: 'דף הבית', key: 'home' },
   { label: 'כל ההדרכות', key: 'library' },
   { label: 'החשבון שלי', key: 'profile' },
 ]
@@ -67,10 +68,10 @@ function Header({
           {showBack ? (
             <button
               onClick={onBack}
-              className="hidden lg:flex items-center gap-1.5 md:gap-2 text-[#3E3935] font-bold bg-[#E8EEE5] hover:bg-[#3E3935] hover:text-[#C88F96] px-3 md:px-5 py-2 rounded-full transition-all duration-300 shadow-sm border border-[#3E3935]/10"
+              className="flex items-center gap-1.5 md:gap-2 text-[#3E3935] font-bold bg-[#E8EEE5] hover:bg-[#3E3935] hover:text-[#C88F96] px-4 md:px-5 py-2.5 rounded-full transition-all duration-300 shadow-sm border border-[#3E3935]/10"
             >
               <ChevronRight size={24} />
-              <span className="hidden md:inline text-base">חזרה</span>
+              <span className="text-base md:text-lg">חזרה</span>
             </button>
           ) : isMember ? (
             <nav className="hidden lg:flex items-center gap-5">
@@ -78,7 +79,7 @@ function Header({
                 <button
                   key={item.label}
                   onClick={item.key === 'library' ? onGoLibrary : item.key === 'profile' ? onGoProfile : onGoHome}
-                  className="text-sm font-bold text-[#716861] hover:text-[#3E3935] transition-colors"
+                  className="text-base font-bold text-[#5E5650] hover:text-[#3E3935] transition-colors"
                 >
                   {item.label}
                 </button>
@@ -87,7 +88,7 @@ function Header({
                 href={`${pricingConfig.whatsappBaseUrl}?text=${encodeURIComponent('היי רבקה, אשמח להצטרף לקבוצת המועדון')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm font-bold text-[#716861] hover:text-[#3E3935] transition-colors"
+                className="text-base font-bold text-[#5E5650] hover:text-[#3E3935] transition-colors"
               >
                 הקהילה
               </a>
@@ -96,13 +97,13 @@ function Header({
             <nav className="hidden lg:flex items-center gap-5">
               <button
                 onClick={onGoLibrary}
-                className="text-sm font-bold text-[#716861] hover:text-[#3E3935] transition-colors"
+                className="text-base font-bold text-[#5E5650] hover:text-[#3E3935] transition-colors"
               >
                 ההדרכות שלי
               </button>
               <button
                 onClick={onGoProfile}
-                className="text-sm font-bold text-[#716861] hover:text-[#3E3935] transition-colors"
+                className="text-base font-bold text-[#5E5650] hover:text-[#3E3935] transition-colors"
               >
                 החשבון שלי
               </button>
@@ -190,25 +191,34 @@ function BottomNav({ activeView, isAuthenticated, isKeyboardOpen, onGoHome, onGo
     >
       <button
         onClick={onGoHome}
-        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'home' ? 'text-[#3E3935]' : 'text-gray-400 hover:text-[#3E3935]'}`}
+        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'home' ? 'text-[#3E3935]' : 'text-[#716861] hover:text-[#3E3935]'}`}
       >
-        <Library size={22} />
-        <span className="text-[11px] mt-1 font-medium">בית</span>
+        <Library size={26} />
+        <span className="text-[14px] mt-1 font-bold">בית</span>
       </button>
       <button
         onClick={onGoLibrary}
-        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'library' ? 'text-[#3E3935]' : 'text-gray-400 hover:text-[#3E3935]'}`}
+        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'library' ? 'text-[#3E3935]' : 'text-[#716861] hover:text-[#3E3935]'}`}
       >
-        <Search size={22} />
-        <span className="text-[11px] mt-1 font-medium">כל ההדרכות</span>
+        <Search size={26} />
+        <span className="text-[14px] mt-1 font-bold">כל ההדרכות</span>
       </button>
       <button
         onClick={() => (!isAuthenticated ? onGoLogin() : onGoProfile())}
-        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'profile' ? 'text-[#3E3935]' : 'text-gray-400 hover:text-[#3E3935]'}`}
+        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'profile' ? 'text-[#3E3935]' : 'text-[#716861] hover:text-[#3E3935]'}`}
       >
-        <User size={22} />
-        <span className="text-[11px] mt-1 font-medium">האזור שלי</span>
+        <User size={26} />
+        <span className="text-[14px] mt-1 font-bold">האזור שלי</span>
       </button>
+      <a
+        href={`${pricingConfig.whatsappBaseUrl}?text=${encodeURIComponent('היי רבקה, אני צריכה עזרה באתר המועדון')}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex flex-col items-center justify-center w-full h-full pt-2 pb-1 text-[#716861] hover:text-[#3E3935]"
+      >
+        <MessageCircle size={26} />
+        <span className="text-[14px] mt-1 font-bold">עזרה</span>
+      </a>
     </nav>
   )
 }
@@ -216,7 +226,6 @@ function BottomNav({ activeView, isAuthenticated, isKeyboardOpen, onGoHome, onGo
 export default function App() {
   const [view, setView] = useState('home')
   const [selectedTutorial, setSelectedTutorial] = useState(null)
-  const [selectedCategoryName, setSelectedCategoryName] = useState('')
   const [nextTutorial, setNextTutorial] = useState(null)
   // האם מבקרת לא-מזוהה כבר בחרה "אני עדיין לא חברה" בשער הכניסה — אם לא,
   // מוצג ClubGateway ולא ה-Landing השיווקי. נשאר true לאורך הביקור, לא נשאל שוב בכל ניווט.
@@ -378,15 +387,9 @@ export default function App() {
   }, [])
 
   const proceedToTutorial = (tutorial) => {
-    const category = tutorialsData.find((cat) => cat.tutorials.some((t) => t.id === tutorial.id))
     setSelectedTutorial(tutorial)
-    setSelectedCategoryName(category ? category.title : '')
-    if (category) {
-      const idx = category.tutorials.findIndex((t) => t.id === tutorial.id)
-      setNextTutorial(
-        idx !== -1 && idx < category.tutorials.length - 1 ? category.tutorials[idx + 1] : null
-      )
-    }
+    // "החלק הבא" לפי הסדרה/המדף (src/lib/series.js), לא לפי סדר השורות בגיליון
+    setNextTutorial(getNextInShelf(tutorialsData, tutorial.id))
     setView('tutorial')
     window.scrollTo(0, 0)
   }
@@ -515,7 +518,7 @@ export default function App() {
   }
 
   const handleNextTutorial = () => {
-    if (nextTutorial) handleSelectTutorial(nextTutorial)
+    if (nextTutorial) handleSelectTutorial(nextTutorial.tutorial)
   }
 
   if (view === 'admin') return <AdminPage adminKey={adminKey} />
@@ -737,10 +740,10 @@ export default function App() {
         <TutorialPage
           tutorial={selectedTutorial}
           tutorialsData={tutorialsData}
-          categoryName={selectedCategoryName}
           onBack={handleBackToHome}
           onNext={handleNextTutorial}
-          hasNext={!!nextTutorial}
+          nextInfo={nextTutorial}
+          onSelectTutorial={handleSelectTutorial}
           accessibleTutorialIds={accessibleTutorialIds}
           userEmail={userEmail}
           userPassword={userPassword}

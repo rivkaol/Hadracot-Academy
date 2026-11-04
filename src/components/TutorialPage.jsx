@@ -3,7 +3,9 @@ import { Sparkles, CheckCircle, ChevronLeft, BookOpen, Edit, Download, Save, Loa
 import confetti from 'canvas-confetti'
 import Player from '@vimeo/player'
 import { apiGetNote, apiSaveNote, apiSetCompleted, apiLogProgress, apiLogMemberProgress, apiGetTrialProgress } from '../api'
-import { getTrackTutorials, getNextAccessibleTutorial } from '../lib/catalogHelpers'
+import { getTrackTutorials } from '../lib/catalogHelpers'
+import { findShelfOf } from '../lib/series'
+import SeriesShelf from './SeriesShelf'
 import { trackEvent } from '../lib/trackEvent'
 import StepBadge from './StepBadge'
 
@@ -21,9 +23,9 @@ function toImageDownloadUrl(url) {
 export default function TutorialPage({
   tutorial,
   tutorialsData,
-  categoryName,
   onNext,
-  hasNext,
+  nextInfo, // { tutorial, isNewSeries, shelf } מ-getNextInShelf, או null
+  onSelectTutorial,
   accessibleTutorialIds,
   userEmail,
   userPassword,
@@ -187,15 +189,10 @@ export default function TutorialPage({
   const [isCompleted, setIsCompleted] = useState(completedTutorials.includes(tutorial.id))
   const notesRef = useRef(notes)
 
-  const currentCategory = tutorialsData.find((cat) => cat.tutorials.some((t) => t.id === tutorial.id))
-  const categoryTutorials = currentCategory ? currentCategory.tutorials : []
-  const completedInCategory = categoryTutorials.filter((t) => completedTutorials.includes(t.id)).length
-  const progressPercent = categoryTutorials.length > 0 ? Math.round((completedInCategory / categoryTutorials.length) * 100) : 0
-  // "הדרכה הבאה" לפי סדר אמיתי במסלול, לא אריתמטיקת id+1 (id-ים לא רציפים)
-  const nextAccessibleTutorial = getNextAccessibleTutorial(tutorialsData, tutorial, {
-    hasFullAccess: isClubMember,
-    accessibleTutorialIds,
-  })
+  // הסדרה/המדף שההדרכה שייכת אליו — לרשימת "כל החלקים" ולכפתור "לחלק הבא"
+  const shelfInfo = findShelfOf(tutorialsData, tutorial.id)
+  const canWatch = (t) => isClubMember || accessibleTutorialIds.includes(t.id)
+  const nextTutorial = nextInfo && canWatch(nextInfo.tutorial) ? nextInfo.tutorial : null
 
   useEffect(() => { notesRef.current = notes }, [notes])
 
@@ -315,28 +312,29 @@ export default function TutorialPage({
             </div>
 
             <div className="mb-8 text-center flex flex-col items-center">
-              <div className="flex items-center justify-center gap-2 text-sm text-[#C88F96] font-bold mb-2">
-                <Sparkles size={14} />
-                <span>{categoryName || 'תודעה ושינוי מבפנים'}</span>
-              </div>
               <StepBadge tutorial={tutorial} totalSteps={totalSteps} size="lg" className="mb-6 text-center" />
 
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 border-b border-gray-200 pb-8 w-full max-w-lg mx-auto">
+              <div className="flex flex-col items-center justify-center gap-4 border-b border-gray-200 pb-8 w-full max-w-lg mx-auto">
                 <button
                   onClick={handleCompleteLesson}
-                  className={`flex items-center justify-center gap-2 font-bold px-8 py-3.5 rounded-full transition-all duration-300 w-full sm:w-auto shadow-sm ${isCompleted ? 'bg-[#687B63] text-white hover:bg-opacity-80' : 'bg-[#E8EEE5] text-[#3E3935] hover:bg-[#3E3935] hover:text-white'}`}
+                  className={`flex items-center justify-center gap-2 text-lg font-bold px-8 py-4 rounded-full transition-all duration-300 w-full shadow-sm ${isCompleted ? 'bg-[#687B63] text-white hover:bg-opacity-80' : 'bg-[#E8EEE5] text-[#3E3935] hover:bg-[#3E3935] hover:text-white'}`}
                 >
-                  <CheckCircle size={22} />
-                  {isCompleted ? 'הושלם' : 'סיימתי את ההדרכה'}
+                  <CheckCircle size={24} />
+                  {isCompleted ? 'סימנתי שצפיתי ✓' : 'סיימתי לצפות בחלק הזה'}
                 </button>
 
-                {hasNext && nextAccessibleTutorial && (
+                {nextTutorial && (
                   <button
                     onClick={onNext}
-                    className="flex items-center justify-center gap-2 text-[#3E3935] font-bold bg-white border border-gray-200 hover:border-[#3E3935] hover:bg-gray-50 px-8 py-3.5 rounded-full transition-all duration-300 w-full sm:w-auto shadow-sm"
+                    className="flex items-center justify-between gap-3 text-right bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white px-6 py-4 rounded-[1.25rem] w-full shadow-[0_12px_28px_rgba(158,98,108,0.25)] hover:-translate-y-0.5 transition-all"
                   >
-                    לצעד הבא
-                    <ChevronLeft size={22} />
+                    <span className="min-w-0">
+                      <span className="block text-base font-medium opacity-90">
+                        {nextInfo.isNewSeries ? `לסדרה הבאה: סדרה ${nextInfo.shelf.number}` : 'לחלק הבא'}
+                      </span>
+                      <span className="block text-lg font-bold leading-snug">{nextTutorial.title}</span>
+                    </span>
+                    <ChevronLeft size={28} className="shrink-0" />
                   </button>
                 )}
               </div>
@@ -474,32 +472,25 @@ export default function TutorialPage({
             </div>
           </div>
 
-          <div className="w-full lg:w-80 shrink-0 hidden lg:block">
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-[0_10px_30px_rgba(0,0,0,0.03)] p-5 sticky top-24">
-              <div className="mb-6">
-                <div className="flex justify-between items-center text-sm font-bold text-[#3E3935] mb-2">
-                  <span>התקדמות בקטגוריה</span>
-                  <span>{completedInCategory} / {categoryTutorials.length}</span>
-                </div>
-                <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
-                  <div className="bg-[#687B63] h-2 rounded-full transition-all duration-1000 ease-out" style={{ width: `${progressPercent}%` }}></div>
-                </div>
+          {/* כל החלקים בסדרה — במחשב בצד, בנייד מתחת לתוכן (לא מוסתר) */}
+          {shelfInfo && onSelectTutorial && (
+            <aside className="w-full lg:w-[380px] shrink-0">
+              <div className="lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto rounded-[1.5rem]">
+                <p className="flex items-center gap-2 text-lg font-bold text-[#3E3935] mb-3">
+                  <Sparkles size={20} className="text-[#C88F96]" />
+                  {shelfInfo.isSeries ? 'כל החלקים בסדרה' : 'עוד הדרכות במדף הזה'}
+                </p>
+                <SeriesShelf
+                  shelf={shelfInfo.shelf}
+                  tone={shelfInfo.shelf.id === 'health' ? 'health' : 'series'}
+                  completedTutorials={completedTutorials}
+                  currentTutorialId={tutorial.id}
+                  canWatch={canWatch}
+                  onSelectTutorial={onSelectTutorial}
+                />
               </div>
-              <h3 className="font-bold text-[#3E3935] mb-4 flex items-center gap-2 border-b border-gray-100 pb-3">
-                <Sparkles size={18} className="text-[#C88F96]" /> המשך הסדרה
-              </h3>
-              <div className="p-3 bg-[#FAF7F2] rounded-xl border border-[#C88F96]/30 flex gap-3 cursor-default relative">
-                <div className="absolute right-0 top-0 bottom-0 w-1 bg-[#C88F96] rounded-r-xl"></div>
-                <div className="w-10 h-10 rounded-lg bg-[#3E3935] flex items-center justify-center text-white shrink-0">
-                  <Sparkles size={20} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h4 className="text-sm font-bold text-[#3E3935] truncate">{tutorial.title}</h4>
-                  <span className="text-xs text-gray-500 mt-0.5 block">מתנגן עכשיו</span>
-                </div>
-              </div>
-            </div>
-          </div>
+            </aside>
+          )}
         </div>
       </main>
     </div>

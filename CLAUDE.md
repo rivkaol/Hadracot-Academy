@@ -10,6 +10,7 @@
 | `src/App.jsx` | מצב מרכזי + ניתוב לפי `view` (home/tutorial/login/register/profile/library/trialWelcome/trialTrackMap/admin). אין ראוטר חיצוני. מחשב `viewerState` (visitor/trial/purchaser/inactive/member/vip) דרך `useViewerState`. |
 | `src/hooks/useViewerState.js` | מקור האמת היחיד ל"איזה מצב רואה מי" — ראו `## 4 מצבי משתמשת` למטה. |
 | `src/lib/catalogHelpers.js` | `getTrackTutorials`/`groupByStage`/`getNextAccessibleTutorial`/`findTutorialById` — כל מסך שצריך "סדר במסלול" קורא מכאן, לא בונה רשימה משלו. |
+| `src/lib/series.js` | **הסדרות ומדף הבריאות מוגדרים כאן, לא בגיליון** (החלטה של רבקה, 4.11.2026). `SERIES` = רשימת ids לפי סדר צפייה, `HEALTH_SHELF` = הדרכות הבריאות. `buildShelves` (מסך הבית + "כל ההדרכות"), `getNextInShelf` (כפתור "לחלק הבא", בסוף סדרה עובר לסדרה הבאה), `seriesLabelFor` (התווית ב-`StepBadge`). **הדרכה חדשה בגיליון → להוסיף את ה-id שלה כאן**, אחרת היא נכנסת למדף "עוד הדרכות". בגיליון כל ההדרכות רשומות `personal-growth`, גם הבריאות, ולכן לא מחלקים לפי הקטגוריה משם. |
 | `src/lib/trackEvent.js` | Analytics — עוטף `apiTrackEvent`, נכשל בשקט. |
 | `src/pricing.js` | מקור אמת יחיד למחיר/קישור תשלום (חברות + VIP). |
 | `src/api.js` | עוטף כל פעולה כ-`POST /api/hub` עם שדה `action`. הדפדפן לא נוגע ב-Supabase. |
