@@ -487,6 +487,7 @@ export default function TutorialPage({
                   currentTutorialId={tutorial.id}
                   canWatch={canWatch}
                   onSelectTutorial={onSelectTutorial}
+                  layout="list"
                 />
               </div>
             </aside>

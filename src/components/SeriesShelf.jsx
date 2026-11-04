@@ -14,7 +14,10 @@ export default function SeriesShelf({
   currentTutorialId,
   canWatch = () => true,
   onSelectTutorial,
+  layout = 'auto', // 'auto' = רשימה בנייד וכרטיסים לרוחב מ-md; 'list' = תמיד רשימה (לצד דף ההדרכה)
 }) {
+  const cards = layout === 'auto'
+  const c = (listCls, cardCls) => (cards ? `${listCls} ${cardCls}` : listCls)
   const t = TONES[tone]
   const total = shelf.tutorials.length
   const done = shelf.tutorials.filter((x) => completedTutorials.includes(x.id)).length
@@ -41,7 +44,7 @@ export default function SeriesShelf({
         )}
       </header>
 
-      <ol className="divide-y divide-gray-100">
+      <ol className={c('divide-y divide-gray-100', 'md:divide-y-0 md:grid md:grid-cols-3 lg:grid-cols-4 md:gap-5 md:p-6')}>
         {shelf.tutorials.map((tutorial, i) => {
           const isDone = completedTutorials.includes(tutorial.id)
           const isCurrent = tutorial.id === currentTutorialId
@@ -50,15 +53,15 @@ export default function SeriesShelf({
             <li key={tutorial.id}>
               <button
                 onClick={() => onSelectTutorial(tutorial)}
-                className={`w-full flex items-center gap-3 sm:gap-4 md:gap-5 px-3 sm:px-4 md:px-6 py-4 md:py-5 text-right transition-colors hover:bg-[#FAF7F2] focus-visible:outline-none focus-visible:bg-[#FAF7F2] ${isCurrent ? 'bg-[#FFF8F0]' : ''}`}
+                className={`${c('w-full flex items-center gap-3 sm:gap-4 px-3 sm:px-4 py-4 text-right transition-all hover:bg-[#FAF7F2] focus-visible:outline-none focus-visible:bg-[#FAF7F2]', 'md:h-full md:flex-col md:items-stretch md:gap-0 md:p-0 md:rounded-2xl md:overflow-hidden md:border md:border-gray-100 md:shadow-sm md:hover:shadow-md md:hover:-translate-y-0.5')} ${isCurrent ? (cards ? 'bg-[#FFF8F0] md:ring-2 md:ring-[#C88F96]' : 'bg-[#FFF8F0]') : ''}`}
               >
-                <div className="relative w-[118px] sm:w-[150px] md:w-[180px] aspect-video rounded-xl overflow-hidden shrink-0 bg-[#E8EEE5]">
+                <div className={c('relative w-[118px] sm:w-[150px] aspect-video rounded-xl overflow-hidden shrink-0 bg-[#E8EEE5]', 'md:w-full md:rounded-none')}>
                   {tutorial.imageUrl && (
                     <img src={tutorial.imageUrl} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
                   )}
                   {isNumbered && (
                     <span
-                      className="absolute top-1 right-1 min-w-[32px] h-[32px] px-1.5 rounded-full text-white text-base font-bold flex items-center justify-center shadow"
+                      className="absolute top-1.5 right-1.5 min-w-[32px] h-[32px] px-1.5 rounded-full text-white text-base font-bold flex items-center justify-center shadow"
                       style={{ background: t.accent }}
                     >
                       {i + 1}
@@ -66,8 +69,8 @@ export default function SeriesShelf({
                   )}
                 </div>
 
-                <div className="flex-1 min-w-0">
-                  <p className="text-[20px] md:text-[22px] font-bold text-[#3E3935] leading-snug">{tutorial.title}</p>
+                <div className={c('flex-1 min-w-0', 'md:p-4')}>
+                  <p className="text-[20px] font-bold text-[#3E3935] leading-snug">{tutorial.title}</p>
                   {(isDone || isCurrent || !open) && (
                     <p className="text-[17px] mt-1 flex items-center gap-1.5" style={{ color: isDone ? '#4F6249' : t.accent }}>
                       {!open ? (
@@ -81,7 +84,7 @@ export default function SeriesShelf({
                   )}
                 </div>
 
-                <ChevronLeft size={28} className="hidden sm:block text-[#9E9188] shrink-0" aria-hidden="true" />
+                <ChevronLeft size={28} className={c('hidden sm:block text-[#9E9188] shrink-0', 'md:hidden')} aria-hidden="true" />
               </button>
             </li>
           )
