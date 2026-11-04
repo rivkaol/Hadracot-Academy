@@ -50,7 +50,6 @@ export default function CurrentStepHero({
 
   if (!currentTutorial) return null
 
-  const label = isContinuing ? 'ממשיכות מהמקום שבו עצרת' : isFirstEver ? 'מכאן מתחילים' : 'הצעד הבא שלך'
   const ctaLabel = isContinuing ? 'ממשיכה לצפות' : isFirstEver ? 'מתחילה את הצעד הראשון' : 'לצעד הבא'
 
   return (
@@ -78,9 +77,6 @@ export default function CurrentStepHero({
             <div className="absolute inset-0 bg-gradient-to-br from-[#E8EEE5] to-[#FAF7F2]" />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
-          <span className="absolute top-4 right-4 text-sm font-bold text-white bg-black/35 backdrop-blur-sm px-3 py-1 rounded-full">
-            {isFirstEver && !isContinuing ? 'הצעד הבא' : 'את כאן'}
-          </span>
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="w-16 h-16 bg-white/95 rounded-full flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
               <PlayCircle size={30} className="text-[#3E3935]" />
@@ -89,7 +85,6 @@ export default function CurrentStepHero({
         </div>
 
         <div className="flex-1 p-6 md:p-9 text-center md:text-right flex flex-col justify-center">
-          <p className="text-sm font-bold text-[#9E626C] mb-3 tracking-wide">{label}</p>
           <StepBadge tutorial={currentTutorial} totalSteps={totalSteps} size="lg" />
           <button
             onClick={() => onSelectTutorial(currentTutorial)}

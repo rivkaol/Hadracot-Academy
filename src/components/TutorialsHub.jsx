@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { Lock, PlayCircle, CheckCircle, ChevronLeft, Search, Lightbulb, Clock } from 'lucide-react'
+import { Lock, PlayCircle, CheckCircle, Search, Lightbulb, Clock } from 'lucide-react'
 import { themeConfig } from '../constants'
 import { getTrackTutorials } from '../lib/catalogHelpers'
 import { buildShelves } from '../lib/series'
@@ -143,40 +143,25 @@ export default function TutorialsHub({
 
                         <div className="p-6 flex-1 flex flex-col justify-between">
                           <div>
-                            <StepBadge tutorial={tutorial} totalSteps={totalSteps} size="sm" className={isLocked ? 'opacity-50' : ''} />
+                            <StepBadge tutorial={tutorial} totalSteps={totalSteps} size="sm" showLabel={false} className={isLocked ? 'opacity-50' : ''} />
                             {tutorial.duration && (
                               <p className="text-xs text-gray-400 font-medium mt-1.5 flex items-center gap-1">
                                 <Clock size={12} /> {tutorial.duration}
                               </p>
                             )}
                           </div>
-                          <div className="mt-8 pt-5 border-t border-gray-100 flex items-center justify-between">
-                            <div>
-                              {isCompleted && !isLocked && (
-                                <div className="flex items-center gap-1 text-[#4F6249] text-sm font-bold">
-                                  <CheckCircle size={16} /> צפית
-                                </div>
-                              )}
-                              {isContinuing && (
-                                <div className="flex items-center gap-1 text-[#9E626C] text-sm font-bold">
-                                  <PlayCircle size={16} /> המשך צפייה
-                                </div>
-                              )}
-                              {!isCompleted && !isContinuing && !isLocked && isAuthenticated && (
-                                <div className="text-[#716861] text-sm font-medium">לא התחלת</div>
+                          {/* שורת סטטוס רק כשיש מה לומר — בלי "לא התחלת" ובלי משפט CTA זהה בכל כרטיס */}
+                          {((isCompleted && !isLocked) || isContinuing || isLocked) && (
+                            <div className="mt-4 text-base font-bold flex items-center gap-1.5">
+                              {isLocked ? (
+                                <span className="text-[#9E626C] flex items-center gap-1.5"><Lock size={18} /> הדרכה נעולה</span>
+                              ) : isContinuing ? (
+                                <span className="text-[#9E626C] flex items-center gap-1.5"><PlayCircle size={18} /> המשך צפייה</span>
+                              ) : (
+                                <span className="text-[#4F6249] flex items-center gap-1.5"><CheckCircle size={18} /> צפית</span>
                               )}
                             </div>
-                            {isLocked ? (
-                              <span className="text-[#C88F96] text-sm font-bold flex items-center gap-1.5">
-                                <Lock size={16} /> הדרכה נעולה
-                              </span>
-                            ) : (
-                              <button className="text-[#716861] text-sm font-bold flex items-center gap-2 group-hover:text-[#3E3935] transition-all duration-300">
-                                {cardTheme.ctaText}
-                                <ChevronLeft size={16} className="transform translate-x-1 group-hover:translate-x-0 transition-transform duration-300 text-[#C88F96]" />
-                              </button>
-                            )}
-                          </div>
+                          )}
                         </div>
                       </div>
                     )

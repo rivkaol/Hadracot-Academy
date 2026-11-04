@@ -148,6 +148,7 @@ export default function MemberDashboard({
             <SeriesShelf
               shelf={health}
               tone="health"
+              showHeader={false}
               completedTutorials={completedTutorials}
               onSelectTutorial={onSelectTutorial}
             />
