@@ -12,9 +12,9 @@
 <meta property="og:image" content="https://res.cloudinary.com/dyqe95map/image/upload/v1778355572/profile.jpg_zror0m.jpg">
 <meta name="theme-color" content="#1F4A3A">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script>
-// ===== Offer details (see the template notes in the lesson-landing-page skill) =====
+// ===== Offer details (see the lesson-landing-page skill) =====
 // start, price and checkoutUrl come from Rivka only. Empty the draft list before publishing.
 window.SESSION = {
   series: 'ogenim',
@@ -25,12 +25,14 @@ window.SESSION = {
 };
 </script>
 <style>
+/* Direction "magazine cover", chosen by Rivka 10.11.2026.
+   Brand palette and Rubik only. Exception approved by direction choice: display type above the
+   brand scale (masthead and pull quotes) to give the page a magazine voice. */
 :root {
-  --forest: #1f4a3a; --forest-deep: #173a2d; --leaf: #1c5937; --plum: #7e3f55; --rose: #9e626c; --gold: #cbaa5a;
+  --forest: #1f4a3a; --deep: #173a2d; --leaf: #1c5937; --plum: #7e3f55; --rose: #9e626c; --gold: #cbaa5a;
   --blush: #f4e4e4; --sage: #e4eae0; --cream: #f8f3ec; --paper: #ffffff;
   --ink: #2b2724; --muted: #6b625c; --line: #e2d9cc;
-  --cream-soft: rgba(248, 243, 236, .82);
-  --shadow: 0 8px 24px rgba(43, 39, 36, .08);
+  --cream-soft: rgba(248, 243, 236, .84);
   --ease-out: cubic-bezier(.23, 1, .32, 1);
   --font: "Rubik", "Heebo", Arial, sans-serif;
 }
@@ -40,166 +42,194 @@ body { font-family: var(--font); font-size: 17px; line-height: 1.65; color: var(
 img { display: block; max-width: 100%; }
 a { color: inherit; }
 b, strong { font-weight: 600; }
+p, h1, h2 { text-wrap: pretty; }
 ::selection { background: var(--blush); color: var(--plum); }
-.on-dark ::selection { background: var(--gold); color: var(--forest-deep); }
+.on-dark ::selection { background: var(--gold); color: var(--deep); }
 :focus-visible { outline: 2px solid var(--plum); outline-offset: 4px; border-radius: 8px; }
 .on-dark :focus-visible { outline-color: var(--gold); }
 
-.wrap { width: min(1080px, 100% - 32px); margin-inline: auto; }
-.narrow { width: min(680px, 100% - 32px); margin-inline: auto; }
-section { padding: 96px 0; }
-h2 { font-size: 39px; line-height: 1.2; font-weight: 600; color: var(--forest); text-wrap: balance; }
-p { text-wrap: pretty; }
-.lead { font-size: 20px; line-height: 1.6; }
-.stack > * + * { margin-top: 24px; }
-
+.wrap { width: min(1200px, 100% - 48px); margin-inline: auto; }
+.col { width: min(680px, 100%); }
+section { padding: 120px 0; }
 .draft { position: sticky; top: 0; z-index: 50; background: #fff3c4; color: #5a4500; text-align: center; font-size: 14px; padding: 8px 16px; }
 
-/* Heart: drawn, never an emoji */
-.heart { display: inline-block; width: .9em; height: .9em; vertical-align: -.08em; fill: var(--plum); }
+/* Magazine devices */
+.folio { display: flex; align-items: center; gap: 16px; font-size: 13px; font-weight: 500; color: var(--rose); margin-bottom: 48px; }
+.folio::after { content: ""; flex: 1; height: 1px; background: currentColor; opacity: .5; }
+.on-dark .folio { color: var(--gold); }
+.pull { font-size: 72px; line-height: 1.05; font-weight: 700; letter-spacing: -.01em; text-wrap: balance; }
+.heart { display: inline-block; width: .85em; height: .85em; vertical-align: -.06em; fill: var(--plum); }
 .on-dark .heart { fill: var(--blush); }
 
-/* Buttons: press feedback on :active, hover only where there is a real pointer */
+/* Buttons */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   min-height: 56px; padding: 16px 32px; border-radius: 999px;
   background: var(--plum); color: #fff; text-decoration: none;
   font-size: 19px; font-weight: 500; line-height: 1.3; text-align: center;
-  box-shadow: 0 8px 24px rgba(126, 63, 85, .28);
+  box-shadow: 0 10px 28px rgba(126, 63, 85, .3);
   transition: background-color 200ms ease, transform 160ms var(--ease-out), box-shadow 200ms ease;
   -webkit-tap-highlight-color: transparent;
 }
 .btn .heart { fill: currentColor; width: 20px; height: 20px; vertical-align: 0; }
 .btn:active { transform: scale(.97); }
-@media (hover: hover) and (pointer: fine) {
-  .btn:hover { background: var(--rose); box-shadow: 0 12px 28px rgba(126, 63, 85, .32); }
-}
+@media (hover: hover) and (pointer: fine) { .btn:hover { background: var(--rose); box-shadow: 0 14px 32px rgba(126, 63, 85, .34); } }
 .btn-wide { width: 100%; }
 
-/* 1. Hero */
-.hero { background: var(--forest); color: var(--cream); padding: 0 0 96px; position: relative; overflow: hidden; }
-.hero::after { /* thin gold ring, echo of the logo */
-  content: ""; position: absolute; width: 640px; height: 640px; border-radius: 50%;
-  border: 1px solid rgba(203, 170, 90, .35); left: -240px; bottom: -320px; pointer-events: none;
-}
-.top { display: flex; justify-content: space-between; align-items: center; padding: 24px 0 64px; }
+/* ===== 1. Cover ===== */
+.cover { position: relative; min-height: min(100svh, 960px); background: var(--forest); color: var(--cream); overflow: hidden; display: flex; }
+.cover-photo { position: absolute; inset: 0 auto 0 0; width: 46%; }
+.cover-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 28%; }
+.cover-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to left, var(--forest) 0, rgba(31, 74, 58, 0) 30%); }
+.cover-body { position: relative; z-index: 1; width: 54%; margin-inline-start: 0; padding: 32px 80px 80px 48px; display: flex; flex-direction: column; }
+.top { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
 .brand { text-decoration: none; font-weight: 600; font-size: 17px; line-height: 1.3; }
 .brand small { display: block; font-weight: 400; font-size: 13px; color: rgba(248, 243, 236, .72); }
 .login { font-size: 14px; color: var(--blush); text-decoration: none; border-bottom: 1px solid rgba(203, 170, 90, .6); padding-bottom: 2px; }
-.hero-grid { display: grid; grid-template-columns: 1.3fr .7fr; gap: 64px; align-items: center; position: relative; z-index: 1; }
-.hero h1 { font-size: 49px; line-height: 1.18; font-weight: 600; text-wrap: balance; max-width: 14em; }
-.hero .lead { margin-top: 24px; color: var(--blush); font-size: 25px; line-height: 1.45; font-weight: 500; }
-.hero-cta { margin-top: 48px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
-.hero-cta .note { font-size: 14px; color: var(--cream-soft); }
+.mast { margin-top: auto; padding-top: 64px; font-size: 200px; line-height: .9; font-weight: 700; letter-spacing: -.02em; }
+.mast-rule { height: 1px; background: var(--gold); margin-top: 32px; transform-origin: right center; }
+.mast-sub { margin-top: 16px; font-size: 25px; line-height: 1.4; font-weight: 500; color: var(--gold); }
+.cover h1 { margin-top: 48px; font-size: 49px; line-height: 1.15; font-weight: 600; text-wrap: balance; }
+.cover h1 em { font-style: normal; color: var(--blush); }
+.cover .lead { margin-top: 24px; font-size: 20px; color: var(--cream-soft); }
+.cover-cta { margin-top: 40px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
+.cover-cta .note { font-size: 14px; color: var(--cream-soft); }
 .bit:has(> [data-field]:empty) { display: none; }
-.arch { position: relative; justify-self: center; width: 100%; max-width: 320px; }
-.arch img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 999px 999px 16px 16px; }
-.arch::before { content: ""; position: absolute; inset: -12px; border: 1px solid var(--gold); border-radius: 999px 999px 24px 24px; }
-.arch figcaption { position: absolute; bottom: 24px; right: -24px; background: var(--cream); color: var(--ink); border-radius: 12px; padding: 12px 16px; font-size: 14px; line-height: 1.4; box-shadow: var(--shadow); }
-.arch figcaption b { display: block; font-size: 17px; color: var(--forest); }
 
-/* 2. The small moment */
-.life .been { font-size: 25px; line-height: 1.45; font-weight: 500; color: var(--forest); }
-.life .been + .been { margin-top: 16px; }
-.life .but { margin-top: 64px; font-size: 31px; line-height: 1.3; font-weight: 600; color: var(--plum); }
-.moments { list-style: none; margin-top: 32px; border-top: 1px solid var(--line); }
-.moments li { display: grid; grid-template-columns: 48px 1fr; gap: 24px; align-items: start; padding: 24px 0; border-bottom: 1px solid var(--line); font-size: 20px; line-height: 1.55; }
-.moments svg { width: 48px; height: 48px; stroke: var(--leaf); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.life .where { margin-top: 64px; font-size: 39px; line-height: 1.2; font-weight: 600; color: var(--forest); text-wrap: balance; }
-.life .what-if { margin-top: 24px; }
+/* The one authored moment: the cover sets itself once on load */
+@keyframes rise { from { transform: translateY(24px); opacity: 0; } }
+@keyframes draw { from { transform: scaleX(0); } }
+@keyframes settle { from { transform: scale(1.06); } }
+.js .cover-photo img { animation: settle 1400ms var(--ease-out) both; }
+.js .mast { animation: rise 900ms var(--ease-out) 100ms both; }
+.js .mast-rule { animation: draw 900ms var(--ease-out) 350ms both; }
+.js .mast-sub, .js .cover h1 { animation: rise 700ms var(--ease-out) 500ms both; }
+.js .cover .lead, .js .cover-cta { animation: rise 700ms var(--ease-out) 650ms both; }
 
-/* 3. The lesson: name, the tool, and the one authored moment (the gold thread) */
-.intro-lesson { background: var(--paper); }
+/* ===== 2. Spread: the small moment ===== */
+.spread { background: var(--cream); }
+.been { font-size: 49px; line-height: 1.15; font-weight: 600; color: var(--forest); max-width: 15em; text-wrap: balance; }
+.been span { display: block; margin-top: 24px; font-size: 31px; font-weight: 500; color: var(--plum); }
+.but { margin-top: 96px; font-size: 31px; line-height: 1.3; font-weight: 600; color: var(--plum); }
+.moments { list-style: none; margin-top: 32px; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 2px solid var(--forest); }
+.moments li { padding: 32px 32px 0; font-size: 20px; line-height: 1.55; }
+.moments li:first-child { padding-inline-start: 0; }
+.moments li + li { border-inline-start: 1px solid var(--line); }
+.moments svg { width: 56px; height: 56px; margin-bottom: 24px; stroke: var(--leaf); fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.where { margin-top: 120px; color: var(--plum); max-width: 11em; }
+.what-if { margin-top: 32px; font-size: 25px; line-height: 1.45; font-weight: 500; color: var(--forest); max-width: 26em; }
+
+/* ===== 3. The feature: what an anchor is ===== */
+.feature { background: var(--paper); }
+.feature-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 96px; align-items: start; }
 .made { font-size: 20px; font-weight: 500; color: var(--plum); }
-.title { margin-top: 16px; }
-.title b { display: block; font-size: 49px; line-height: 1.1; font-weight: 600; color: var(--forest); }
-.title span { display: block; margin-top: 16px; font-size: 25px; line-height: 1.4; font-weight: 500; color: var(--plum); max-width: 22em; }
-.intro-lesson .narrow > p:not(.made) { font-size: 19px; }
+.feature h2 { margin-top: 16px; font-size: 112px; line-height: .95; font-weight: 700; color: var(--forest); letter-spacing: -.02em; }
+.feature h2 span { display: block; margin-top: 24px; font-size: 31px; line-height: 1.3; font-weight: 500; color: var(--plum); letter-spacing: 0; max-width: 16em; }
+.body { margin-top: 48px; }
+.body p { font-size: 20px; line-height: 1.6; }
+.body p + p { margin-top: 24px; }
 
-.anchor-map { position: relative; list-style: none; margin: 64px auto 0; width: min(920px, 100% - 32px); display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; text-align: center; }
-.anchor-map::before { /* the thread that ties the three points */
-  content: ""; position: absolute; top: 31px; right: calc(100% / 6); left: calc(100% / 6); height: 2px;
-  background: var(--gold); transform-origin: right center;
-}
-.anchor-map li { position: relative; font-size: 17px; line-height: 1.5; color: var(--ink); }
-.anchor-map .node { position: relative; width: 64px; height: 64px; margin: 0 auto 16px; border-radius: 50%; background: var(--forest); display: grid; place-items: center; }
-.anchor-map .node::after { content: ""; position: absolute; inset: 6px; border-radius: 50%; border: 1px solid var(--gold); }
-.anchor-map .node svg { width: 28px; height: 28px; stroke: var(--cream); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.anchor-box { position: sticky; top: 48px; background: var(--forest); color: var(--cream); border-radius: 16px; padding: 48px 40px; }
+.anchor-map { list-style: none; position: relative; }
+.anchor-map::before { content: ""; position: absolute; right: 31px; top: 32px; bottom: 32px; width: 2px; background: var(--gold); }
+.anchor-map li { position: relative; display: grid; grid-template-columns: 64px 1fr; gap: 24px; align-items: center; font-size: 17px; line-height: 1.5; color: var(--cream-soft); }
+.anchor-map li + li { margin-top: 40px; }
+.anchor-map b { display: block; font-size: 20px; color: var(--cream); margin-bottom: 4px; }
+.node { position: relative; width: 64px; height: 64px; border-radius: 50%; background: var(--deep); display: grid; place-items: center; box-shadow: 0 0 0 1px var(--gold); }
+.node svg { width: 28px; height: 28px; stroke: var(--gold); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .anchor-map li:last-child .node { background: var(--plum); }
-.anchor-map b { display: block; font-size: 19px; color: var(--forest); margin-bottom: 4px; }
-/* Entrance: the thread draws from the first point, then the points settle in. Visible by default without JS. */
-.js .anchor-map.reveal::before { transform: scaleX(0); transition: transform 900ms var(--ease-out) 150ms; }
-.js .anchor-map.reveal li { opacity: 0; transform: translateY(8px); transition: opacity 400ms ease, transform 500ms var(--ease-out); }
-.js .anchor-map.reveal li:nth-child(2) { transition-delay: 350ms; }
-.js .anchor-map.reveal li:nth-child(3) { transition-delay: 700ms; }
-.js .anchor-map.reveal.in::before { transform: scaleX(1); }
-.js .anchor-map.reveal.in li { opacity: 1; transform: none; }
+.anchor-map li:last-child .node svg { stroke: var(--cream); }
+.quietly { margin-top: 40px; padding-top: 32px; border-top: 1px solid rgba(203, 170, 90, .4); font-size: 25px; line-height: 1.4; font-weight: 600; color: var(--blush); }
+.feature .cta { margin-top: 48px; }
 
-.quietly { margin-top: 64px; text-align: center; font-size: 25px; line-height: 1.45; font-weight: 500; color: var(--forest); }
-.cta-row { margin-top: 32px; text-align: center; }
+/* ===== 4. Recall: think of a moment ===== */
+.recall { background: var(--blush); }
+.recall h2 { font-size: 49px; line-height: 1.15; font-weight: 600; color: var(--plum); max-width: 14em; }
+.recall .ask { margin-top: 32px; font-size: 25px; line-height: 1.45; font-weight: 500; max-width: 26em; }
+.maybe { list-style: none; margin-top: 64px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.maybe li { border-top: 2px solid var(--plum); padding-top: 24px; font-size: 20px; line-height: 1.5; }
+.maybe li b { display: block; font-size: 31px; line-height: 1.2; color: var(--plum); margin-bottom: 8px; }
+.felt { margin-top: 120px; display: grid; grid-template-columns: .8fr 1.2fr; gap: 64px; align-items: end; }
+.felt .remember { font-size: 25px; font-weight: 500; color: var(--ink); }
+.felt .words { font-size: 88px; line-height: 1; font-weight: 700; color: var(--forest); letter-spacing: -.01em; }
+.felt .words span { display: block; }
+.felt .words small { display: block; margin-top: 24px; font-size: 31px; line-height: 1.3; font-weight: 500; color: var(--plum); letter-spacing: 0; }
 
-/* 4. Think of a moment */
-.recall { background: var(--sage); }
-.recall .maybe { list-style: none; margin-top: 32px; }
-.recall .maybe li { position: relative; padding-inline-start: 32px; font-size: 20px; line-height: 1.55; }
-.recall .maybe li + li { margin-top: 16px; }
-.recall .maybe li::before { content: ""; position: absolute; right: 0; top: .55em; width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--leaf); }
-.recall .felt { margin-top: 48px; font-size: 25px; line-height: 1.45; font-weight: 500; color: var(--forest); }
-.inside { margin: 64px 0; padding: 48px 0; border-block: 1px solid rgba(28, 89, 55, .25); font-size: 31px; line-height: 1.35; font-weight: 600; color: var(--forest); text-wrap: balance; }
-.inside span { display: block; margin-top: 8px; color: var(--plum); }
+/* ===== 5. The turn: full-bleed statement ===== */
+.inside { background: var(--forest); color: var(--cream); padding: 144px 0; text-align: center; position: relative; overflow: hidden; }
+.inside::before, .inside::after { content: ""; position: absolute; left: 50%; width: 1px; height: 72px; background: var(--gold); }
+.inside::before { top: 0; } .inside::after { bottom: 0; }
+.inside .pull { max-width: 15em; margin: 0 auto; }
+.inside .pull span { display: block; margin-top: 24px; color: var(--blush); }
+.inside-text { margin: 96px auto 0; max-width: 640px; text-align: right; }
+.inside-text p { font-size: 20px; color: var(--cream-soft); }
+.inside-text p + p { margin-top: 24px; }
+.inside-text .way { font-size: 25px; line-height: 1.45; font-weight: 600; color: var(--cream); }
 
-/* 5. What we'll do: five points on one thread */
-.together { background: var(--paper); }
-.together h2 { margin-bottom: 48px; }
-.steps { list-style: none; position: relative; }
-.steps::before { content: ""; position: absolute; right: 15px; top: 16px; bottom: 16px; width: 1px; background: var(--gold); }
-.steps li { position: relative; padding-inline-start: 64px; }
-.steps li + li { margin-top: 40px; }
-.steps li::before { content: ""; position: absolute; right: 0; top: 2px; width: 32px; height: 32px; border-radius: 50%; background: var(--paper); border: 1px solid var(--gold); box-shadow: inset 0 0 0 7px var(--paper), inset 0 0 0 16px var(--forest); }
-.steps b { display: block; font-size: 20px; line-height: 1.4; color: var(--forest); }
-.steps p { margin-top: 8px; font-size: 17px; }
-.no-exp { margin-top: 64px; background: var(--blush); border-radius: 16px; padding: 32px; font-size: 20px; line-height: 1.55; }
-.no-exp b { color: var(--plum); }
+/* ===== 6. Contents: what we'll do ===== */
+.contents { background: var(--cream); }
+.contents h2 { font-size: 72px; line-height: 1.05; font-weight: 700; color: var(--forest); max-width: 9em; letter-spacing: -.01em; }
+.toc { list-style: none; counter-reset: toc; margin-top: 80px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 96px; }
+.toc li { counter-increment: toc; display: grid; grid-template-columns: 72px 1fr; gap: 24px; padding: 32px 0; border-top: 1px solid var(--line); }
+.toc li::before { content: counter(toc); font-size: 64px; line-height: .9; font-weight: 700; color: var(--plum); }
+.toc b { display: block; font-size: 22px; line-height: 1.35; color: var(--forest); }
+.toc p { margin-top: 8px; font-size: 17px; color: var(--ink); }
+.toc li:last-child { grid-column: 1 / -1; }
+.toc li:last-child > div { max-width: 640px; }
+.no-exp { margin-top: 64px; display: flex; gap: 24px; align-items: center; padding: 32px 40px; background: var(--forest); color: var(--cream); border-radius: 16px; font-size: 25px; line-height: 1.4; font-weight: 500; }
+.no-exp svg { flex: none; width: 40px; height: 40px; stroke: var(--gold); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
-/* 6. You don't need to become someone else */
-.yourself { background: var(--forest); color: var(--cream); position: relative; overflow: hidden; }
-.yourself::before { content: ""; position: absolute; width: 560px; height: 560px; border-radius: 50%; border: 1px solid rgba(203, 170, 90, .3); right: -280px; top: -200px; pointer-events: none; }
-.yourself h2 { color: var(--cream); }
-.yourself .meet { margin-top: 24px; color: var(--blush); }
-.said { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; width: min(920px, 100% - 32px); margin: 32px auto 64px; }
-.said li { position: relative; background: rgba(248, 243, 236, .06); border: 1px solid rgba(248, 243, 236, .12); border-radius: 16px; padding: 48px 24px 24px; font-size: 20px; line-height: 1.5; }
-.said li::before { content: ""; position: absolute; top: 24px; right: 24px; width: 32px; height: 2px; background: var(--gold); }
-.yourself .narrow { position: relative; }
-.yourself .narrow p { font-size: 19px; color: var(--cream-soft); }
-.yourself .narrow .say { font-size: 25px; line-height: 1.45; font-weight: 500; color: var(--cream); }
-.yourself .narrow .strong { margin-top: 48px; font-size: 31px; line-height: 1.3; font-weight: 600; color: var(--blush); }
+/* ===== 7. You don't need to be someone else ===== */
+.yourself { background: var(--deep); color: var(--cream); }
+.yourself h2 { font-size: 72px; line-height: 1.05; font-weight: 700; max-width: 10em; letter-spacing: -.01em; }
+.yourself .meet { margin-top: 32px; font-size: 20px; color: var(--blush); }
+.said { list-style: none; margin-top: 48px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; }
+.said li { position: relative; padding-top: 72px; font-size: 25px; line-height: 1.4; font-weight: 500; }
+.said li::before { content: "״"; position: absolute; top: -16px; right: -4px; font-size: 128px; line-height: 1; font-weight: 700; color: var(--gold); }
+.answer { margin-top: 120px; max-width: 760px; }
+.answer p { font-size: 19px; color: var(--cream-soft); }
+.answer p + p { margin-top: 24px; }
+.answer .big { font-size: 39px; line-height: 1.2; font-weight: 600; color: var(--cream); }
+.answer .big + p { margin-top: 32px; }
+.answer p + .big { margin-top: 64px; }
+.answer .strong { color: var(--blush); }
+.answer .allowed { font-size: 25px; font-weight: 500; color: var(--cream); }
 
-/* 7. What I love about it */
-.love h2 { margin-bottom: 32px; }
-.love p { font-size: 19px; }
-.love .honest { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--line); }
+/* ===== 8. Editor's letter: what I love ===== */
+.letter { background: var(--paper); }
+.letter-grid { display: grid; grid-template-columns: 280px 1fr; gap: 96px; align-items: start; }
+.letter figure img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: 50% 25%; border-radius: 999px 999px 16px 16px; }
+.letter figcaption { margin-top: 16px; font-size: 14px; color: var(--muted); }
+.letter figcaption b { display: block; font-size: 17px; color: var(--forest); }
+.letter h2 { font-size: 49px; line-height: 1.15; font-weight: 600; color: var(--forest); }
+.letter .cols { margin-top: 48px; columns: 2; column-gap: 64px; }
+.letter .cols p { font-size: 19px; break-inside: avoid; }
+.letter .cols p + p { margin-top: 24px; }
+.letter .believe { margin-top: 64px; padding-top: 32px; border-top: 2px solid var(--forest); font-size: 31px; line-height: 1.35; font-weight: 600; color: var(--plum); max-width: 20em; }
 
-/* 8. Invitation + offer */
-.offer-band { background: var(--forest); color: var(--cream); position: relative; overflow: hidden; }
-.offer-band::before { content: ""; position: absolute; width: 720px; height: 720px; border-radius: 50%; border: 1px solid rgba(203, 170, 90, .3); left: -360px; bottom: -360px; pointer-events: none; }
-.offer-grid { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
-.offer-grid .offer { position: sticky; top: 64px; }
-.invite h2 { color: var(--cream); }
-.invite .face { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold); margin-bottom: 32px; }
-.invite p { margin-top: 24px; font-size: 19px; color: var(--cream-soft); }
-.invite .club { margin-top: 16px; font-size: 25px; font-weight: 600; color: var(--blush); }
-.invite .sign { margin-top: 32px; font-size: 17px; color: var(--cream); }
-.invite .sign b { display: block; font-size: 20px; }
-.invite .sign span { color: var(--blush); }
-.offer { position: relative; background: var(--cream); color: var(--ink); border-radius: 16px; padding: 48px 40px 40px; text-align: center; box-shadow: 0 24px 48px rgba(0, 0, 0, .18); }
-.offer::before { content: ""; position: absolute; inset: 8px; border: 1px solid var(--gold); border-radius: 12px; pointer-events: none; }
-.offer .what { font-size: 31px; line-height: 1.2; font-weight: 600; color: var(--forest); }
-.offer .what small { display: block; margin-top: 8px; font-size: 17px; line-height: 1.45; font-weight: 500; color: var(--plum); }
-.offer .when { margin-top: 16px; font-size: 19px; font-weight: 500; color: var(--ink); }
+/* ===== 9. Back cover: invitation + offer ===== */
+.back { background: var(--forest); color: var(--cream); position: relative; overflow: hidden; }
+.back-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 96px; align-items: start; }
+.back h2 { font-size: 72px; line-height: 1.05; font-weight: 700; letter-spacing: -.01em; }
+.back .club { margin-top: 32px; font-size: 20px; color: var(--cream-soft); }
+.back .club b { display: block; margin-top: 8px; font-size: 39px; line-height: 1.2; color: var(--gold); }
+.back .about p { margin-top: 24px; font-size: 19px; color: var(--cream-soft); max-width: 34em; }
+.back .glad { margin-top: 32px; font-size: 25px; font-weight: 500; color: var(--cream); }
+.sign { margin-top: 48px; display: flex; align-items: center; gap: 16px; }
+.sign img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 2px var(--gold); }
+.sign p { font-size: 17px; line-height: 1.4; color: var(--cream-soft); }
+.sign b { display: block; font-size: 20px; color: var(--cream); }
+
+/* The offer reads as a subscription card cut from the magazine */
+.ticket { position: sticky; top: 48px; background: var(--cream); color: var(--ink); border-radius: 16px; padding: 48px 40px 40px; text-align: center; box-shadow: 0 24px 56px rgba(0, 0, 0, .24); }
+.ticket::before { content: ""; position: absolute; inset: 12px; border: 1.5px dashed rgba(203, 170, 90, .9); border-radius: 10px; pointer-events: none; }
+.ticket .what { font-size: 56px; line-height: 1; font-weight: 700; color: var(--forest); letter-spacing: -.01em; }
+.ticket .what small { display: block; margin-top: 16px; font-size: 17px; line-height: 1.45; font-weight: 500; color: var(--plum); letter-spacing: 0; }
+.ticket .when { margin-top: 16px; font-size: 19px; font-weight: 500; }
 .kind { display: inline-flex; align-items: center; gap: 8px; margin-top: 24px; background: var(--blush); color: var(--plum); border-radius: 999px; padding: 8px 16px; font-size: 14px; font-weight: 500; }
 .kind svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.price { margin-top: 16px; display: flex; justify-content: center; align-items: baseline; gap: 8px; color: var(--plum); font-variant-numeric: lining-nums tabular-nums; }
-.price .n { font-size: 64px; line-height: 1; font-weight: 600; }
+.price { margin-top: 24px; display: flex; justify-content: center; align-items: baseline; gap: 8px; color: var(--plum); font-variant-numeric: lining-nums tabular-nums; }
+.price .n { font-size: 72px; line-height: 1; font-weight: 700; }
 .price .cur { font-size: 31px; font-weight: 600; }
 .then { margin: 16px 0 32px; font-size: 17px; color: var(--muted); }
 
@@ -211,67 +241,117 @@ body:not(.is-recorded) .rec-only { display: none !important; }
 .is-recorded .live-only { display: none !important; }
 
 /* Footer + sticky */
-.foot { background: var(--forest-deep); color: rgba(248, 243, 236, .8); font-size: 14px; padding: 32px 0 112px; }
+.foot { background: var(--deep); color: rgba(248, 243, 236, .8); font-size: 14px; padding: 32px 0 112px; border-top: 1px solid rgba(203, 170, 90, .25); }
 .foot .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 24px; }
 .foot a { color: var(--blush); }
 .sticky { position: fixed; inset: auto 0 0 0; z-index: 40; display: none; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: var(--paper); box-shadow: 0 -8px 24px rgba(43, 39, 36, .12); transform: translateY(110%); transition: transform 300ms var(--ease-out); }
 .sticky.show { transform: none; }
-.sticky .p { font-size: 20px; font-weight: 600; color: var(--forest); line-height: 1.2; }
+.sticky .p { font-size: 20px; font-weight: 700; color: var(--forest); line-height: 1.2; }
 .sticky .p small { display: block; font-size: 13px; font-weight: 400; color: var(--muted); }
 .sticky .btn { min-height: 48px; padding: 12px 24px; font-size: 17px; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .js .anchor-map.reveal::before, .js .anchor-map.reveal li { transform: none; opacity: 1; transition: none; }
+  .js .cover-photo img, .js .mast, .js .mast-rule, .js .mast-sub, .js .cover h1, .js .cover .lead, .js .cover-cta { animation: none; }
   .btn, .sticky { transition: none; }
 }
 
-/* Tablet and phone */
+/* Tablet */
+@media (max-width: 1100px) {
+  .mast { font-size: 152px; }
+  .cover h1 { font-size: 39px; }
+  .feature-grid, .back-grid { gap: 64px; }
+  .pull { font-size: 56px; }
+  .felt .words { font-size: 72px; }
+}
+
+/* Phone */
 @media (max-width: 820px) {
-  section { padding: 64px 0; }
-  h2 { font-size: 31px; }
-  .top { padding: 16px 0 32px; }
-  .hero { padding-bottom: 64px; }
-  .hero-grid { grid-template-columns: 1fr; gap: 48px; }
-  .hero h1 { font-size: 39px; }
-  .hero .lead { font-size: 20px; }
-  .hero-cta { margin-top: 32px; }
-  .hero-cta .btn { width: 100%; }
-  .arch { max-width: 240px; }
-  .arch figcaption { right: -8px; }
-  .life .been { font-size: 20px; }
-  .life .but { margin-top: 48px; font-size: 25px; }
-  .moments li { grid-template-columns: 40px 1fr; gap: 16px; font-size: 19px; }
-  .moments svg { width: 40px; height: 40px; }
-  .life .where { margin-top: 48px; font-size: 31px; }
-  .title b { font-size: 39px; }
-  .title span { font-size: 20px; }
-  .anchor-map { grid-template-columns: 1fr; gap: 32px; text-align: right; margin-top: 48px; }
-  .anchor-map::before { top: 32px; bottom: 32px; right: 31px; left: auto; width: 2px; height: auto; transform-origin: center top; }
-  .js .anchor-map.reveal::before { transform: scaleY(0); }
-  .js .anchor-map.reveal.in::before { transform: scaleY(1); }
-  .anchor-map li { display: grid; grid-template-columns: 64px 1fr; gap: 16px; align-items: center; }
-  .anchor-map .node { margin: 0; }
-  .quietly { margin-top: 48px; font-size: 20px; }
-  .cta-row .btn { width: 100%; }
-  .recall .maybe li { font-size: 19px; }
-  .recall .felt { font-size: 20px; }
-  .inside { margin: 48px 0; padding: 32px 0; font-size: 25px; }
-  .steps li { padding-inline-start: 56px; }
-  .steps li + li { margin-top: 32px; }
-  .no-exp { margin-top: 48px; padding: 24px; font-size: 19px; }
-  .said { grid-template-columns: 1fr; gap: 16px; margin: 32px auto 48px; }
-  .said li { font-size: 19px; }
-  .yourself::before { display: none; }
-  .yourself .narrow .say { font-size: 20px; }
-  .yourself .narrow .strong { font-size: 25px; }
-  .offer-grid { grid-template-columns: 1fr; gap: 48px; }
-  .offer-band::before { display: none; }
-  .offer, .offer-grid .offer { position: relative; top: auto; padding: 40px 24px 32px; }
-  .offer .what { font-size: 25px; }
+  .wrap { width: min(1200px, 100% - 32px); }
+  section { padding: 80px 0; }
+  .folio { margin-bottom: 32px; }
+  .pull { font-size: 39px; }
+
+  .cover { flex-direction: column; min-height: 0; }
+  .cover-photo { position: relative; inset: auto; width: 100%; height: 62svh; min-height: 380px; max-height: 560px; order: 1; }
+  .cover-photo img { object-position: 50% 22%; }
+  .cover-photo::after { background: linear-gradient(to top, var(--forest) 0, rgba(31, 74, 58, 0) 45%); }
+  .cover-body { display: contents; }
+  .top { position: absolute; inset: 0 0 auto 0; z-index: 2; padding: 16px; background: linear-gradient(to bottom, rgba(23, 58, 45, .7), rgba(23, 58, 45, 0)); }
+  .cover-main { order: 2; position: relative; z-index: 1; padding: 0 16px 64px; margin-top: -88px; }
+  .mast { padding-top: 0; font-size: 104px; }
+  .mast-rule { margin-top: 24px; }
+  .mast-sub { font-size: 20px; }
+  .cover h1 { margin-top: 32px; font-size: 31px; line-height: 1.2; }
+  .cover .lead { font-size: 19px; }
+  .cover-cta { margin-top: 32px; }
+  .cover-cta .btn { width: 100%; }
+
+  .been { font-size: 31px; }
+  .been span { font-size: 25px; }
+  .but { margin-top: 64px; font-size: 25px; }
+  .moments { grid-template-columns: 1fr; }
+  .moments li, .moments li:first-child { padding: 24px 0; display: grid; grid-template-columns: 48px 1fr; gap: 16px; font-size: 19px; }
+  .moments li + li { border-inline-start: 0; border-top: 1px solid var(--line); }
+  .moments svg { width: 48px; height: 48px; margin: 0; }
+  .where { margin-top: 64px; }
+  .what-if { font-size: 20px; }
+
+  .feature-grid { grid-template-columns: 1fr; gap: 48px; }
+  .feature h2 { font-size: 72px; }
+  .feature h2 span { font-size: 22px; }
+  .body p { font-size: 19px; }
+  .anchor-box { position: static; padding: 32px 24px; }
+  .quietly { font-size: 20px; }
+  .feature .cta .btn { width: 100%; }
+
+  .recall h2 { font-size: 31px; }
+  .recall .ask { font-size: 20px; }
+  .maybe { grid-template-columns: 1fr; gap: 24px; margin-top: 48px; }
+  .maybe li b { font-size: 25px; }
+  .felt { margin-top: 64px; grid-template-columns: 1fr; gap: 24px; }
+  .felt .remember { font-size: 20px; }
+  .felt .words { font-size: 56px; }
+  .felt .words small { font-size: 22px; }
+
+  .inside { padding: 104px 0; }
+  .inside::before, .inside::after { height: 48px; }
+  .inside-text { margin-top: 64px; }
+  .inside-text p { font-size: 19px; }
+  .inside-text .way { font-size: 20px; }
+
+  .contents h2, .yourself h2, .back h2 { font-size: 39px; }
+  .toc { grid-template-columns: 1fr; margin-top: 48px; }
+  .toc li { grid-template-columns: 48px 1fr; gap: 16px; padding: 24px 0; }
+  .toc li::before { font-size: 44px; }
+  .toc b { font-size: 20px; }
+  .no-exp { margin-top: 48px; padding: 24px; font-size: 20px; align-items: flex-start; }
+
+  .said { grid-template-columns: 1fr; gap: 32px; }
+  .said li { padding-top: 56px; font-size: 22px; }
+  .said li::before { font-size: 104px; top: -12px; }
+  .answer { margin-top: 64px; }
+  .answer .big { font-size: 25px; }
+  .answer p + .big { margin-top: 48px; }
+  .answer .allowed { font-size: 20px; }
+
+  .letter-grid { grid-template-columns: 1fr; gap: 32px; }
+  .letter figure { display: flex; align-items: center; gap: 16px; }
+  .letter figure img { width: 88px; aspect-ratio: 1; border-radius: 50%; }
+  .letter figcaption { margin: 0; }
+  .letter h2 { font-size: 31px; }
+  .letter .cols { columns: 1; margin-top: 32px; }
+  .letter .believe { margin-top: 48px; font-size: 22px; }
+
+  .back-grid { grid-template-columns: 1fr; gap: 48px; }
+  .back .club b { font-size: 31px; }
+  .back .glad { font-size: 20px; }
+  .ticket { position: relative; top: auto; padding: 40px 24px 32px; }
+  .ticket .what { font-size: 44px; }
   .price .n { font-size: 56px; }
   .sticky { display: flex; }
 }
+@media (min-width: 821px) { .cover-main { display: contents; } }
 </style>
 </head>
 <body>
@@ -282,35 +362,34 @@ body:not(.is-recorded) .rec-only { display: none !important; }
   <symbol id="heart" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-7.5-10.4A4.3 4.3 0 0 1 12 8a4.3 4.3 0 0 1 7.5 2.6C19.5 16.4 12 21 12 21z"/></symbol>
 </svg>
 
-<!-- 1. Opening question -->
-<header class="hero on-dark">
-  <div class="wrap">
+<!-- 1. Cover -->
+<header class="cover on-dark">
+  <div class="cover-photo">
+    <img src="https://res.cloudinary.com/dyqe95map/image/upload/c_fill,w_1100,h_1400,g_face,q_auto,f_auto/v1778355572/profile.jpg_zror0m.jpg" alt="רבקה הולצברג" fetchpriority="high">
+  </div>
+  <div class="cover-body">
     <nav class="top">
       <a class="brand" href="https://rivkaholtsberg.co.il">בריאות שבאה מהלב<small>המועדון של רבקה הולצברג</small></a>
       <a class="login" href="/?login=1">כבר חברה? כניסה</a>
     </nav>
-    <div class="hero-grid">
-      <div>
-        <h1>למה דווקא ברגע שאת הכי צריכה את הביטחון שלך, הוא נעלם?</h1>
-        <p class="lead">את הרי אישה שעברה לא מעט בחיים.</p>
-        <div class="hero-cta open-only">
-          <a class="btn" href="#offer">אני רוצה להצטרף להדרכה <svg class="heart" aria-hidden="true"><use href="#heart"/></svg></a>
-          <span class="note"><span class="live-only">שיעור חי בזום<span class="bit"> · <span data-field="date"></span></span><span class="bit"> · <span data-field="time"></span></span></span><span class="rec-only">שיעור מוקלט · לצפייה מתי שנוח לך</span></span>
-        </div>
+    <div class="cover-main">
+      <p class="mast" aria-hidden="true">עוגנים</p>
+      <div class="mast-rule" aria-hidden="true"></div>
+      <p class="mast-sub">איך לעורר את הכוח הפנימי שלך ברגע שאת צריכה אותו</p>
+      <h1>למה דווקא ברגע שאת הכי צריכה <em>את הביטחון שלך,</em> הוא נעלם?</h1>
+      <p class="lead">את הרי אישה שעברה לא מעט בחיים.</p>
+      <div class="cover-cta open-only">
+        <a class="btn" href="#offer">אני רוצה להצטרף להדרכה <svg class="heart" aria-hidden="true"><use href="#heart"/></svg></a>
+        <span class="note"><span class="live-only">שיעור חי בזום<span class="bit"> · <span data-field="date"></span></span><span class="bit"> · <span data-field="time"></span></span></span><span class="rec-only">שיעור מוקלט · לצפייה מתי שנוח לך</span></span>
       </div>
-      <figure class="arch">
-        <img src="https://res.cloudinary.com/dyqe95map/image/upload/v1778355572/profile.jpg_zror0m.jpg" alt="רבקה הולצברג">
-        <figcaption><b>רבקה הולצברג</b>בריאות שבאה מהלב</figcaption>
-      </figure>
     </div>
   </div>
 </header>
 
-<!-- 2. The small moment -->
-<section class="life">
-  <div class="narrow">
-    <p class="been">גידלת ילדים, התמודדת עם קשיים, קיבלת החלטות, עברת תקופות לא פשוטות.</p>
-    <p class="been">ואת יודעת שיש בך כוחות.</p>
+<!-- 2. Spread: the small moment -->
+<section class="spread">
+  <div class="wrap">
+    <p class="been">גידלת ילדים, התמודדת עם קשיים, קיבלת החלטות, עברת תקופות לא פשוטות.<span>ואת יודעת שיש בך כוחות.</span></p>
     <p class="but">אבל אז מגיע רגע קטן...</p>
     <ul class="moments">
       <li>
@@ -326,127 +405,147 @@ body:not(.is-recorded) .rec-only { display: none !important; }
         <p>או שאת עומדת להתחיל משהו חדש, ומשהו בפנים אומר לך: ״עזבי, זה לא בשבילך.״</p>
       </li>
     </ul>
-    <p class="where">לאן נעלם כל הביטחון שהיה לך?</p>
-    <p class="lead what-if">ומה אם היית יכולה ללמוד דרך פשוטה לעזור לעצמך להרגיש שוב את הכוח הזה, דווקא כשאת צריכה אותו?</p>
+    <p class="pull where">לאן נעלם כל הביטחון שהיה לך?</p>
+    <p class="what-if">ומה אם היית יכולה ללמוד דרך פשוטה לעזור לעצמך להרגיש שוב את הכוח הזה, דווקא כשאת צריכה אותו?</p>
   </div>
 </section>
 
-<!-- 3. The lesson and the tool -->
-<section class="intro-lesson">
-  <div class="narrow stack">
-    <p class="made">בשביל זה הכנתי לך הדרכה מיוחדת <svg class="heart" aria-hidden="true"><use href="#heart"/></svg></p>
-    <h2 class="title"><b>עוגנים</b><span>איך לעורר את הכוח הפנימי שלך ברגע שאת צריכה אותו</span></h2>
-    <p>בהדרכה נלמד להכיר כלי פשוט ומעניין שנקרא <b>עוגן</b>.</p>
-    <p>נלמד איך לקחת תחושה טובה מרגע אמיתי בחיים שלך, רגע שבו הרגשת חזקה, שמחה או בטוחה בעצמך, ולקשור אותה לתנועה קטנה שתבחרי.</p>
-    <p>תנועה שתוכלי להשתמש בה בהמשך, כדי לעזור לעצמך להיזכר בתחושה הזאת גם ברגעים פחות פשוטים.</p>
-  </div>
-  <ol class="anchor-map reveal" aria-label="איך עובד עוגן">
-    <li>
-      <span class="node"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"/></svg></span>
-      <span><b>רגע אמיתי בחיים שלך</b>רגע שבו הרגשת חזקה, שמחה או בטוחה בעצמך</span>
-    </li>
-    <li>
-      <span class="node"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V12M11 11.5v-1a1.5 1.5 0 0 1 3 0V12M14 11.5a1.5 1.5 0 0 1 3 0V13M17 12.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-1.5a6 6 0 0 1-4.6-2.2L5 15.5a1.5 1.5 0 0 1 2.3-1.9L8 14.5"/></svg></span>
-      <span><b>תנועה קטנה שתבחרי</b>תנועה שתוכלי להשתמש בה בהמשך</span>
-    </li>
-    <li>
-      <span class="node"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.3-7-9.7A4 4 0 0 1 12 8a4 4 0 0 1 7 2.3C19 15.7 12 20 12 20z"/></svg></span>
-      <span><b>להיזכר בתחושה הזאת</b>גם ברגעים פחות פשוטים</span>
-    </li>
-  </ol>
-  <div class="narrow">
-    <p class="quietly">בלי שאף אחד מסביבך צריך לדעת.</p>
-    <div class="cta-row open-only"><a class="btn" href="#offer">אני רוצה להצטרף להדרכה <svg class="heart" aria-hidden="true"><use href="#heart"/></svg></a></div>
+<!-- 3. Feature: the lesson and the tool -->
+<section class="feature">
+  <div class="wrap feature-grid">
+    <div>
+      <p class="made">בשביל זה הכנתי לך הדרכה מיוחדת <svg class="heart" aria-hidden="true"><use href="#heart"/></svg></p>
+      <h2>עוגנים<span>איך לעורר את הכוח הפנימי שלך ברגע שאת צריכה אותו</span></h2>
+      <div class="body">
+        <p>בהדרכה נלמד להכיר כלי פשוט ומעניין שנקרא <b>עוגן</b>.</p>
+        <p>נלמד איך לקחת תחושה טובה מרגע אמיתי בחיים שלך, רגע שבו הרגשת חזקה, שמחה או בטוחה בעצמך, ולקשור אותה לתנועה קטנה שתבחרי.</p>
+        <p>תנועה שתוכלי להשתמש בה בהמשך, כדי לעזור לעצמך להיזכר בתחושה הזאת גם ברגעים פחות פשוטים.</p>
+      </div>
+      <div class="cta open-only"><a class="btn" href="#offer">אני רוצה להצטרף להדרכה <svg class="heart" aria-hidden="true"><use href="#heart"/></svg></a></div>
+    </div>
+    <aside class="anchor-box on-dark" aria-label="איך עובד עוגן">
+      <ol class="anchor-map">
+        <li>
+          <span class="node"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"/></svg></span>
+          <span><b>רגע אמיתי בחיים שלך</b>רגע שבו הרגשת חזקה, שמחה או בטוחה בעצמך</span>
+        </li>
+        <li>
+          <span class="node"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V12M11 11.5v-1a1.5 1.5 0 0 1 3 0V12M14 11.5a1.5 1.5 0 0 1 3 0V13M17 12.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-1.5a6 6 0 0 1-4.6-2.2L5 15.5a1.5 1.5 0 0 1 2.3-1.9L8 14.5"/></svg></span>
+          <span><b>תנועה קטנה שתבחרי</b>תנועה שתוכלי להשתמש בה בהמשך</span>
+        </li>
+        <li>
+          <span class="node"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.3-7-9.7A4 4 0 0 1 12 8a4 4 0 0 1 7 2.3C19 15.7 12 20 12 20z"/></svg></span>
+          <span><b>להיזכר בתחושה הזאת</b>גם ברגעים פחות פשוטים</span>
+        </li>
+      </ol>
+      <p class="quietly">בלי שאף אחד מסביבך צריך לדעת.</p>
+    </aside>
   </div>
 </section>
 
-<!-- 4. Think of a moment -->
+<!-- 4. Recall -->
 <section class="recall">
-  <div class="narrow">
+  <div class="wrap">
     <h2>אני רוצה שתחשבי רגע על משהו...</h2>
-    <p class="lead" style="margin-top:24px">האם הייתה לך פעם תקופה שבה חשבת שלא תצליחי להתמודד עם משהו, ובסוף הצלחת?</p>
+    <p class="ask">האם הייתה לך פעם תקופה שבה חשבת שלא תצליחי להתמודד עם משהו, ובסוף הצלחת?</p>
     <ul class="maybe">
-      <li>אולי זו הייתה תקופה קשה במשפחה.</li>
-      <li>אולי שיחה שפחדת ממנה ובסוף עברה טוב.</li>
-      <li>אולי משהו חדש שלמדת, למרות שהיית בטוחה שזה כבר לא הגיל שלך.</li>
+      <li><b>אולי</b>זו הייתה תקופה קשה במשפחה.</li>
+      <li><b>אולי</b>שיחה שפחדת ממנה ובסוף עברה טוב.</li>
+      <li><b>אולי</b>משהו חדש שלמדת, למרות שהיית בטוחה שזה כבר לא הגיל שלך.</li>
     </ul>
-    <p class="felt">תיזכרי איך הרגשת אחר כך.<br>השמחה. ההקלה. התחושה הזאת של ״ברוך ה׳, הצלחתי!״</p>
-    <p class="inside">הכוח שהיה לך באותו רגע לא הגיע משום מקום. <span>הוא היה בתוכך.</span></p>
-    <div class="stack">
-      <p class="lead">אבל בחיים עצמם, כשאנחנו עייפות, מודאגות או מתרגשות, לא תמיד קל לנו להרגיש אותו.</p>
-      <p class="lead">ואנחנו מוצאות את עצמנו מגיבות מתוך הפחד או הלחץ, במקום מתוך הביטחון שהיינו רוצות להרגיש.</p>
-      <p class="lead">בהדרכה הזאת אני רוצה להראות לך דרך אחרת.</p>
-      <p class="lead"><b>לא לחכות שמשהו מבחוץ יגרום לך להרגיש טוב, אלא ללמוד איך אפשר להיעזר במה שכבר נמצא בתוכך.</b></p>
+    <div class="felt">
+      <p class="remember">תיזכרי איך הרגשת אחר כך.</p>
+      <p class="words"><span>השמחה.</span><span>ההקלה.</span><small>התחושה הזאת של ״ברוך ה׳, הצלחתי!״</small></p>
     </div>
   </div>
 </section>
 
-<!-- 5. What we'll do together -->
-<section class="together">
-  <div class="narrow">
+<!-- 5. The turn -->
+<section class="inside on-dark">
+  <div class="wrap">
+    <p class="pull">הכוח שהיה לך באותו רגע לא הגיע משום מקום. <span>הוא היה בתוכך.</span></p>
+    <div class="inside-text">
+      <p>אבל בחיים עצמם, כשאנחנו עייפות, מודאגות או מתרגשות, לא תמיד קל לנו להרגיש אותו.</p>
+      <p>ואנחנו מוצאות את עצמנו מגיבות מתוך הפחד או הלחץ, במקום מתוך הביטחון שהיינו רוצות להרגיש.</p>
+      <p>בהדרכה הזאת אני רוצה להראות לך דרך אחרת.</p>
+      <p class="way">לא לחכות שמשהו מבחוץ יגרום לך להרגיש טוב, אלא ללמוד איך אפשר להיעזר במה שכבר נמצא בתוכך.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 6. Contents -->
+<section class="contents">
+  <div class="wrap">
     <h2>מה נעשה יחד בהדרכה?</h2>
-    <ol class="steps">
-      <li><b>נגלה למה לפעמים דבר קטן משנה לנו את כל מצב הרוח</b><p>איך יכול להיות שריח, צליל או אפילו מקום מסוים מעוררים בנו פתאום רגש חזק, בלי שבכלל התכוונו?</p></li>
-      <li><b>נלמד מה זה עוגן ואיך הוא קשור לחיים שלנו</b><p>תגלי שלמעשה, את כבר פוגשת עוגנים כל יום. רק שעד היום אולי לא ידעת לקרוא להם בשם.</p></li>
-      <li><b>ניזכר ברגעים שבהם הרגשת את הכוח שלך</b><p>גם אם היום קצת קשה לך להיזכר בהם, הם חלק מסיפור החיים שלך. נלמד איך להיעזר בזיכרונות הטובים האלה.</p></li>
-      <li><b>נתרגל יחד איך ליצור עוגן אישי משלך</b><p>תנועה קטנה ומילה שתבחרי, שיוכלו לשמש אותך כתזכורת לתחושה של ביטחון, שמחה או כוח.</p></li>
-      <li><b>ונלמד איך לתרגל את הכלי בחיי היום־יום</b><p>לפני שיחה חשובה, לפני ביקור אצל רופא, כשאת רוצה להתחיל משהו חדש, או פשוט ביום שבו חסרה לך קצת תחושת ביטחון.</p></li>
+    <ol class="toc">
+      <li><div><b>נגלה למה לפעמים דבר קטן משנה לנו את כל מצב הרוח</b><p>איך יכול להיות שריח, צליל או אפילו מקום מסוים מעוררים בנו פתאום רגש חזק, בלי שבכלל התכוונו?</p></div></li>
+      <li><div><b>נלמד מה זה עוגן ואיך הוא קשור לחיים שלנו</b><p>תגלי שלמעשה, את כבר פוגשת עוגנים כל יום. רק שעד היום אולי לא ידעת לקרוא להם בשם.</p></div></li>
+      <li><div><b>ניזכר ברגעים שבהם הרגשת את הכוח שלך</b><p>גם אם היום קצת קשה לך להיזכר בהם, הם חלק מסיפור החיים שלך. נלמד איך להיעזר בזיכרונות הטובים האלה.</p></div></li>
+      <li><div><b>נתרגל יחד איך ליצור עוגן אישי משלך</b><p>תנועה קטנה ומילה שתבחרי, שיוכלו לשמש אותך כתזכורת לתחושה של ביטחון, שמחה או כוח.</p></div></li>
+      <li><div><b>ונלמד איך לתרגל את הכלי בחיי היום־יום</b><p>לפני שיחה חשובה, לפני ביקור אצל רופא, כשאת רוצה להתחיל משהו חדש, או פשוט ביום שבו חסרה לך קצת תחושת ביטחון.</p></div></li>
     </ol>
-    <p class="no-exp"><b>את לא צריכה ניסיון קודם. רק להגיע עם רצון ללמוד משהו טוב בשביל עצמך.</b></p>
+    <p class="no-exp"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17"/><path d="M12 20.5l5.5 5.5L29 14.5"/></svg>את לא צריכה ניסיון קודם. רק להגיע עם רצון ללמוד משהו טוב בשביל עצמך.</p>
   </div>
 </section>
 
-<!-- 6. You don't need to become someone else -->
+<!-- 7. You don't need to become someone else -->
 <section class="yourself on-dark">
-    <div class="narrow">
-      <h2>את לא צריכה להפוך לאישה אחרת</h2>
-      <p class="lead meet">אני פוגשת נשים שאומרות לי:</p>
-    </div>
+  <div class="wrap">
+    <h2>את לא צריכה להפוך לאישה אחרת</h2>
+    <p class="meet">אני פוגשת נשים שאומרות לי:</p>
     <ul class="said">
-      <li>״רבקה, אני כזאת. אני מתרגשת מכל דבר.״</li>
-      <li>״אני כבר לא בגיל שאני יכולה להשתנות.״</li>
-      <li>״הלוואי שהיה לי קצת יותר ביטחון.״</li>
+      <li>רבקה, אני כזאת. אני מתרגשת מכל דבר.</li>
+      <li>אני כבר לא בגיל שאני יכולה להשתנות.</li>
+      <li>הלוואי שהיה לי קצת יותר ביטחון.</li>
     </ul>
-    <div class="narrow stack">
-      <p class="say">ואני רוצה לומר לך משהו.<br>את לא צריכה להיות מישהי אחרת.</p>
+    <div class="answer">
+      <p class="big">ואני רוצה לומר לך משהו. את לא צריכה להיות מישהי אחרת.</p>
       <p>לא צריך להפוך פתאום לאישה שמדברת מול מאות אנשים, שלא חוששת משום דבר ושאף פעם לא מתרגשת.</p>
-      <p class="say">מותר לך להתרגש. מותר לך לחשוש.</p>
-      <p class="strong">אבל מגיע לך להכיר גם את הצד החזק שלך.</p>
+      <p class="allowed">מותר לך להתרגש. מותר לך לחשוש.</p>
+      <p class="big strong">אבל מגיע לך להכיר גם את הצד החזק שלך.</p>
       <p>זה שכבר עזר לך לעבור כל כך הרבה דברים בחיים. וללמוד איך להיעזר בו יותר.</p>
       <p>גם אם רק בפעם הבאה שתצליחי לומר את מה שרצית בשיחה חשובה, או לגשת למשהו חדש עם קצת פחות חשש, זה כבר יכול להיות משמעותי עבורך.</p>
     </div>
+  </div>
 </section>
 
-<!-- 7. What I love about this tool -->
-<section class="love">
-  <div class="narrow">
-    <h2>ומה אני הכי אוהבת בכלי הזה?</h2>
-    <div class="stack">
-      <p>שהוא לא דורש ממך לפנות שעה בכל יום.<br>לא צריך לקנות שום דבר מיוחד.</p>
-      <p>אנחנו נלמד איך לבנות את העוגן בעזרת זיכרון אישי, תנועה קטנה ומילה שתבחרי.</p>
-      <p>ואחר כך תוכלי להמשיך לתרגל אותו בבית, בקצב שלך.</p>
-    </div>
-    <div class="honest stack">
-      <p>זה לא קסם, ולא משהו שפותר כל פחד או קושי.<br>אבל זה עוד כלי קטן שאת יכולה להוסיף לארגז הכלים שלך.</p>
-      <p><b>ואני מאמינה שלפעמים דווקא הכלים הקטנים, אלה שאנחנו באמת מצליחות להכניס לחיים, יכולים לעזור לנו מאוד.</b></p>
+<!-- 8. Editor's letter -->
+<section class="letter">
+  <div class="wrap letter-grid">
+    <figure>
+      <img src="https://res.cloudinary.com/dyqe95map/image/upload/c_fill,w_600,h_800,g_face,q_auto,f_auto/v1778355572/profile.jpg_zror0m.jpg" alt="רבקה הולצברג" loading="lazy">
+      <figcaption><b>רבקה הולצברג</b>בריאות שבאה מהלב</figcaption>
+    </figure>
+    <div>
+      <h2>ומה אני הכי אוהבת בכלי הזה?</h2>
+      <div class="cols">
+        <p>שהוא לא דורש ממך לפנות שעה בכל יום. לא צריך לקנות שום דבר מיוחד.</p>
+        <p>אנחנו נלמד איך לבנות את העוגן בעזרת זיכרון אישי, תנועה קטנה ומילה שתבחרי.</p>
+        <p>ואחר כך תוכלי להמשיך לתרגל אותו בבית, בקצב שלך.</p>
+        <p>זה לא קסם, ולא משהו שפותר כל פחד או קושי. אבל זה עוד כלי קטן שאת יכולה להוסיף לארגז הכלים שלך.</p>
+      </div>
+      <p class="believe">ואני מאמינה שלפעמים דווקא הכלים הקטנים, אלה שאנחנו באמת מצליחות להכניס לחיים, יכולים לעזור לנו מאוד.</p>
     </div>
   </div>
 </section>
 
-<!-- 8. Invitation + offer -->
-<section id="offer" class="offer-band on-dark">
-  <div class="wrap offer-grid">
-    <div class="invite">
-      <img class="face" src="https://res.cloudinary.com/dyqe95map/image/upload/v1778355572/profile.jpg_zror0m.jpg" alt="רבקה הולצברג">
+<!-- 9. Back cover: invitation + offer -->
+<section id="offer" class="back on-dark">
+  <div class="wrap back-grid">
+    <div>
       <h2>אני מזמינה אותך להצטרף אלינו <svg class="heart" aria-hidden="true"><use href="#heart"/></svg></h2>
-      <p>להדרכה הזו במועדון שלי,</p>
-      <p class="club">״בריאות שבאה מהלב״</p>
-      <p>מקום שבו אנחנו נפגשות כדי ללמוד לא רק איך לדאוג לבריאות הגוף, אלא גם איך לחזק את הנפש, להכיר את עצמנו טוב יותר ולחיות עם קצת יותר רוגע, שמחה וביטחון.</p>
-      <p>בכל הדרכה אנחנו לומדות משהו שאפשר לקחת לחיים עצמם. בלי מילים מסובכות, בלי צורך להיות מומחית, ועם הרבה דוגמאות מהחיים שלנו.</p>
-      <p>ואני אשמח מאוד שתהיי איתנו.</p>
-      <p class="sign">מחכה לך באהבה,<b>רבקה הולצברג</b><span>בריאות שבאה מהלב <svg class="heart" aria-hidden="true"><use href="#heart"/></svg></span></p>
+      <p class="club">להדרכה הזו במועדון שלי,<b>״בריאות שבאה מהלב״</b></p>
+      <div class="about">
+        <p>מקום שבו אנחנו נפגשות כדי ללמוד לא רק איך לדאוג לבריאות הגוף, אלא גם איך לחזק את הנפש, להכיר את עצמנו טוב יותר ולחיות עם קצת יותר רוגע, שמחה וביטחון.</p>
+        <p>בכל הדרכה אנחנו לומדות משהו שאפשר לקחת לחיים עצמם. בלי מילים מסובכות, בלי צורך להיות מומחית, ועם הרבה דוגמאות מהחיים שלנו.</p>
+      </div>
+      <p class="glad">ואני אשמח מאוד שתהיי איתנו.</p>
+      <div class="sign">
+        <img src="https://res.cloudinary.com/dyqe95map/image/upload/c_fill,w_200,h_200,g_face,q_auto,f_auto/v1778355572/profile.jpg_zror0m.jpg" alt="" loading="lazy">
+        <p>מחכה לך באהבה,<b>רבקה הולצברג</b>בריאות שבאה מהלב <svg class="heart" aria-hidden="true"><use href="#heart"/></svg></p>
+      </div>
     </div>
-    <div class="offer">
+    <div class="ticket">
       <div class="open-only">
         <p class="what">עוגנים<small>איך לעורר את הכוח הפנימי שלך ברגע שאת צריכה אותו</small></p>
         <span class="kind"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10.5l5-3v9l-5-3z"/></svg><span class="live-only">שיעור חי בזום</span><span class="rec-only">שיעור מוקלט</span></span>
@@ -474,9 +573,9 @@ body:not(.is-recorded) .rec-only { display: none !important; }
 
 <script src="/live/live.js"></script>
 <script>
-// Sticky bar on phones: show after the hero, hide while the offer is on screen.
+// Sticky bar on phones: show after the cover, hide while the offer is on screen.
 (function () {
-  var bar = document.getElementById('sticky'), hero = document.querySelector('.hero'), offer = document.getElementById('offer');
+  var bar = document.getElementById('sticky'), hero = document.querySelector('.cover'), offer = document.getElementById('offer');
   if (!bar || !('IntersectionObserver' in window)) return;
   var heroOut = false, offerIn = false;
   function upd() { bar.classList.toggle('show', heroOut && !offerIn); }
