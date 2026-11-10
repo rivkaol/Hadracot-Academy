@@ -154,7 +154,7 @@ export default function VisitorShowroom({ tutorialsData, onStartTrial, onLogin }
   return (
     <main
       className="visitor-showroom bg-[#FAF7F2] text-[#3E3935] overflow-hidden"
-      style={{ fontFamily: 'Arial, "Segoe UI", sans-serif' }}
+      style={{ fontFamily: '"Rubik", Arial, "Segoe UI", sans-serif' }}
     >
       <section className="relative pt-12 md:pt-16 pb-16 md:pb-20 border-b border-[#E9E1D8]">
         <div className="absolute -top-44 -right-48 w-[34rem] h-[34rem] rounded-full bg-[#C88F96]/12 blur-3xl pointer-events-none" />

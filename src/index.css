@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 html, body {
-  font-family: "Segoe UI", Arial, sans-serif;
+  font-family: 'Rubik', "Segoe UI", Arial, sans-serif;
   background-color: #FAF7F2;
   margin: 0;
   padding: 0;
