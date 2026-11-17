@@ -72,19 +72,18 @@ section{padding:96px 0}
 .portrait figcaption{position:absolute;bottom:-26px;right:-8px;background:#fff;color:var(--ink);padding:14px 20px;border-radius:6px;font-size:16px;line-height:1.5;max-width:270px;box-shadow:0 20px 40px rgba(0,0,0,.25)}
 .portrait figcaption .hand{display:block;font-size:30px;line-height:1;margin-top:4px}
 
-/* 2. moments */
-.moments{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:44px}
-.moment{border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;background:#fff}
-.moment .now{flex:1;padding:28px 28px 22px;font-size:19px;line-height:1.65;color:var(--ink)}
-.moment .after{background:var(--plum-soft);padding:18px 28px 22px;color:var(--plum-dk);font-weight:600;line-height:1.55}
-.moment .after span{display:block;font-size:13px;font-weight:500;color:var(--plum);margin-bottom:4px}
-.dots{display:none;justify-content:center;gap:7px;margin-top:16px}
-.dots i{width:8px;height:8px;border-radius:50%;background:var(--plum-line);transition:all .25s}
-.dots i.on{width:22px;border-radius:4px;background:var(--plum)}
-.moments-end{margin-top:36px;font-weight:600;color:var(--forest);font-size:20px}
+/* Moments as a WhatsApp-style conversation: her thought, then Rivka's answer. Big type, no side-swiping. */
+.chat-band{background:var(--plum-soft)}
+.convo{max-width:640px;margin:40px auto 0;display:grid;gap:14px}
+.pair{display:grid;gap:8px;margin-bottom:22px}
+.mine{justify-self:start;background:#fff;color:var(--ink);font-size:20px;line-height:1.6;padding:16px 20px;border-radius:20px 20px 20px 6px;max-width:88%;box-shadow:0 4px 14px rgba(106,52,71,.08)}
+.hers{justify-self:end;background:var(--plum);color:#fff;font-size:19px;line-height:1.6;padding:14px 20px 16px;border-radius:20px 20px 6px 20px;max-width:88%;box-shadow:0 8px 20px rgba(106,52,71,.22)}
+.hers b{display:block;font-family:var(--hand);font-size:26px;line-height:1;color:var(--plum-line);margin-bottom:4px}
+.convo-end{max-width:640px;margin:8px auto 0;text-align:center;font-weight:600;color:var(--forest);font-size:21px}
+@media (max-width:860px){.mine{font-size:19px}.hers{font-size:18px}.convo-end{font-size:19px}}
 
 /* 3. a word from me */
-.letter-band{background:var(--plum-soft)}
+.letter-band{background:#fff}
 .letter{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:center;background:#fff;border-radius:8px;padding:48px;box-shadow:0 2px 4px rgba(106,52,71,.05),0 24px 48px rgba(106,52,71,.10)}
 .letter img{width:150px;height:150px;border-radius:50%;object-fit:cover;object-position:center 20%}
 .letter p{font-size:20px;line-height:1.8}
@@ -171,13 +170,6 @@ footer.site-foot a{color:var(--plum-soft);text-decoration:none}
   .hero h1{font-size:33px}
   .hero .lead{font-size:18px}
   .hero .btn{width:100%}
-  .moments{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin:32px -20px 0;padding:4px 20px 8px;scrollbar-width:none}
-  .moments::-webkit-scrollbar{display:none}
-  .moment{flex:0 0 86%;scroll-snap-align:center}
-  .moment .now{padding:22px 22px 18px;font-size:18px}
-  .moment .after{padding:16px 22px 20px}
-  .dots{display:flex}
-  .moments-end{font-size:18px}
   .letter{grid-template-columns:1fr;text-align:center;padding:32px 22px;gap:20px}
   .letter img{width:112px;height:112px;margin:0 auto}
   .letter p{font-size:18px}
@@ -217,35 +209,12 @@ footer.site-foot a{color:var(--plum-soft);text-decoration:none}
   </div>
 </header>
 
-<!-- 2. הרגעים, ומה משתנה -->
-<section>
-  <div class="wrap">
-    <div class="center reveal">
-      <p class="kicker">אולי זה נשמע לך מוכר</p>
-      <h2>את מכירה את הרגעים האלה?</h2>
-    </div>
-    <div class="moments reveal" id="moments">
-      <article class="moment">
-        <p class="now">אחרי חצות, ואת עדיין ערה. הראש לא מפסיק לדאוג לילדים.</p>
-        <p class="after"><span>מה שאנחנו לומדות במועדון</span>לדאוג להם מתוך אמונה, ולא מתוך פחד. ואז גם הלילה נעשה שקט יותר.</p>
-      </article>
-      <article class="moment">
-        <p class="now">את מחכה שהבן יתקשר. לא רוצה שוב להתקשר ראשונה. והטלפון שותק.</p>
-        <p class="after"><span>מה שאנחנו לומדות במועדון</span>לראות אותו בעין טובה. ומשם השיחות ביניכם נעשות חמות יותר.</p>
-      </article>
-      <article class="moment">
-        <p class="now">הכלה אמרה משפט אחד בשבת. ביום רביעי את עדיין מסובבת אותו בראש.</p>
-        <p class="after"><span>מה שאנחנו לומדות במועדון</span>למצוא מילה טובה במקום להיעלב. כדי שהשבת תעבור בשלום ובאהבה.</p>
-      </article>
-      <article class="moment">
-        <p class="now">ביום ראשון את מתחילה מחדש: הליכה, אוכל נכון, סדר. ביום רביעי זה כבר נגמר.</p>
-        <p class="after"><span>מה שאנחנו לומדות במועדון</span>שינוי שבא מבפנים, ולכן מחזיק. ונשאר לך כוח בשביל כולם.</p>
-      </article>
-    </div>
-    <div class="dots" id="dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
-    <p class="moments-end center reveal">אם עצרת על אחד מהרגעים האלה, הדף הזה נכתב בשבילך.</p>
-  </div>
-</section>
+<!-- 2. הרגעים, כשיחה -->
+<section class="chat-band"><div class="wrap reveal">
+  <div class="center"><p class="kicker">אולי זה נשמע לך מוכר</p><h2>את מכירה את הרגעים האלה?</h2></div>
+  <div class="convo"><div class="pair"><p class="mine">אחרי חצות, ואת עדיין ערה. הראש לא מפסיק לדאוג לילדים.</p><p class="hers"><b>במועדון לומדות</b>לדאוג להם מתוך אמונה, ולא מתוך פחד. ואז גם הלילה נעשה שקט יותר.</p></div><div class="pair"><p class="mine">את מחכה שהבן יתקשר. לא רוצה שוב להתקשר ראשונה. והטלפון שותק.</p><p class="hers"><b>במועדון לומדות</b>לראות אותו בעין טובה. ומשם השיחות ביניכם נעשות חמות יותר.</p></div><div class="pair"><p class="mine">הכלה אמרה משפט אחד בשבת. ביום רביעי את עדיין מסובבת אותו בראש.</p><p class="hers"><b>במועדון לומדות</b>למצוא מילה טובה במקום להיעלב. כדי שהשבת תעבור בשלום ובאהבה.</p></div><div class="pair"><p class="mine">ביום ראשון את מתחילה מחדש: הליכה, אוכל נכון, סדר. ביום רביעי זה כבר נגמר.</p><p class="hers"><b>במועדון לומדות</b>שינוי שבא מבפנים, ולכן מחזיק. ונשאר לך כוח בשביל כולם.</p></div></div>
+  <p class="convo-end">אם עצרת על אחד מהרגעים האלה, הדף הזה נכתב בשבילך.</p>
+</div></section>
 
 <!-- 3. מילה ממני -->
 <section class="letter-band">
@@ -342,7 +311,7 @@ footer.site-foot a{color:var(--plum-soft);text-decoration:none}
 
 <div class="sticky"><div class="p">69 ₪<small>לחודש</small></div><a class="btn" href="#offer">להצטרפות</a></div>
 <script>
-// Fade sections in as they scroll into view, and keep the swipe dots in sync with the moment cards.
+// Fade sections in as they scroll into view.
 (function () {
   var items = document.querySelectorAll('.reveal');
   if (!('IntersectionObserver' in window)) { items.forEach(function (el) { el.classList.add('in'); }); return; }
@@ -356,14 +325,6 @@ footer.site-foot a{color:var(--plum-soft);text-decoration:none}
   if (heroBtn) new IntersectionObserver(function (en) {
     document.body.classList.toggle('show-sticky', !en[0].isIntersecting && en[0].boundingClientRect.top < 0);
   }).observe(heroBtn);
-
-  var track = document.getElementById('moments'), dots = document.querySelectorAll('#dots i');
-  if (!track || !dots.length) return;
-  track.addEventListener('scroll', function () {
-    var card = track.children[0], step = card.offsetWidth + 14;
-    var i = Math.min(dots.length - 1, Math.round(Math.abs(track.scrollLeft) / step));
-    dots.forEach(function (d, k) { d.classList.toggle('on', k === i); });
-  }, { passive: true });
 })();
 </script>
 <script>
