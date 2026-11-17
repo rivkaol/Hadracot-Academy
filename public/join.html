@@ -5,390 +5,237 @@
 <script>document.documentElement.className += ' js';</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>מועדון בריאות שבאה מהלב | רבקה הולצברג</title>
-<meta name="description" content="מפחד לביטחון. בלב, בבית ובגוף. שיטה של שיעור אחרי שיעור עם רבקה הולצברג: כל הדרכות המועדון, 2 שיעורים חדשים בכל חודש וקבוצת המועדון. 69 ₪ לחודש, ביטול בכל עת.">
+<meta name="description" content="את יודעת מה טוב לך. אז למה ברגע האמת הלב עדיין מתכווץ? במועדון של רבקה הולצברג עוברות יחד, צעד אחרי צעד, מפחד לביטחון. 69 ₪ לחודש, ביטול בכל עת.">
 <meta property="og:title" content="מועדון בריאות שבאה מהלב: מפחד לביטחון">
 <meta property="og:description" content="שיטה של שיעור אחרי שיעור, שמחליפה דאגה בשקט, בלב, בבית ובגוף.">
 <meta property="og:image" content="https://res.cloudinary.com/dyqe95map/image/upload/v1778355572/profile.jpg_zror0m.jpg">
+<meta name="theme-color" content="#6A3447">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Assistant:wght@400;600;700;800&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&family=Amatic+SC:wght@700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --cream: #FAF7F2;
-  --paper: #FFFDF9;
-  --ink: #3E3935;
-  --muted: #716861;
-  --rose: #C88F96;
-  --rose-deep: #A96874;
-  --blush: #F1DFE1;
-  --sage: #687B63;
-  --sage-light: #E8EEE5;
-  --line: rgba(62, 57, 53, .09);
-  --shadow: 0 18px 45px rgba(74, 61, 54, .10);
+/* Club join page, new brand (Nov 2026), direction "the heart": deep plum opens and closes the page,
+   white and soft plum in between. Personal layer kept quiet on purpose: one photo, her words, a handwritten
+   signature. No food photos, tilts or moving strips (the club is deeper than the recipe side of the brand). */
+:root{
+  --forest:#1F4A3A; --plum:#7E3F55; --plum-dk:#6A3447; --plum-soft:#F4E9ED; --plum-line:#E9D3DB;
+  --s1:#E9D3DB; --s2:#C99AAB; --s3:#A0627A; --s4:#6A3447;
+  --cream:#F8F3EC; --gold-light:#D9BD86;
+  --ink:#2B2724; --muted:#6B625C; --line:#ECE6E1;
+  --body:"Rubik",Arial,sans-serif; --hand:"Amatic SC","Rubik",cursive;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--cream);
-  color: var(--ink);
-  font-family: 'Heebo', sans-serif;
-  font-size: 18px;
-  line-height: 1.85;
-  -webkit-font-smoothing: antialiased;
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#fff;color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:clip}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--plum);outline-offset:3px;border-radius:4px}
+h1,h2,h3{font-weight:700;color:var(--forest);letter-spacing:-.015em;line-height:1.15;text-wrap:balance}
+h2{font-size:clamp(31px,3.6vw,44px);margin-bottom:16px}
+h3{font-size:20px;margin-bottom:4px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.narrow{max-width:760px;margin:0 auto;padding:0 20px}
+section{padding:96px 0}
+.center{text-align:center}
+.hand{font-family:var(--hand);font-weight:700;color:var(--plum)}
+.kicker{display:inline-flex;align-items:center;gap:12px;font-size:15px;font-weight:500;color:var(--plum);margin-bottom:16px}
+.kicker::before{content:"";width:32px;height:1px;background:currentColor;opacity:.6}
+.center .kicker::after{content:"";width:32px;height:1px;background:currentColor;opacity:.6}
+.lead{font-size:19px;color:var(--muted);max-width:56ch}
+.center .lead{margin-inline:auto}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:58px;padding:0 32px;border-radius:999px;border:0;cursor:pointer;
+  background:var(--plum);color:#fff;font:700 18px/1 var(--body);text-decoration:none;box-shadow:0 4px 0 rgba(0,0,0,.18);transition:transform .16s,box-shadow .16s}
+.btn::after{content:"←";font-weight:400;transition:transform .16s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 0 rgba(0,0,0,.18)}
+.btn:hover::after{transform:translateX(-3px)}
+.btn.light{background:var(--cream);color:var(--plum-dk);box-shadow:0 4px 0 rgba(0,0,0,.25)}
+.micro{font-size:14px;color:var(--muted);margin-top:14px}
+
+/* 1. hero */
+.hero{background:var(--plum-dk);color:var(--cream)}
+.top .wrap{display:flex;justify-content:space-between;align-items:center;min-height:76px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff;font-weight:700;font-size:16px;line-height:1.25}
+.brand img{height:42px;width:auto;filter:brightness(0) invert(1);opacity:.92}
+.brand small{display:block;font-weight:400;font-size:13px;color:rgba(248,243,236,.72)}
+.login{color:var(--plum-soft);font-weight:600;font-size:15px;text-decoration:none;border-bottom:1px solid rgba(244,233,237,.4)}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:72px;align-items:center;padding-block:48px 112px}
+.hero .kicker{color:var(--plum-line)}
+.hero .kicker::before{background:var(--gold-light);opacity:1}
+.hero h1{color:#fff;font-size:clamp(38px,5vw,62px);line-height:1.12;margin-bottom:28px}
+.hero h1 span{display:block;color:var(--plum-line);font-weight:400}
+.hero .lead{color:rgba(248,243,236,.88);font-size:20px;line-height:1.75;max-width:38ch;margin-bottom:36px}
+.hero .micro{color:rgba(248,243,236,.72)}
+.portrait{position:relative;justify-self:center;width:100%;max-width:400px}
+.portrait img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:220px 220px 8px 8px}
+.portrait::before{content:"";position:absolute;inset:-14px -14px 14px 14px;border:1px solid rgba(217,189,134,.6);border-radius:228px 228px 10px 10px;pointer-events:none}
+.portrait figcaption{position:absolute;bottom:-26px;right:-8px;background:#fff;color:var(--ink);padding:14px 20px;border-radius:6px;font-size:16px;line-height:1.5;max-width:270px;box-shadow:0 20px 40px rgba(0,0,0,.25)}
+.portrait figcaption .hand{display:block;font-size:30px;line-height:1;margin-top:4px}
+
+/* Moments as a WhatsApp-style conversation: her thought, then Rivka's answer. Big type, no side-swiping. */
+.chat-band{background:var(--plum-soft)}
+.convo{max-width:640px;margin:40px auto 0;display:grid;gap:14px}
+.pair{display:grid;gap:8px;margin-bottom:22px}
+.mine{justify-self:start;background:#fff;color:var(--ink);font-size:20px;line-height:1.6;padding:16px 20px;border-radius:20px 20px 20px 6px;max-width:88%;box-shadow:0 4px 14px rgba(106,52,71,.08)}
+.hers{justify-self:end;background:var(--plum);color:#fff;font-size:19px;line-height:1.6;padding:14px 20px 16px;border-radius:20px 20px 6px 20px;max-width:88%;box-shadow:0 8px 20px rgba(106,52,71,.22)}
+.hers b{display:block;font-family:var(--hand);font-size:26px;line-height:1;color:var(--plum-line);margin-bottom:4px}
+.convo-end{max-width:640px;margin:8px auto 0;text-align:center;font-weight:600;color:var(--forest);font-size:21px}
+@media (max-width:860px){.mine{font-size:19px}.hers{font-size:18px}.convo-end{font-size:19px}}
+
+/* 3. a word from me */
+.letter-band{background:#fff}
+.letter{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:center;background:#fff;border-radius:8px;padding:48px;box-shadow:0 2px 4px rgba(106,52,71,.05),0 24px 48px rgba(106,52,71,.10)}
+.letter img{width:150px;height:150px;border-radius:50%;object-fit:cover;object-position:center 20%}
+.letter p{font-size:20px;line-height:1.8}
+.letter p+p{margin-top:12px}
+.letter .sign{font-size:46px;line-height:1;margin-top:10px}
+
+/* 4. the method: four weeks, four deepening plum shades */
+.path{list-style:none;max-width:760px;margin:48px auto 0;position:relative}
+.path::before{content:"";position:absolute;top:28px;bottom:28px;right:27px;width:2px;background:linear-gradient(var(--s1),var(--s4))}
+.step{display:grid;grid-template-columns:56px 1fr;gap:24px;padding-bottom:36px;position:relative}
+.step:last-child{padding-bottom:0}
+.step .dot{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font:700 22px var(--body);position:relative;z-index:1;box-shadow:0 0 0 6px #fff}
+.step:nth-child(1) .dot{background:var(--s1);color:var(--plum-dk)}
+.step:nth-child(2) .dot{background:var(--s2);color:#fff}
+.step:nth-child(3) .dot{background:var(--s3);color:#fff}
+.step:nth-child(4) .dot{background:var(--s4);color:#fff}
+.step .wk{font-size:14px;font-weight:600;color:var(--plum)}
+.step h3{font-size:23px;margin-top:2px}
+.step .res{color:var(--muted);font-size:18px}
+.step details{margin-top:8px}
+.step summary{cursor:pointer;list-style:none;font-size:15px;font-weight:600;color:var(--plum);display:inline-flex;gap:8px}
+.step summary::-webkit-details-marker{display:none}
+.step summary::after{content:"+"}
+.step details[open] summary::after{content:"−"}
+.step ul{list-style:none;padding-top:8px;color:var(--muted);font-size:16px;line-height:1.6}
+.step li{padding-right:16px;position:relative;margin-bottom:4px}
+.step li::before{content:"";position:absolute;right:0;top:.7em;width:6px;height:6px;border-radius:50%;background:var(--s2)}
+.path-note{margin-top:40px;color:var(--muted);font-size:16px}
+
+/* 5. offer */
+.offer-band{background:var(--plum-soft)}
+.offer{max-width:720px;margin:0 auto;background:#fff;border-radius:8px;padding:56px 48px;text-align:center;border-top:6px solid var(--plum);box-shadow:0 2px 4px rgba(106,52,71,.05),0 30px 60px rgba(106,52,71,.14)}
+.price{display:flex;justify-content:center;align-items:flex-end;gap:16px;margin:20px 0 32px}
+.price .big{font:700 88px/1 var(--body);color:var(--plum-dk)}
+.price .big span{font-size:32px}
+.price .per{text-align:right;font-size:15px;color:var(--muted);line-height:1.5;padding-bottom:10px}
+.gets{list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:12px;text-align:right;margin:0 auto 36px}
+.gets li{display:flex;gap:14px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:16px;line-height:1.45;font-weight:500}
+.gets b{flex:none;width:44px;height:44px;border-radius:50%;background:var(--plum-soft);color:var(--plum);display:grid;place-items:center}
+.gets svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* 6. faq */
+.faq h2{margin-bottom:32px}
+details.q{border-bottom:1px solid var(--line)}
+details.q summary{cursor:pointer;list-style:none;padding:22px 0;font-weight:600;font-size:19px;display:flex;justify-content:space-between;gap:16px;color:var(--forest)}
+details.q summary::-webkit-details-marker{display:none}
+details.q summary::after{content:"+";color:var(--plum);font-size:24px;line-height:1}
+details.q[open] summary::after{content:"−"}
+details.q p{padding:0 0 22px;color:var(--muted);font-size:17px}
+
+/* 7. closing + footer */
+.closing{background:var(--plum-dk);text-align:center;padding:104px 0}
+.closing h2{color:#fff;font-size:clamp(30px,4vw,46px)}
+.closing h2 span{display:block;color:var(--plum-line);font-weight:400}
+.closing .btn{margin-top:28px}
+.closing .sign{font-size:44px;margin-top:28px;color:var(--plum-line);display:block}
+footer.site-foot{background:var(--plum-dk);border-top:1px solid rgba(244,233,237,.15);color:rgba(248,243,236,.72);padding:28px 0 32px;font-size:15px}
+footer.site-foot .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;align-items:center}
+footer.site-foot strong{color:#fff}
+footer.site-foot a{color:var(--plum-soft);text-decoration:none}
+
+/* mobile sticky bar */
+.sticky{position:fixed;inset-inline:0;bottom:0;z-index:50;display:none;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);border-top:1px solid var(--line);
+  padding:10px 16px calc(10px + env(safe-area-inset-bottom));align-items:center;gap:14px}
+.sticky .p{font:700 22px/1 var(--body);color:var(--plum-dk);white-space:nowrap}
+.sticky .p small{display:block;font:400 12px var(--body);color:var(--muted);margin-top:3px}
+.sticky .btn{flex:1;min-height:50px;font-size:17px;padding:0 16px}
+
+/* gentle fade-in on scroll */
+.js .reveal{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease;transition-delay:var(--d,0s)}
+.js .reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.js .reveal{opacity:1;transform:none;transition:none} html{scroll-behavior:auto}}
+
+@media (max-width:860px){
+  body{font-size:17px;padding-bottom:76px}
+  section{padding:64px 0}
+  .top .wrap{min-height:68px}
+  .brand small{display:none}
+  .login{font-size:14px}
+  .hero-grid{grid-template-columns:1fr;gap:44px;padding-block:20px 72px}
+  .portrait{order:-1;max-width:250px}
+  .portrait figcaption{font-size:14px;max-width:210px;padding:10px 14px;right:-30px}
+  .portrait figcaption .hand{font-size:26px}
+  .hero h1{font-size:33px}
+  .hero .lead{font-size:18px}
+  .hero .btn{width:100%}
+  .letter{grid-template-columns:1fr;text-align:center;padding:32px 22px;gap:20px}
+  .letter img{width:112px;height:112px;margin:0 auto}
+  .letter p{font-size:18px}
+  .path::before{right:21px}
+  .step{grid-template-columns:44px 1fr;gap:16px}
+  .step .dot{width:44px;height:44px;font-size:18px}
+  .step h3{font-size:20px}
+  .offer{padding:40px 20px}
+  .price .big{font-size:72px}
+  .gets{grid-template-columns:1fr}
+  .closing{padding:72px 0}
+  .sticky{display:flex;transform:translateY(110%);transition:transform .3s ease}
+  .show-sticky .sticky{transform:none}
 }
-h1, h2, h3 { font-family: 'Assistant', 'Heebo', sans-serif; font-weight: 800; line-height: 1.2; }
-h1 { font-size: clamp(2.3rem, 5.6vw, 4.4rem); letter-spacing: -.02em; }
-h2 { font-size: clamp(1.8rem, 3.8vw, 3rem); margin-bottom: 18px; }
-h3 { font-size: 1.3rem; margin-bottom: 6px; }
-img { max-width: 100%; display: block; }
-
-.wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
-.narrow { max-width: 760px; margin: 0 auto; padding: 0 20px; }
-section { padding: 84px 0; }
-.alt { background: var(--paper); border-block: 1px solid var(--line); }
-.sage-bg { background: var(--sage-light); }
-.center { text-align: center; }
-.muted { color: var(--muted); }
-.accent { color: var(--rose-deep); }
-.eyebrow {
-  display: inline-block; font-weight: 800; font-size: .9rem; color: var(--rose-deep);
-  background: var(--blush); border-radius: 999px; padding: 6px 16px; margin-bottom: 18px;
-}
-.eyebrow.sage { color: var(--sage); background: var(--sage-light); }
-.lead { font-size: 1.2rem; color: var(--muted); max-width: 640px; }
-.center .lead { margin-inline: auto; }
-
-
-.btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  min-height: 60px; padding: 0 34px; border-radius: 999px; border: 0; cursor: pointer;
-  background: linear-gradient(135deg, var(--rose), var(--rose-deep)); color: #fff;
-  font: 800 1.15rem 'Assistant', 'Heebo', sans-serif; text-decoration: none;
-  box-shadow: 0 14px 32px rgba(169, 104, 116, .28); transition: transform .2s;
-}
-.btn:hover { transform: translateY(-2px); }
-.btn.ghost { background: #fff; color: var(--rose-deep); border: 2px solid rgba(200, 143, 150, .5); box-shadow: none; }
-.micro { font-size: .85rem; color: var(--muted); margin-top: 10px; }
-
-
-.hero { padding: 56px 0 80px; position: relative; overflow: hidden; }
-.hero::before, .hero::after {
-  content: ''; position: absolute; border-radius: 50%; filter: blur(60px); pointer-events: none;
-}
-.hero::before { width: 460px; height: 460px; background: rgba(200, 143, 150, .16); top: -160px; right: -160px; }
-.hero::after { width: 480px; height: 480px; background: rgba(168, 181, 162, .18); bottom: -200px; left: -180px; }
-.hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 56px; align-items: center; position: relative; z-index: 1; }
-.hero p.lead { margin: 22px 0 30px; }
-.hero-photo { position: relative; max-width: 400px; margin-inline: auto; }
-.hero-photo img { border-radius: 32px; aspect-ratio: 4/5; object-fit: cover; box-shadow: var(--shadow); position: relative; }
-.hero-photo::before { content: ''; position: absolute; inset: 18px -18px -18px 18px; background: var(--blush); border-radius: 32px; transform: rotate(3deg); }
-.photo-note {
-  position: absolute; bottom: -22px; right: -12px; background: #fff; border-radius: 18px; padding: 12px 18px;
-  box-shadow: var(--shadow); font-weight: 700; font-size: .95rem; line-height: 1.4;
-}
-.photo-note small { display: block; font-weight: 400; color: var(--muted); }
-
-
-.cards { display: grid; gap: 18px; }
-.cards.c2 { grid-template-columns: repeat(2, 1fr); }
-.cards.c3 { grid-template-columns: repeat(3, 1fr); }
-.cards.c4 { grid-template-columns: repeat(4, 1fr); }
-.card { background: #fff; border: 1px solid var(--line); border-radius: 24px; padding: 26px; box-shadow: 0 8px 24px rgba(74, 61, 54, .05); }
-.card .num { font: 800 3.2rem/1 'Assistant', sans-serif; color: rgba(200, 143, 150, .25); }
-.card .tag { font-size: .85rem; font-weight: 700; color: var(--sage); }
-.card ul { margin: 12px 18px 0 0; font-size: .95rem; color: var(--muted); }
-.card .result { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line); font-weight: 700; font-size: .98rem; }
-
-
-
-
-
-.offer { background: var(--paper); border-radius: 34px; box-shadow: var(--shadow); padding: 48px 36px; text-align: center; max-width: 720px; margin: 0 auto; }
-.price { display: flex; justify-content: center; align-items: flex-end; gap: 14px; margin: 18px 0 26px; }
-.price .big { font: 800 5.6rem/1 'Assistant', sans-serif; color: var(--rose-deep); }
-.price .big span { font-size: 2rem; }
-.price .old { text-align: right; font-size: .9rem; color: var(--muted); line-height: 1.5; }
-.price .old s { font-size: 1.3rem; }
-
-
-details { background: #fff; border: 1px solid var(--line); border-radius: 18px; margin-bottom: 12px; overflow: hidden; }
-summary { cursor: pointer; list-style: none; padding: 18px 22px; font-weight: 800; display: flex; justify-content: space-between; gap: 12px; }
-summary::-webkit-details-marker { display: none; }
-summary::after { content: '+'; color: var(--rose-deep); font-size: 1.4rem; line-height: 1; }
-details[open] summary::after { content: '−'; }
-details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
-
-
-.sticky {
-  position: fixed; inset-inline: 0; bottom: 0; z-index: 50; display: none;
-  background: rgba(255, 255, 255, .96); backdrop-filter: blur(10px); border-top: 1px solid var(--line);
-  padding: 10px 14px calc(10px + env(safe-area-inset-bottom)); align-items: center; gap: 12px;
-}
-.sticky .p { font: 800 1.3rem/1 'Assistant', sans-serif; color: var(--rose-deep); white-space: nowrap; }
-.sticky .p small { display: block; font: 400 .7rem 'Heebo', sans-serif; color: var(--muted); margin-top: 3px; }
-.sticky .btn { flex: 1; min-height: 50px; font-size: 1rem; padding: 0 16px; }
-
-
-@media (max-width: 860px) {
-  body { font-size: 17px; }
-  section { padding: 60px 0; }
-  .hero { padding-top: 30px; }
-  .hero-grid { grid-template-columns: 1fr; gap: 40px; }
-  .hero-photo { max-width: 230px; }
-  .photo-note { right: -30px; font-size: .85rem; }
-  .hero .center-m { text-align: center; }
-  .hero .center-m .lead { margin-inline: auto; }
-  .cards.c2, .cards.c3, .cards.c4 { grid-template-columns: 1fr; }
-  .offer { padding: 36px 20px; }
-  .price .big { font-size: 4.4rem; }
-  .sticky { display: flex; }
-  body { padding-bottom: 76px; }
-}
-</style>
-<style>
-  /* פלטת האתר הראשי: ירוק עמוק וזהב */
-  :root { --cream: #F7F5EF; --paper: #FFFFFF; --ink: #23332D; --muted: #5F6B66; --rose: #D4AF37; --rose-deep: #B08D1E; --blush: #F5ECCF; --sage: #1B4D3E; --sage-light: #E3EDE8; --green: #1B4D3E; }
-  h2 { color: var(--green); }
-  .accent { color: var(--rose-deep); }
-  .btn { background: linear-gradient(135deg, #E2BF4A, #C49A22); color: #1B2E28; box-shadow: 0 14px 32px rgba(212,175,55,.3); }
-  .dark { background: radial-gradient(circle at 85% 0%, #2A6B57, #1B4D3E 55%, #133A2F); color: #fff; }
-  .dark h1, .dark h2 { color: #fff; }
-  .dark .gold { color: #E9C653; }
-  .dark .lead, .dark p { color: rgba(255,255,255,.82); }
-  .dark .eyebrow { background: rgba(212,175,55,.18); color: #F0D57A; }
-  .dark .micro { color: rgba(255,255,255,.62); }
-  .hero.dark { padding: 70px 0 90px; }
-  .hero.dark::before, .hero.dark::after { display: none; }
-  .hero.dark .hero-photo::before { background: rgba(212,175,55,.35); }
-  .hero.dark .photo-note { color: var(--ink); }
-
-
-
-
-
-  .note { font-family: 'Frank Ruhl Libre', serif; font-size: 1.2rem; line-height: 2; }
-  .note p { margin-bottom: 1em; color: var(--ink); }
-  .offer .big { color: var(--green); }
-  .closing { padding: 80px 0; text-align: center; }
-  .closing h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); }
-
-
-  .site-top { position: absolute; inset-inline: 0; top: 0; z-index: 5; }
-  .site-top .wrap { display: flex; justify-content: space-between; align-items: center; padding-top: 16px; }
-  .site-top .brand { color: #fff; font: 800 1.05rem 'Assistant', sans-serif; text-decoration: none; }
-  .site-top .brand small { display: block; font: 400 .78rem 'Heebo', sans-serif; color: rgba(255,255,255,.7); }
-  .site-top .login { color: #F0D57A; font-weight: 700; font-size: .95rem; text-decoration: none; border-bottom: 1px solid rgba(240,213,122,.5); }
-  .hero.dark { position: relative; padding-top: 110px; }
-  footer.site-foot { background: #133A2F; color: rgba(255,255,255,.75); padding: 28px 0 32px; font-size: .9rem; }
-  footer.site-foot .wrap { display: flex; flex-wrap: wrap; gap: 14px 26px; justify-content: space-between; align-items: center; }
-  footer.site-foot a { color: #F0D57A; text-decoration: none; }
-  footer.site-foot strong { color: #fff; }
-  @media (max-width: 860px) {
-  }
-</style>
-<style>
-  /* קצר וחי: כרטיסי רגעים, מסלול, ותנועה עדינה בגלילה */
-  .moments { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 34px; }
-  .moment { background: #fff; border: 1px solid var(--line); border-radius: 22px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 8px 24px rgba(27, 77, 62, .06); }
-  .moment .now { padding: 22px 22px 18px; font-size: 1.05rem; line-height: 1.65; flex: 1; position: relative; padding-right: 50px; }
-  .moment .now::before { content: '“'; position: absolute; right: 18px; top: 8px; font: 800 2.4rem/1 'Assistant', sans-serif; color: var(--rose); }
-  .moment .after { background: var(--sage-light); color: var(--green); font-weight: 700; padding: 16px 22px 20px; line-height: 1.55; }
-  .moment .after span { display: block; font: 700 .78rem 'Heebo', sans-serif; color: var(--rose-deep); margin-bottom: 4px; }
-  .dots { display: none; justify-content: center; gap: 7px; margin-top: 14px; }
-  .dots i { width: 8px; height: 8px; border-radius: 50%; background: rgba(27, 77, 62, .2); transition: all .25s; }
-  .dots i.on { width: 22px; border-radius: 4px; background: var(--rose); }
-  .moments-end { margin-top: 26px; font-weight: 700; color: var(--green); font-size: 1.1rem; }
-
-  .me { display: flex; gap: 26px; align-items: center; }
-  .me img { flex: none; width: 128px; height: 128px; border-radius: 50%; object-fit: cover; border: 4px solid var(--blush); box-shadow: var(--shadow); }
-  .me .note p { margin-bottom: .5em; }
-  .me .sign { font-weight: 700; color: var(--green); margin: 0; }
-
-  .path { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; position: relative; }
-  .step { background: #fff; border-radius: 22px; padding: 22px 20px; box-shadow: 0 8px 24px rgba(27, 77, 62, .07); position: relative; }
-  .step .dot { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; margin-bottom: 12px;
-    background: linear-gradient(135deg, #E2BF4A, #C49A22); color: #1B2E28; font: 800 1.2rem 'Assistant', sans-serif; }
-  .step .wk { font: 800 .82rem 'Assistant', sans-serif; color: var(--rose-deep); }
-  .step h3 { font-size: 1.15rem; color: var(--green); }
-  .step .res { font-size: .95rem; color: var(--muted); line-height: 1.5; }
-  .step details { background: none; border: 0; border-radius: 0; margin: 10px 0 0; border-top: 1px dashed var(--line); }
-  .step summary { padding: 10px 0 0; font-size: .9rem; color: var(--rose-deep); justify-content: flex-start; }
-  .step summary::after { font-size: 1.1rem; }
-  .step ul { list-style: none; padding: 8px 0 0; font-size: .92rem; color: var(--muted); line-height: 1.55; }
-  .step li { padding-right: 16px; position: relative; margin-bottom: 6px; }
-  .step li::before { content: '•'; position: absolute; right: 2px; color: var(--rose); font-weight: 800; }
-
-  .gets { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; text-align: right; max-width: 580px; margin: 0 auto 30px; }
-  .gets li { display: flex; gap: 12px; align-items: center; background: var(--sage-light); border-radius: 16px; padding: 12px 14px; font-size: .95rem; line-height: 1.45; font-weight: 600; }
-  .gets b { flex: none; width: 42px; height: 42px; border-radius: 50%; background: #fff; display: grid; place-items: center; font: 800 1.15rem 'Assistant', sans-serif; color: var(--green); }
-
-  .js .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; transition-delay: var(--d, 0s); }
-  .js .reveal.in { opacity: 1; transform: none; }
-  .hero .center-m > * { animation: rise .8s ease both; }
-  .hero .center-m > :nth-child(2) { animation-delay: .1s; }
-  .hero .center-m > :nth-child(3) { animation-delay: .2s; }
-  .hero .center-m > :nth-child(n+4) { animation-delay: .3s; }
-  @keyframes rise { from { opacity: 0; transform: translateY(16px); } }
-  @media (prefers-reduced-motion: reduce) {
-    .js .reveal, .hero .center-m > * { opacity: 1; transform: none; transition: none; animation: none; }
-  }
-
-  @media (max-width: 860px) {
-    .hero.dark { padding: 96px 0 56px; }
-    .hero-photo { max-width: 190px; }
-    .moments { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px; margin: 26px -20px 0; padding: 4px 20px 10px; scrollbar-width: none; }
-    .moments::-webkit-scrollbar { display: none; }
-    .moment { flex: 0 0 84%; scroll-snap-align: center; }
-    .dots { display: flex; }
-    .me { flex-direction: column; text-align: center; gap: 16px; }
-    .me img { width: 104px; height: 104px; }
-    .path { grid-template-columns: 1fr; gap: 12px; }
-    .path::before { content: ''; position: absolute; top: 30px; bottom: 30px; right: 39px; width: 2px; background: rgba(212, 175, 55, .45); }
-    .step { display: grid; grid-template-columns: 44px 1fr; gap: 14px; padding: 18px; }
-    .step .dot { margin: 0; position: relative; z-index: 1; }
-    .gets { grid-template-columns: 1fr; }
-  }
-</style>
-<style>
-  /* Polished layer (body.pro): gold hairline labels, line icons, dark method band, face in the first phone screen */
-  .hero-who, .gets svg { display: none; }
-
-  /* ===== גרסה מקצועית ===== */
-  body.pro { font-size: 17.5px; line-height: 1.75; }
-  .pro h1, .pro h2, .pro h3 { font-weight: 700; letter-spacing: -.015em; }
-  .pro h2 { font-size: clamp(1.75rem, 3.4vw, 2.6rem); }
-  .pro section h2::after { content: ''; display: block; width: 44px; height: 2px; background: var(--rose); margin: 18px auto 0; border-radius: 2px; }
-  .pro section { padding: 96px 0; }
-
-  /* כותרות קטנות: קו זהב דק במקום "כדור" צבעוני */
-  .pro .eyebrow { background: none; padding: 0; border-radius: 0; font-size: .82rem; letter-spacing: .08em; color: var(--rose-deep);
-    display: inline-flex; align-items: center; gap: 10px; }
-  .pro .eyebrow::before, .pro .eyebrow::after { content: ''; width: 22px; height: 1px; background: currentColor; opacity: .6; }
-  .pro .dark .eyebrow { background: none; color: #F0D57A; }
-
-  /* כפתור עם חץ, צל עדין יותר */
-  .pro .btn { box-shadow: 0 10px 24px rgba(196, 154, 34, .26); letter-spacing: .01em; }
-  .pro .btn::after { content: '←'; font-weight: 400; transition: transform .2s; }
-  .pro .btn:hover::after { transform: translateX(-4px); }
-
-  /* תמונה: מסגרת זהב דקה במקום ריבוע מסובב */
-  .pro .hero.dark .hero-photo::before { background: none; border: 1.5px solid rgba(233, 198, 83, .6); transform: none; inset: 14px -14px -14px 14px; }
-  .pro .photo-note { border-radius: 12px; border-right: 3px solid var(--rose); }
-
-  /* כרטיסים: אחידים, עם צל רך ושכבתי */
-  .pro .moment, .pro .step { border-radius: 20px; border: 1px solid var(--line); box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 12px 32px rgba(27, 77, 62, .07); }
-  .pro .moment .after span { letter-spacing: .03em; }
-
-  /* מילה ממני: כרטיס אישי עם חתימה */
-  .pro .me { background: #fff; border-radius: 24px; padding: 30px; box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 16px 40px rgba(27, 77, 62, .08); border-top: 3px solid var(--rose); }
-  .pro .me .sign { font-family: 'Frank Ruhl Libre', serif; font-size: 1.35rem; color: var(--rose-deep); }
-
-  /* השיטה: פס ירוק כהה שמשנה קצב בדף */
-  .pro section.sage-bg:not(#offer) { background: radial-gradient(circle at 90% 0%, #2A6B57, #1B4D3E 55%, #133A2F); }
-  .pro section.sage-bg:not(#offer) h2 { color: #fff; }
-  .pro section.sage-bg:not(#offer) .accent { color: #E9C653; }
-  .pro section.sage-bg:not(#offer) .lead, .pro section.sage-bg:not(#offer) .muted { color: rgba(255,255,255,.78); }
-  .pro section.sage-bg:not(#offer) .eyebrow { color: #F0D57A; }
-  .pro .step { border: 0; }
-
-  /* הצעה: פס זהב עליון, מסגרת דקה וסמלים במקום אימוג'י */
-  .pro .offer { position: relative; overflow: hidden; border: 1px solid rgba(212, 175, 55, .45); box-shadow: 0 30px 60px rgba(27, 77, 62, .12); }
-  .pro .offer::before { content: ''; position: absolute; top: 0; inset-inline: 0; height: 6px; background: linear-gradient(90deg, #E2BF4A, #C49A22); }
-  .pro .gets li { background: #fff; border: 1px solid var(--line); }
-  .pro .gets b { background: var(--blush); color: var(--rose-deep); }
-  .pro .gets .t { display: none; }
-  .pro .gets svg { display: block; width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-
-  .pro details { border-radius: 14px; }
-  .pro summary::after { color: var(--rose); }
-
-  @media (max-width: 860px) {
-    .pro section { padding: 64px 0; }
-    /* בטלפון: הפנים שלך כבר במסך הראשון, והכפתור עולה למעלה */
-    .pro .hero-who { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 18px; text-align: right; }
-    .pro .hero-who img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 2px solid #E9C653; }
-    .pro .hero-who span { font: 700 1rem/1.3 'Assistant', sans-serif; color: #fff; }
-    .pro .hero-who small { display: block; font: 400 .8rem 'Heebo', sans-serif; color: rgba(255,255,255,.7); }
-    .pro .hero .hero-photo { display: none; }
-    .pro .hero .eyebrow { display: none; }
-    .pro .hero.dark { padding-bottom: 64px; }
-    .pro .me { padding: 26px 20px; }
-  }
 </style>
 </head>
-<body class="pro">
+<body>
 
 <!-- 1. HERO -->
-<header class="hero dark">
-  <nav class="site-top"><div class="wrap">
-    <a class="brand" href="https://rivkaholtsberg.co.il">בריאות שבאה מהלב<small>המועדון של רבקה הולצברג</small></a>
-    <a class="login" href="/?login=1">כבר חברה? כניסה למועדון</a>
+<header class="hero">
+  <nav class="top"><div class="wrap">
+    <a class="brand" href="https://rivkaholtsberg.co.il"><img src="/img/club/logo.png" alt="">בריאות שבאה מהלב<small>המועדון של רבקה הולצברג</small></a>
+    <a class="login" href="/?login=1">כבר חברה? כניסה</a>
   </div></nav>
   <div class="wrap hero-grid">
-    <div class="center-m">
-      <div class="hero-who"><img src="https://res.cloudinary.com/dyqe95map/image/upload/v1778355572/profile.jpg_zror0m.jpg" alt="רבקה הולצברג"><span>רבקה הולצברג<small>בריאות שבאה מהלב</small></span></div>
-      <span class="eyebrow">מועדון בריאות שבאה מהלב · עם רבקה הולצברג</span>
-      <h1>מפחד לביטחון.<br><span class="gold">בלב, בבית ובגוף.</span></h1>
-      <p class="lead">לדאוג לילדים מתוך אמונה, ולא מתוך פחד. לראות את הכלה בעין טובה. להיות הלב השקט שכל הבית נשען עליו.</p>
-      <a class="btn" href="#offer">אני רוצה להצטרף למועדון</a>
+    <div>
+      <p class="kicker">המועדון של רבקה הולצברג</p>
+      <h1>את יודעת מה טוב לך. <span>אז למה ברגע האמת הלב עדיין מתכווץ?</span></h1>
+      <p class="lead">במועדון אנחנו עוברות יחד, צעד אחרי צעד, מפחד לביטחון. בלב, בבית ובגוף.</p>
+      <a class="btn light" href="#offer">אני רוצה להצטרף למועדון</a>
       <p class="micro">69 ₪ לחודש · כל ההדרכות פתוחות מיד · ביטול בכל עת</p>
     </div>
-    <div class="hero-photo">
-      <img src="https://res.cloudinary.com/dyqe95map/image/upload/v1778355572/profile.jpg_zror0m.jpg" alt="רבקה הולצברג">
-      <div class="photo-note">רבקה הולצברג<small>בריאות שבאה מהלב</small></div>
-    </div>
+    <figure class="portrait">
+      <img src="/img/club/rivka.jpg" alt="רבקה הולצברג" width="880" height="1100">
+      <figcaption>ידעתי, קראתי, ניסיתי. ובכל זאת, ברגע האמת הגבתי בדיוק כמו פעם.<span class="hand">רבקה</span></figcaption>
+    </figure>
   </div>
 </header>
 
-<!-- 2. הרגעים, ומה משתנה -->
-<section class="alt">
-  <div class="wrap">
-    <div class="center reveal">
-      <span class="eyebrow sage">אולי זה נשמע לך מוכר</span>
-      <h2>את מכירה את הרגעים האלה?</h2>
-    </div>
-    <div class="moments reveal" id="moments">
-      <article class="moment">
-        <p class="now">אחרי חצות, ואת עדיין ערה. הראש לא מפסיק לדאוג לילדים.</p>
-        <p class="after"><span>אחרי כמה שבועות במועדון</span>"אני עדיין דואגת להם, אבל מתוך אמונה. והלילה אני ישנה."</p>
-      </article>
-      <article class="moment">
-        <p class="now">את מחכה שהבן יתקשר. לא רוצה שוב להתקשר ראשונה. והטלפון שותק.</p>
-        <p class="after"><span>אחרי כמה שבועות במועדון</span>"התחלתי לראות אותו בעין טובה. והשיחות בינינו נעשו חמות יותר."</p>
-      </article>
-      <article class="moment">
-        <p class="now">הכלה אמרה משפט אחד בשבת. ביום רביעי את עדיין מסובבת אותו בראש.</p>
-        <p class="after"><span>אחרי כמה שבועות במועדון</span>"במקום להיעלב, מצאתי מילה טובה. והשבת עברה בשלום ובאהבה."</p>
-      </article>
-      <article class="moment">
-        <p class="now">ביום ראשון את מתחילה מחדש: הליכה, אוכל נכון, סדר. ביום רביעי זה כבר נגמר.</p>
-        <p class="after"><span>אחרי כמה שבועות במועדון</span>"השינוי מחזיק, כי הוא בא מבפנים. ויש לי כוח בשביל כולם."</p>
-      </article>
-    </div>
-    <div class="dots" id="dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
-    <p class="moments-end center reveal">אם עצרת על אחד מהרגעים האלה, הדף הזה נכתב בשבילך.</p>
-  </div>
-</section>
+<!-- 2. הרגעים, כשיחה -->
+<section class="chat-band"><div class="wrap reveal">
+  <div class="center"><p class="kicker">אולי זה נשמע לך מוכר</p><h2>את מכירה את הרגעים האלה?</h2></div>
+  <div class="convo"><div class="pair"><p class="mine">אחרי חצות, ואת עדיין ערה. הראש לא מפסיק לדאוג לילדים.</p><p class="hers"><b>במועדון לומדות</b>לדאוג להם מתוך אמונה, ולא מתוך פחד. ואז גם הלילה נעשה שקט יותר.</p></div><div class="pair"><p class="mine">את מחכה שהבן יתקשר. לא רוצה שוב להתקשר ראשונה. והטלפון שותק.</p><p class="hers"><b>במועדון לומדות</b>לראות אותו בעין טובה. ומשם השיחות ביניכם נעשות חמות יותר.</p></div><div class="pair"><p class="mine">הכלה אמרה משפט אחד בשבת. ביום רביעי את עדיין מסובבת אותו בראש.</p><p class="hers"><b>במועדון לומדות</b>למצוא מילה טובה במקום להיעלב. כדי שהשבת תעבור בשלום ובאהבה.</p></div><div class="pair"><p class="mine">ביום ראשון את מתחילה מחדש: הליכה, אוכל נכון, סדר. ביום רביעי זה כבר נגמר.</p><p class="hers"><b>במועדון לומדות</b>שינוי שבא מבפנים, ולכן מחזיק. ונשאר לך כוח בשביל כולם.</p></div></div>
+  <p class="convo-end">אם עצרת על אחד מהרגעים האלה, הדף הזה נכתב בשבילך.</p>
+</div></section>
 
 <!-- 3. מילה ממני -->
-<section>
+<section class="letter-band">
   <div class="narrow">
-    <div class="me reveal">
-      <img src="https://res.cloudinary.com/dyqe95map/image/upload/v1778355572/profile.jpg_zror0m.jpg" alt="רבקה הולצברג">
-      <div class="note">
+    <div class="letter reveal">
+      <img src="/img/club/rivka.jpg" alt="רבקה הולצברג" width="880" height="1100" loading="lazy">
+      <div>
         <p>הייתי בדיוק שם. ידעתי, קראתי, ניסיתי. ובכל זאת, ברגע האמת הגבתי בדיוק כמו פעם.</p>
         <p>כשלמדתי איך להפוך ידע להרגל, הכל התחיל לזרום. את זה אני מלמדת במועדון, בגובה העיניים.</p>
-        <p class="sign">רבקה</p>
+        <p class="hand sign">רבקה</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- 4. השיטה -->
-<section class="sage-bg">
+<section>
   <div class="wrap">
-    <div class="center reveal" style="margin-bottom:36px">
-      <span class="eyebrow">זה לא אוסף הרצאות. זו שיטה.</span>
-      <h2>ידע לבד נשאר בראש.<br><span class="accent">לכן כל שיעור נגמר בתרגיל קטן.</span></h2>
+    <div class="center reveal">
+      <p class="kicker">זה לא אוסף הרצאות. זו שיטה.</p>
+      <h2>ידע לבד נשאר בראש. לכן כל שיעור נגמר בתרגיל קטן.</h2>
       <p class="lead">כמה דקות ביום בבית, עד שהתגובה החדשה נעשית טבעית. ככה נראה החודש הראשון שלך:</p>
     </div>
     <ol class="path">
@@ -397,38 +244,38 @@ details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
         <p class="res">"אני כבר לא מתחילה ונשברת."</p>
         <details><summary>מה לומדים כאן</summary><ul><li>למה אני מתחילה בהתלהבות ונשברת אחרי כמה ימים?</li><li>למה אני יודעת מה טוב לי, ובכל זאת דוחה?</li><li>איך מוצאים זמן לעצמי כשכולם צריכים אותי?</li></ul></details>
       </div></li>
-      <li class="step reveal" style="--d:.08s"><b class="dot">2</b><div>
+      <li class="step reveal"><b class="dot">2</b><div>
         <span class="wk">שבוע 2</span><h3>להחליף את הקול שאומר "את לא מספיק"</h3>
         <p class="res">"אני מתחילה לראות את עצמי אחרת."</p>
         <details><summary>מה לומדים כאן</summary><ul><li>למה אני תמיד מגיעה לאותה נקודה, גם כשאני מנסה אחרת?</li><li>איך מחליפים את הקול שאומר "את לא מספיק טובה"?</li><li>למה משפטים חיוביים הרגישו לי מזויפים?</li></ul></details>
       </div></li>
-      <li class="step reveal" style="--d:.16s"><b class="dot">3</b><div>
+      <li class="step reveal"><b class="dot">3</b><div>
         <span class="wk">שבוע 3</span><h3>לישון בשקט גם כשיש דאגות</h3>
         <p class="res">"הדאגה כבר לא מנהלת לי את היום."</p>
         <details><summary>מה לומדים כאן</summary><ul><li>מה עושים עם דאגה לילדים שלא נותנת להירדם?</li><li>איך לא לתת לדבר קטן שהשתבש להרוס לי שבוע?</li><li>למה אני מרגישה ש"לא מגיע לי"?</li></ul></details>
       </div></li>
-      <li class="step reveal" style="--d:.24s"><b class="dot">4</b><div>
+      <li class="step reveal"><b class="dot">4</b><div>
         <span class="wk">שבוע 4</span><h3>הבן, הכלה, הבעל, ואני</h3>
         <p class="res">"הקשר מתחיל להיפתח."</p>
         <details><summary>מה לומדים כאן</summary><ul><li>אני אוהבת אותו. אז למה הוא סגור אליי?</li><li>מה עושים כשהיא חצופה אליי, במקום להיפגע?</li><li>איך מבקשים בבית את מה שאני צריכה, בלי ריב?</li></ul></details>
       </div></li>
     </ol>
-    <p class="center muted reveal" style="margin-top:22px;font-size:.95rem">כל השיעורים פתוחים לך מהיום הראשון, גם מעבר למסלול.</p>
+    <p class="center path-note reveal">כל השיעורים פתוחים לך מהיום הראשון, גם מעבר למסלול.</p>
   </div>
 </section>
 
-<!-- 9. הצעה -->
-<section id="offer" class="sage-bg">
+<!-- 5. הצעה -->
+<section id="offer" class="offer-band">
   <div class="wrap">
-    <div class="offer">
-      <span class="eyebrow sage">חברות חודשית · בלי התחייבות</span>
+    <div class="offer reveal">
+      <p class="kicker">חברות חודשית · בלי התחייבות</p>
       <h2>תני לזה חודש אחד</h2>
-      <div class="price"><div class="big">69<span> ₪</span></div><div class="old">לחודש<br>ביטול בהודעת וואטסאפ</div></div>
+      <div class="price"><div class="big">69<span> ₪</span></div><div class="per">לחודש<br>ביטול בהודעת וואטסאפ</div></div>
       <ul class="gets">
-        <li><b><i class="t">17</i><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M10 8.5v5l4-2.5z"/><path d="M8 21h8"/></svg></b><span>שיעורי השיטה וכל הדרכות המועדון, פתוחים מיד</span></li>
-        <li><b><i class="t">2</i><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></b><span>שיעורים חדשים בכל חודש, שממשיכים מאיפה שעצרנו</span></li>
-        <li><b><i class="t">♡</i><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2c2.9.3 5 2.6 5 5.8"/></svg></b><span>קבוצת המועדון: נשים שהולכות באותה דרך</span></li>
-        <li><b><i class="t">∞</i><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></b><span>כל שיעור נשאר אצלך, לצפייה מתי שנוח</span></li>
+        <li><b><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M10 8.5v5l4-2.5z"/><path d="M8 21h8"/></svg></b><span>שיעורי השיטה וכל הדרכות המועדון, פתוחים מיד</span></li>
+        <li><b><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></b><span>שיעורים חדשים בכל חודש, שממשיכים מאיפה שעצרנו</span></li>
+        <li><b><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2c2.9.3 5 2.6 5 5.8"/></svg></b><span>קבוצת המועדון: נשים שהולכות באותה דרך</span></li>
+        <li><b><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></b><span>כל שיעור נשאר אצלך, לצפייה מתי שנוח</span></li>
       </ul>
       <a class="btn" href="https://private.invoice4u.co.il/newsite/he/clearing/public/i4u-clearing?ProductGuid=550b937f-ac6b-4fc0-bb03-99139eb0193f">כן, אני מצטרפת למועדון</a>
       <p class="micro">תשלום מאובטח · בלי התחייבות</p>
@@ -436,23 +283,24 @@ details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
   </div>
 </section>
 
-<!-- 10. FAQ -->
-<section class="alt">
+<!-- 6. FAQ -->
+<section class="faq">
   <div class="narrow">
     <h2 class="center">שאלות שכבר שאלו אותי</h2>
-    <details><summary>אני מצטרפת באמצע. לא אפסיד?</summary><p>לא. כל השיעורים פתוחים לך מהשיעור הראשון, ואת מצטרפת לשיעורים החיים כשנוח לך.</p></details>
-    <details><summary>אין לי זמן לשיעורים חיים.</summary><p>הכל מוקלט ועולה לאזור החברות. והכלים עצמם לוקחים כמה דקות ביום.</p></details>
-    <details><summary>אני לא דתייה. זה מתאים לי?</summary><p>לגמרי. מקורות יהודיים לצד מדע המוח, בלי הטפה. כל אחת לוקחת ממה שמדבר אליה.</p></details>
-    <details><summary>ואם זה עוד דבר שאתחיל ולא אתמיד בו?</summary><p>בגלל זה זה מועדון ולא קורס: שיעורים חדשים כל חודש, קבוצה שמחכה לך, וכלים קטנים שבנויים להתמדה.</p></details>
-    <details><summary>איך מבטלים?</summary><p>הודעת וואטסאפ אחת. בלי טפסים ובלי אותיות קטנות.</p></details>
+    <details class="q"><summary>אני מצטרפת באמצע. לא אפסיד?</summary><p>לא. כל השיעורים פתוחים לך מהשיעור הראשון, ואת מצטרפת לשיעורים החיים כשנוח לך.</p></details>
+    <details class="q"><summary>אין לי זמן לשיעורים חיים.</summary><p>הכל מוקלט ועולה לאזור החברות. והכלים עצמם לוקחים כמה דקות ביום.</p></details>
+    <details class="q"><summary>אני לא דתייה. זה מתאים לי?</summary><p>לגמרי. מקורות יהודיים לצד מדע המוח, בלי הטפה. כל אחת לוקחת ממה שמדבר אליה.</p></details>
+    <details class="q"><summary>ואם זה עוד דבר שאתחיל ולא אתמיד בו?</summary><p>בגלל זה זה מועדון ולא קורס: שיעורים חדשים כל חודש, קבוצה שמחכה לך, וכלים קטנים שבנויים להתמדה.</p></details>
+    <details class="q"><summary>איך מבטלים?</summary><p>הודעת וואטסאפ אחת. בלי טפסים ובלי אותיות קטנות.</p></details>
   </div>
 </section>
 
-<!-- 11. סיום -->
-<section class="dark closing">
+<!-- 7. סיום -->
+<section class="closing">
   <div class="narrow">
-    <h2>הפחד לא הולך לפני שמתחילות.<br><span class="gold">הוא הולך כי מתחילות.</span></h2>
-    <a class="btn" href="#offer" style="margin-top:18px">אני רוצה להתחיל עכשיו</a>
+    <h2>הפחד לא הולך לפני שמתחילות. <span>הוא הולך כי מתחילות.</span></h2>
+    <a class="btn light" href="#offer">אני רוצה להתחיל עכשיו</a>
+    <span class="hand sign">רבקה</span>
   </div>
 </section>
 
@@ -461,9 +309,9 @@ details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
   <div><a href="https://wa.me/972504207702" target="_blank" rel="noopener">יש לי שאלה</a> · <a href="https://rivkaholtsberg.co.il">האתר של רבקה</a> · © רבקה הולצברג</div>
 </div></footer>
 
-<div class="sticky"><div class="p" style="color:var(--green)">69 ₪<small>לחודש</small></div><a class="btn" href="#offer">להצטרפות</a></div>
+<div class="sticky"><div class="p">69 ₪<small>לחודש</small></div><a class="btn" href="#offer">להצטרפות</a></div>
 <script>
-// Fade sections in as they scroll into view, and keep the swipe dots in sync with the moment cards.
+// Fade sections in as they scroll into view.
 (function () {
   var items = document.querySelectorAll('.reveal');
   if (!('IntersectionObserver' in window)) { items.forEach(function (el) { el.classList.add('in'); }); return; }
@@ -472,13 +320,11 @@ details p { padding: 0 22px 20px; color: var(--muted); font-size: .98rem; }
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
   items.forEach(function (el) { io.observe(el); });
 
-  var track = document.getElementById('moments'), dots = document.querySelectorAll('#dots i');
-  if (!track || !dots.length) return;
-  track.addEventListener('scroll', function () {
-    var card = track.children[0], step = card.offsetWidth + 14;
-    var i = Math.min(dots.length - 1, Math.round(Math.abs(track.scrollLeft) / step));
-    dots.forEach(function (d, k) { d.classList.toggle('on', k === i); });
-  }, { passive: true });
+  // The phone bar appears only once the hero button has scrolled away, so the two never compete.
+  var heroBtn = document.querySelector('.hero .btn');
+  if (heroBtn) new IntersectionObserver(function (en) {
+    document.body.classList.toggle('show-sticky', !en[0].isIntersecting && en[0].boundingClientRect.top < 0);
+  }).observe(heroBtn);
 })();
 </script>
 <script>
