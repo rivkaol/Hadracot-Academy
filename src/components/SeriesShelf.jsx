@@ -3,9 +3,13 @@ import { CheckCircle2, ChevronLeft, Lock, PlayCircle } from 'lucide-react'
 // מדף אחד: סדרה (חלקים ממוספרים לפי הסדר) או מדף הבריאות (בלי מספור).
 // שורות גדולות וברורות (קהל 45–70) — כותרת 20px+, תמונה גדולה, שורה שלמה לחיצה, סטטוס במילים ולא רק בצבע.
 const TONES = {
-  series: { accent: '#7E3F55', soft: '#F6ECEE', bar: '#A0627A' },
+  series: { accent: '#7E3F55', soft: '#F4E9ED', bar: '#A0627A' },
   health: { accent: '#173A2D', soft: '#EEF3EF', bar: '#1F4A3A' },
 }
+// "הלב": כל סדרה מקבלת גוון שזיף משלה, מהבהיר לעמוק (כמו ארבעת שלבי המסלול במותג).
+// הגוון מופיע בפס העליון של הסדרה ובעיגולי המספרים. בגוון הבהיר המספר כתוב בשזיף עמוק, בשאר בלבן.
+const SERIES_SHADES = ['#E9D3DB', '#C99AAB', '#A0627A', '#6A3447']
+const shadeFor = (n) => SERIES_SHADES[(Math.max(1, n) - 1) % SERIES_SHADES.length]
 
 export default function SeriesShelf({
   shelf,
@@ -23,9 +27,15 @@ export default function SeriesShelf({
   const total = shelf.tutorials.length
   const done = shelf.tutorials.filter((x) => completedTutorials.includes(x.id)).length
   const isNumbered = shelf.number != null
+  const shade = isNumbered ? shadeFor(shelf.number) : null
+  const badgeBg = shade || t.accent
+  const badgeText = shade === SERIES_SHADES[0] ? '#6A3447' : '#FFFFFF'
 
   return (
-    <section className="bg-white rounded-[1.5rem] border border-gray-100 shadow-[0_10px_30px_rgba(0,0,0,0.04)] overflow-hidden">
+    <section
+      className="bg-white rounded-[1.5rem] border border-gray-100 shadow-[0_10px_30px_rgba(0,0,0,0.04)] overflow-hidden"
+      style={shade ? { borderTop: `6px solid ${shade}` } : undefined}
+    >
       {showHeader && (
         <header className="px-5 md:px-7 pt-6 pb-5" style={{ background: t.soft }}>
           <h4 className="text-[26px] md:text-[30px] font-bold text-[#2B2724] leading-tight">
@@ -63,8 +73,8 @@ export default function SeriesShelf({
                   )}
                   {isNumbered && (
                     <span
-                      className="absolute top-1.5 right-1.5 min-w-[32px] h-[32px] px-1.5 rounded-full text-white text-base font-bold flex items-center justify-center shadow"
-                      style={{ background: t.accent }}
+                      className="absolute top-1.5 right-1.5 min-w-[32px] h-[32px] px-1.5 rounded-full text-base font-bold flex items-center justify-center shadow"
+                      style={{ background: badgeBg, color: badgeText }}
                     >
                       {i + 1}
                     </span>

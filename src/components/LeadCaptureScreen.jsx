@@ -73,7 +73,7 @@ export default function LeadCaptureScreen({ onRegister, onCancel, onLoginRequest
         <div className="absolute top-0 right-0 w-32 h-32 bg-[#A0627A]/10 rounded-full blur-3xl -translate-y-10 translate-x-10"></div>
 
         <div className="relative z-10 mt-2">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-[#A0627A] to-[#7E3F55] text-white mb-4 shadow-md mx-auto">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#7E3F55] text-white mb-4 shadow-md mx-auto">
             <Sparkles size={26} />
           </div>
 
@@ -147,7 +147,7 @@ export default function LeadCaptureScreen({ onRegister, onCancel, onLoginRequest
                 <button
                   type="submit"
                   disabled={isLoading || !valid}
-                  className="w-full bg-gradient-to-br from-[#A0627A] to-[#7E3F55] hover:shadow-lg disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed text-white py-4 rounded-2xl font-bold text-lg shadow-[0_12px_28px_rgba(126,63,85,0.25)] transition-all flex items-center justify-center gap-2 mt-2"
+                  className="w-full bg-[#7E3F55] hover:shadow-lg disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed text-white py-4 rounded-2xl font-bold text-lg shadow-[0_4px_0_rgba(0,0,0,0.18)] transition-all flex items-center justify-center gap-2 mt-2"
                 >
                   {isLoading ? (
                     <><Loader size={20} className="animate-spin text-white" /> רגע...</>

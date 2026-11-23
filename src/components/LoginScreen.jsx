@@ -23,30 +23,30 @@ export default function LoginScreen({ onLogin, onCancel, isLoading, error, pendi
     `${pricingConfig.whatsappBaseUrl}?text=${encodeURIComponent('היי רבקה, אשמח לקבל פרטים ולינק רכישה להדרכה: ' + (pendingTutorial?.title || ''))}`
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center p-4 bg-[#FFFFFF] pb-10">
-      <div className="w-full max-w-md bg-white p-8 sm:p-10 rounded-[2.5rem] shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-gray-100 text-center relative overflow-hidden">
+    // "הלב": רקע ורוד-שזיף רך, כרטיס לבן עם פס שזיף עליון ותמונה של רבקה. הטופס עצמו נשאר ישר ונקי.
+    <div className="flex-1 flex flex-col items-center justify-center p-4 bg-[#F4E9ED] pb-10">
+      <div className="w-full max-w-md bg-white p-8 sm:p-10 rounded-lg border-t-[6px] border-[#7E3F55] shadow-[0_2px_4px_rgba(106,52,71,0.05),0_30px_60px_rgba(106,52,71,0.14)] text-center relative">
         <button
           onClick={onCancel}
+          aria-label="חזרה"
           className="absolute top-6 left-6 text-gray-400 hover:text-[#2B2724] transition-colors z-20"
         >
           <ChevronRight size={24} />
         </button>
 
-        <div className="absolute top-0 right-0 w-32 h-32 bg-[#A0627A]/10 rounded-full blur-3xl -translate-y-10 translate-x-10"></div>
-        <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#2B2724]/5 rounded-full blur-3xl translate-y-10 -translate-x-10"></div>
-
         <div className="relative z-10 mt-2">
           <img
-            src="/logo.jpg.png"
-            alt="לוגו"
-            className="h-16 w-auto mx-auto mb-4 object-contain"
-            onError={(e) => { e.target.style.display = 'none' }}
+            src="/img/club/rivka.jpg"
+            alt="רבקה הולצברג"
+            width="880"
+            height="1100"
+            className="w-24 h-24 mx-auto mb-4 rounded-full object-cover object-[center_20%] ring-4 ring-[#F4E9ED]"
           />
 
           <h1 className="text-3xl font-bold text-[#1F4A3A] mb-2">ברוכה הבאה</h1>
           {knownMember ? (
-            <div className="bg-[#EEF3EF] text-[#1F4A3A] text-sm font-bold px-4 py-3 rounded-2xl mb-6 leading-[1.7]">
-              נראה שאת כבר מנויה במועדון! 💚<br />
+            <div className="bg-[#F4E9ED] text-[#6A3447] text-[15px] font-bold px-4 py-3 rounded-2xl mb-6 leading-[1.7]">
+              נראה שאת כבר מנויה במועדון!<br />
               התחברי עם הסיסמה שלך (מספר הטלפון) כדי להיכנס לצפייה מלאה.
             </div>
           ) : (
@@ -76,7 +76,7 @@ export default function LoginScreen({ onLogin, onCancel, isLoading, error, pendi
                     key={domain}
                     type="button"
                     onClick={() => handleEmailAppend(domain)}
-                    className="text-[11px] font-medium bg-gray-100 hover:bg-[#A0627A]/20 hover:text-[#7E3F55] text-gray-500 px-2.5 py-1.5 rounded-lg transition-colors"
+                    className="text-[13px] font-medium bg-gray-100 hover:bg-[#A0627A]/20 hover:text-[#7E3F55] text-gray-500 px-2.5 py-1.5 rounded-lg transition-colors"
                   >
                     {domain}
                   </button>
@@ -111,7 +111,7 @@ export default function LoginScreen({ onLogin, onCancel, isLoading, error, pendi
             <button
               type="submit"
               disabled={isLoading || !emailInput.trim() || !passwordInput.trim()}
-              className="w-full bg-gradient-to-br from-[#A0627A] to-[#7E3F55] hover:shadow-lg disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed text-white py-4 rounded-2xl font-bold text-lg shadow-[0_12px_28px_rgba(126,63,85,0.25)] transition-all flex items-center justify-center gap-2 mt-4"
+              className="w-full bg-[#7E3F55] hover:-translate-y-0.5 disabled:bg-gray-300 disabled:shadow-none disabled:cursor-not-allowed text-white py-4 rounded-full font-bold text-lg shadow-[0_4px_0_rgba(0,0,0,0.18)] transition-all flex items-center justify-center gap-2 mt-4"
             >
               {isLoading ? (
                 <>
@@ -129,7 +129,7 @@ export default function LoginScreen({ onLogin, onCancel, isLoading, error, pendi
               href={purchaseUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 bg-white text-[#7E3F55] border border-[#A0627A]/50 hover:bg-[#A0627A]/10 font-bold py-2.5 px-6 rounded-xl transition-all shadow-sm w-full"
+              className="inline-flex items-center justify-center gap-2 bg-white text-[#7E3F55] border border-[#A0627A]/50 hover:bg-[#A0627A]/10 font-bold py-2.5 px-6 rounded-full transition-all w-full"
             >
               <Sparkles size={16} />
               לפרטים והרשמה

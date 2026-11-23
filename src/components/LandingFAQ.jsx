@@ -72,7 +72,7 @@ export default function LandingFAQ({ onJoinClick }) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={onJoinClick}
-            className="inline-flex items-center justify-center gap-2 bg-gradient-to-br from-[#A0627A] to-[#7E3F55] text-white px-8 py-4 rounded-full font-bold text-lg shadow-[0_12px_28px_rgba(126,63,85,0.3)] hover:-translate-y-0.5 transition-all"
+            className="inline-flex items-center justify-center gap-2 bg-[#7E3F55] text-white px-8 py-4 rounded-full font-bold text-lg shadow-[0_4px_0_rgba(0,0,0,0.18)] hover:-translate-y-0.5 transition-all"
           >
             אני רוצה להיכנס למועדון
             <ChevronLeft size={20} />

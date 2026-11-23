@@ -714,7 +714,7 @@ export default function App() {
             href={pricingConfig.membershipCheckoutUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-gradient-to-br from-[#A0627A] to-[#7E3F55] text-white px-7 py-3 rounded-full font-bold shadow-[0_12px_28px_rgba(126,63,85,0.25)]"
+            className="bg-[#7E3F55] text-white px-7 py-3 rounded-full font-bold shadow-[0_4px_0_rgba(0,0,0,0.18)]"
           >
             לחידוש החברות
           </a>

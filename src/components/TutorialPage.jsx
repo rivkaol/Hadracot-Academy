@@ -283,7 +283,7 @@ export default function TutorialPage({
                 // במובייל: מסך מלא וממורכז (כדי שהכפתור לא ייחתך); במחשב: בתוך הווידאו כמו קודם
                 <div className="fixed inset-0 z-[60] lg:absolute lg:z-30 flex items-center justify-center text-center px-6 py-8 overflow-y-auto" dir="rtl" style={{ background: 'rgba(43,39,36,0.96)' }}>
                   <div className="max-w-lg w-full my-auto">
-                    <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-[#A0627A] to-[#7E3F55] text-white mb-4 sm:mb-5 shadow-lg mx-auto">
+                    <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#7E3F55] text-white mb-4 sm:mb-5 shadow-lg mx-auto">
                       <Crown size={28} />
                     </div>
                     <h2 className="text-2xl md:text-3xl font-bold text-[#FFFFFF] mb-3">רק התחלנו.</h2>
@@ -293,7 +293,7 @@ export default function TutorialPage({
                     </p>
                     <button
                       onClick={() => onShowTrackMap && onShowTrackMap()}
-                      className="mt-5 inline-flex items-center justify-center gap-2 bg-gradient-to-br from-[#A0627A] to-[#7E3F55] text-white font-bold text-base md:text-lg px-8 py-4 rounded-full shadow-[0_12px_28px_rgba(126,63,85,0.35)] hover:-translate-y-0.5 transition-all"
+                      className="mt-5 inline-flex items-center justify-center gap-2 bg-[#7E3F55] text-white font-bold text-base md:text-lg px-8 py-4 rounded-full shadow-[0_12px_28px_rgba(126,63,85,0.35)] hover:-translate-y-0.5 transition-all"
                     >
                       אני רוצה להמשיך במסע
                     </button>
@@ -326,7 +326,7 @@ export default function TutorialPage({
                 {nextTutorial && (
                   <button
                     onClick={onNext}
-                    className="flex items-center justify-between gap-3 text-right bg-gradient-to-br from-[#A0627A] to-[#7E3F55] text-white px-6 py-4 rounded-[1.25rem] w-full shadow-[0_12px_28px_rgba(126,63,85,0.25)] hover:-translate-y-0.5 transition-all"
+                    className="flex items-center justify-between gap-3 text-right bg-[#7E3F55] text-white px-6 py-4 rounded-[1.25rem] w-full shadow-[0_4px_0_rgba(0,0,0,0.18)] hover:-translate-y-0.5 transition-all"
                   >
                     <span className="min-w-0">
                       <span className="block text-base font-medium opacity-90">
@@ -402,7 +402,7 @@ export default function TutorialPage({
                   <div className="mt-4 flex items-center justify-end">
                     <button
                       onClick={handleSaveNotes}
-                      className="bg-gradient-to-br from-[#A0627A] to-[#7E3F55] text-white px-6 py-2.5 rounded-full font-bold flex items-center gap-2 transition-all shadow-[0_12px_28px_rgba(126,63,85,0.25)] hover:shadow-md hover:-translate-y-0.5"
+                      className="bg-[#7E3F55] text-white px-6 py-2.5 rounded-full font-bold flex items-center gap-2 transition-all shadow-[0_4px_0_rgba(0,0,0,0.18)] hover:shadow-md hover:-translate-y-0.5"
                     >
                       <Save size={18} /> שמירה
                     </button>

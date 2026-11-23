@@ -24,7 +24,7 @@ export default function MemberJourneyStep({ tutorial, totalSteps, status, ctaLab
   const statusPill = isCompleted
     ? { text: '✓ הושלם', className: 'bg-[#EEF3EF] text-[#1F4A3A]' }
     : isCurrent
-      ? { text: 'את כאן', className: 'bg-gradient-to-br from-[#A0627A] to-[#7E3F55] text-white' }
+      ? { text: 'את כאן', className: 'bg-[#7E3F55] text-white' }
       : { text: 'מחכה לך בהמשך', className: 'bg-[#FFFFFF] text-[#9E9188] border border-[#ECE6E1]' }
 
   return (
@@ -86,7 +86,7 @@ export default function MemberJourneyStep({ tutorial, totalSteps, status, ctaLab
 
           <span
             className={`mt-auto inline-flex w-fit items-center gap-1.5 text-sm font-bold ${
-              isCurrent ? 'text-white bg-gradient-to-br from-[#A0627A] to-[#7E3F55] px-5 py-2.5 rounded-full shadow-[0_10px_24px_rgba(126,63,85,0.25)]' : 'text-[#7E3F55]'
+              isCurrent ? 'text-white bg-[#7E3F55] px-5 py-2.5 rounded-full shadow-[0_10px_24px_rgba(126,63,85,0.25)]' : 'text-[#7E3F55]'
             }`}
           >
             {ctaLabel}

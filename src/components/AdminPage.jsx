@@ -154,7 +154,7 @@ export default function AdminPage({ adminKey }) {
 
 function StatCard({ icon: Icon, label, value, accent }) {
   return (
-    <div className={`rounded-2xl p-4 md:p-5 border shadow-sm ${accent ? 'bg-gradient-to-br from-[#A0627A] to-[#7E3F55] text-white border-transparent' : 'bg-white border-gray-100 text-[#2B2724]'}`}>
+    <div className={`rounded-2xl p-4 md:p-5 border shadow-sm ${accent ? 'bg-[#7E3F55] text-white border-transparent' : 'bg-white border-gray-100 text-[#2B2724]'}`}>
       <Icon size={20} className={accent ? 'text-white/90' : 'text-[#7E3F55]'} />
       <div className="text-2xl md:text-3xl font-bold mt-2">{value}</div>
       <div className={`text-xs md:text-sm ${accent ? 'text-white/90' : 'text-[#6B625C]'}`}>{label}</div>

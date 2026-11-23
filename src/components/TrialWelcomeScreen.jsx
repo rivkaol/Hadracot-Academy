@@ -96,7 +96,7 @@ export default function TrialWelcomeScreen({ tutorial, tutorialsData, onStart, o
             <div key={s.n} className="flex items-center">
               <span
                 className={`text-[11px] font-bold px-2.5 py-1 rounded-full whitespace-nowrap ${
-                  s.n === 1 ? 'bg-gradient-to-br from-[#A0627A] to-[#7E3F55] text-white' : 'bg-white text-gray-400 border border-gray-200'
+                  s.n === 1 ? 'bg-[#7E3F55] text-white' : 'bg-white text-gray-400 border border-gray-200'
                 }`}
               >
                 {s.title}
@@ -120,7 +120,7 @@ export default function TrialWelcomeScreen({ tutorial, tutorialsData, onStart, o
           <h2 className="text-xl font-bold text-[#1F4A3A] mb-6">{tutorial?.title}</h2>
           <button
             onClick={onStart}
-            className="w-full bg-gradient-to-br from-[#A0627A] to-[#7E3F55] text-white py-3.5 rounded-2xl font-bold text-lg shadow-[0_12px_28px_rgba(126,63,85,0.25)] inline-flex items-center justify-center gap-2"
+            className="w-full bg-[#7E3F55] text-white py-3.5 rounded-2xl font-bold text-lg shadow-[0_4px_0_rgba(0,0,0,0.18)] inline-flex items-center justify-center gap-2"
           >
             מתחילה לצפות
             <ChevronLeft size={20} />

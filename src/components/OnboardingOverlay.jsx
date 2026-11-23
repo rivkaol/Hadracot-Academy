@@ -26,7 +26,7 @@ export default function OnboardingOverlay({ onDismiss, onJoinCommunity }) {
         </ol>
         <button
           onClick={onDismiss}
-          className="w-full bg-gradient-to-br from-[#A0627A] to-[#7E3F55] text-white py-3.5 rounded-2xl font-bold shadow-[0_12px_28px_rgba(126,63,85,0.25)] mb-3"
+          className="w-full bg-[#7E3F55] text-white py-3.5 rounded-2xl font-bold shadow-[0_4px_0_rgba(0,0,0,0.18)] mb-3"
         >
           יאללה, מתחילות
         </button>

@@ -45,7 +45,7 @@ export default function MemberAreaPreview({ tutorialsData }) {
               צעד {current.recommendedOrder} מתוך {track.length}
             </p>
             <h3 className="font-bold text-[#1F4A3A] text-lg leading-tight mb-4">{current.title}</h3>
-            <span className="inline-flex items-center gap-2 bg-gradient-to-br from-[#A0627A] to-[#7E3F55] text-white px-6 py-2.5 rounded-full font-bold text-sm cursor-default opacity-90">
+            <span className="inline-flex items-center gap-2 bg-[#7E3F55] text-white px-6 py-2.5 rounded-full font-bold text-sm cursor-default opacity-90">
               המשיכי לצפות
             </span>
           </div>
@@ -66,7 +66,7 @@ export default function MemberAreaPreview({ tutorialsData }) {
                   צעד {t.recommendedOrder} — {t.title}
                 </span>
                 {isCurrent && (
-                  <span className="shrink-0 text-[10px] font-bold text-white bg-gradient-to-br from-[#A0627A] to-[#7E3F55] px-2 py-0.5 rounded-full mr-auto">
+                  <span className="shrink-0 text-[10px] font-bold text-white bg-[#7E3F55] px-2 py-0.5 rounded-full mr-auto">
                     את כאן
                   </span>
                 )}
