@@ -30,10 +30,10 @@ export default function LandingFAQ({ onJoinClick }) {
   const [openIndex, setOpenIndex] = useState(null)
 
   return (
-    <section className="visitor-landing bg-[#FAF7F2] py-20 md:py-28">
+    <section className="visitor-landing bg-[#FFFFFF] py-20 md:py-28">
       <div className="max-w-2xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12">
-          <h2 className="text-[clamp(1.7rem,3.6vw,2.4rem)] font-extrabold text-[#3E3935] leading-[1.3]">
+          <h2 className="text-[clamp(1.7rem,3.6vw,2.4rem)] font-extrabold text-[#1F4A3A] leading-[1.3]">
             שאלות שכדאי לדעת
           </h2>
         </div>
@@ -42,19 +42,19 @@ export default function LandingFAQ({ onJoinClick }) {
           {FAQ_ITEMS.map((item, i) => {
             const isOpen = openIndex === i
             return (
-              <div key={i} className="bg-white rounded-2xl border border-[#3E3935]/8 overflow-hidden">
+              <div key={i} className="bg-white rounded-2xl border border-[#6A3447]/8 overflow-hidden">
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : i)}
                   className="w-full flex items-center justify-between gap-4 text-right p-5 md:p-6"
                 >
-                  <span className="font-bold text-[#3E3935] text-lg">{item.q}</span>
+                  <span className="font-bold text-[#2B2724] text-lg">{item.q}</span>
                   <ChevronDown
                     size={20}
-                    className={`shrink-0 text-[#9E626C] transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                    className={`shrink-0 text-[#7E3F55] transition-transform ${isOpen ? 'rotate-180' : ''}`}
                   />
                 </button>
                 {isOpen && (
-                  <div className="px-5 md:px-6 pb-5 md:pb-6 text-[#716861] leading-[1.9] text-base md:text-lg">
+                  <div className="px-5 md:px-6 pb-5 md:pb-6 text-[#6B625C] leading-[1.9] text-base md:text-lg">
                     {item.a}
                   </div>
                 )}
@@ -64,7 +64,7 @@ export default function LandingFAQ({ onJoinClick }) {
         </div>
 
         <div className="text-center mt-16">
-          <h3 className="text-[clamp(1.5rem,3vw,2rem)] font-extrabold text-[#3E3935] leading-[1.35] mb-7">
+          <h3 className="text-[clamp(1.5rem,3vw,2rem)] font-extrabold text-[#1F4A3A] leading-[1.35] mb-7">
             מוכנה להתחיל?
           </h3>
           <a
@@ -72,18 +72,18 @@ export default function LandingFAQ({ onJoinClick }) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={onJoinClick}
-            className="inline-flex items-center justify-center gap-2 bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white px-8 py-4 rounded-full font-bold text-lg shadow-[0_12px_28px_rgba(158,98,108,0.3)] hover:-translate-y-0.5 transition-all"
+            className="inline-flex items-center justify-center gap-2 bg-[#7E3F55] text-white px-8 py-4 rounded-full font-bold text-lg shadow-[0_4px_0_rgba(0,0,0,0.18)] hover:-translate-y-0.5 transition-all"
           >
             אני רוצה להיכנס למועדון
             <ChevronLeft size={20} />
           </a>
-          <p className="text-sm text-[#716861] mt-4">
+          <p className="text-sm text-[#6B625C] mt-4">
             יש לך שאלה לפני שאת מצטרפת?{' '}
             <a
               href={`${pricingConfig.whatsappBaseUrl}?text=${encodeURIComponent('היי רבקה, יש לי שאלה על המועדון')}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#9E626C] font-bold hover:underline"
+              className="text-[#7E3F55] font-bold hover:underline"
             >
               אפשר לשאול אותי בוואטסאפ
             </a>

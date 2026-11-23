@@ -22,10 +22,10 @@ export default function MemberJourneyStep({ tutorial, totalSteps, status, ctaLab
   }
 
   const statusPill = isCompleted
-    ? { text: '✓ הושלם', className: 'bg-[#E8EEE5] text-[#687B63]' }
+    ? { text: '✓ הושלם', className: 'bg-[#EEF3EF] text-[#1F4A3A]' }
     : isCurrent
-      ? { text: 'את כאן', className: 'bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white' }
-      : { text: 'מחכה לך בהמשך', className: 'bg-[#FAF7F2] text-[#9E9188] border border-[#EDE6DC]' }
+      ? { text: 'את כאן', className: 'bg-[#7E3F55] text-white' }
+      : { text: 'מחכה לך בהמשך', className: 'bg-[#FFFFFF] text-[#9E9188] border border-[#ECE6E1]' }
 
   return (
     <div
@@ -34,10 +34,10 @@ export default function MemberJourneyStep({ tutorial, totalSteps, status, ctaLab
       onClick={onSelect}
       onKeyDown={handleKeyDown}
       aria-current={isCurrent ? 'step' : undefined}
-      className={`group h-full flex flex-col bg-white rounded-[1.5rem] overflow-hidden cursor-pointer transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C88F96] focus-visible:ring-offset-2 ${
+      className={`group h-full flex flex-col bg-white rounded-[1.5rem] overflow-hidden cursor-pointer transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A0627A] focus-visible:ring-offset-2 ${
         isCurrent
-          ? 'border-2 border-[#C88F96] shadow-[0_16px_40px_rgba(158,98,108,0.2)]'
-          : 'border border-gray-100 shadow-[0_8px_20px_rgba(148,163,136,0.08)] hover:border-[#C88F96]/40 hover:-translate-y-0.5'
+          ? 'border-2 border-[#A0627A] shadow-[0_16px_40px_rgba(126,63,85,0.2)]'
+          : 'border border-gray-100 shadow-[0_8px_20px_rgba(31,74,58,0.08)] hover:border-[#A0627A]/40 hover:-translate-y-0.5'
       }`}
     >
         <div className="relative w-full aspect-[16/10] shrink-0 overflow-hidden">
@@ -49,12 +49,12 @@ export default function MemberJourneyStep({ tutorial, totalSteps, status, ctaLab
               className="absolute inset-0 w-full h-full object-cover"
             />
           ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-[#E8EEE5] to-[#FAF7F2] flex items-center justify-center">
-              <span className="text-5xl font-black text-[#C88F96]/25">{tutorial.recommendedOrder}</span>
+            <div className="absolute inset-0 bg-gradient-to-br from-[#EEF3EF] to-[#FFFFFF] flex items-center justify-center">
+              <span className="text-5xl font-black text-[#A0627A]/25">{tutorial.recommendedOrder}</span>
             </div>
           )}
           {isCompleted && (
-            <span className="absolute top-3 right-3 flex items-center justify-center w-7 h-7 rounded-full bg-[#687B63] shadow">
+            <span className="absolute top-3 right-3 flex items-center justify-center w-7 h-7 rounded-full bg-[#1F4A3A] shadow">
               <CheckCircle2 size={16} className="text-white" strokeWidth={3} />
             </span>
           )}
@@ -63,7 +63,7 @@ export default function MemberJourneyStep({ tutorial, totalSteps, status, ctaLab
         <div className="flex-1 p-5 flex flex-col min-w-0">
           <div className="flex items-center gap-2.5 mb-2 flex-wrap">
             {tutorial.recommendedOrder != null && (
-              <span className="text-sm font-bold text-[#9E626C]">
+              <span className="text-sm font-bold text-[#7E3F55]">
                 צעד {tutorial.recommendedOrder} מתוך {totalSteps}
               </span>
             )}
@@ -72,12 +72,12 @@ export default function MemberJourneyStep({ tutorial, totalSteps, status, ctaLab
             </span>
           </div>
 
-          <h4 className="text-[19px] font-bold text-[#3E3935] leading-snug mb-1.5">
+          <h4 className="text-[19px] font-bold text-[#2B2724] leading-snug mb-1.5">
             {tutorial.title}
           </h4>
 
           {tutorial.description && (
-            <p className="text-[15px] text-[#716861] leading-relaxed line-clamp-2 mb-2">
+            <p className="text-[15px] text-[#6B625C] leading-relaxed line-clamp-2 mb-2">
               {tutorial.description}
             </p>
           )}
@@ -86,7 +86,7 @@ export default function MemberJourneyStep({ tutorial, totalSteps, status, ctaLab
 
           <span
             className={`mt-auto inline-flex w-fit items-center gap-1.5 text-sm font-bold ${
-              isCurrent ? 'text-white bg-gradient-to-br from-[#C88F96] to-[#9E626C] px-5 py-2.5 rounded-full shadow-[0_10px_24px_rgba(158,98,108,0.25)]' : 'text-[#9E626C]'
+              isCurrent ? 'text-white bg-[#7E3F55] px-5 py-2.5 rounded-full shadow-[0_10px_24px_rgba(126,63,85,0.25)]' : 'text-[#7E3F55]'
             }`}
           >
             {ctaLabel}

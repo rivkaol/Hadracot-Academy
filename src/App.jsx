@@ -32,15 +32,15 @@ const MEMBER_NAV_ITEMS = [
 ]
 // כפתורי התפריט העליון לחברה: כפתורים ממשיים עם אייקון ורקע — לא טקסט חופשי שלא נקלט כלחיץ
 const NAV_PILL = 'flex items-center gap-2 text-lg font-bold px-5 py-2.5 rounded-full border transition-colors'
-const NAV_PILL_IDLE = 'bg-[#FAF7F2] text-[#3E3935] border-[#E8E0D6] hover:bg-[#F3ECE3] hover:border-[#C88F96]'
-const NAV_PILL_ACTIVE = 'bg-[#3E3935] text-white border-[#3E3935]'
+const NAV_PILL_IDLE = 'bg-[#FFFFFF] text-[#2B2724] border-[#ECE6E1] hover:bg-[#F4E9ED] hover:border-[#C99AAB]'
+const NAV_PILL_ACTIVE = 'bg-[#6A3447] text-white border-[#6A3447]'
 
 // פס עליון סטיקי מעל הכול, למי שעדיין לא חברה — לעולם לא חבוי בתפריט.
 function VisitorTopBar({ onLogin }) {
   return (
-    <div className="bg-[#3E3935] text-white text-center py-2.5 px-4 text-sm font-medium sticky top-0 z-[60]">
+    <div className="bg-[#6A3447] text-white text-center py-2.5 px-4 text-sm font-medium sticky top-0 z-[60]">
       כבר חברת מועדון?{' '}
-      <button onClick={onLogin} className="underline font-bold hover:text-[#C88F96] transition-colors">
+      <button onClick={onLogin} className="underline font-bold hover:text-[#E9D3DB] transition-colors">
         התחברי כאן
       </button>
     </div>
@@ -69,19 +69,22 @@ function Header({
   // לחברה: התפריט תופס את כל הצד, והשורה החיוורת באמצע יורדת (הלוגו לא קיים בשרת ממילא)
   const wideNav = isMember && !showBack
   return (
-    <header className="bg-white md:sticky md:top-0 z-50 border-b border-gray-100 shadow-sm">
+    <header className="bg-white md:sticky md:top-0 z-50 border-b border-[#F4E9ED] shadow-[0_4px_20px_rgba(106,52,71,0.05)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between relative">
         <div className={`${wideNav ? 'flex-1' : 'w-1/3'} flex items-center gap-3`}>
           {showBack ? (
             <button
               onClick={onBack}
-              className="flex items-center gap-1.5 md:gap-2 text-[#3E3935] font-bold bg-[#E8EEE5] hover:bg-[#3E3935] hover:text-[#C88F96] px-4 md:px-5 py-2.5 rounded-full transition-all duration-300 shadow-sm border border-[#3E3935]/10"
+              className="flex items-center gap-1.5 md:gap-2 text-[#2B2724] font-bold bg-[#EEF3EF] hover:bg-[#6A3447] hover:text-white px-4 md:px-5 py-2.5 rounded-full transition-all duration-300 shadow-sm border border-[#6A3447]/10"
             >
               <ChevronRight size={24} />
               <span className="text-base md:text-lg">חזרה</span>
             </button>
           ) : isMember ? (
             <nav className="hidden lg:flex items-center gap-3">
+              <button onClick={onGoHome} aria-label="דף הבית" className="shrink-0 ml-2">
+                <img src="/img/club/logo.png" alt="" className="h-11 w-auto" />
+              </button>
               {MEMBER_NAV_ITEMS.map(({ label, key, Icon }) => (
                 <button
                   key={key}
@@ -107,13 +110,13 @@ function Header({
             <nav className="hidden lg:flex items-center gap-5">
               <button
                 onClick={onGoLibrary}
-                className="text-base font-bold text-[#5E5650] hover:text-[#3E3935] transition-colors"
+                className="text-base font-bold text-[#5E5954] hover:text-[#2B2724] transition-colors"
               >
                 ההדרכות שלי
               </button>
               <button
                 onClick={onGoProfile}
-                className="text-base font-bold text-[#5E5650] hover:text-[#3E3935] transition-colors"
+                className="text-base font-bold text-[#5E5954] hover:text-[#2B2724] transition-colors"
               >
                 החשבון שלי
               </button>
@@ -130,15 +133,14 @@ function Header({
           ) : null}
         </div>
 
-        <div className={`${wideNav ? 'hidden' : 'w-1/3 flex'} justify-center`}>
+        <div className={`${wideNav ? 'w-1/3 flex lg:hidden' : 'w-1/3 flex'} justify-center`}>
           <div className="cursor-pointer flex flex-col items-center" onClick={onGoHome}>
             <img
-              src="/logo.jpg.png"
-              alt="לוגו המרחב של רבקה"
-              className="h-8 md:h-10 w-auto mb-1 object-contain"
-              onError={(e) => { e.target.style.display = 'none' }}
+              src="/img/club/logo.png"
+              alt="רבקה הולצברג, בריאות שבאה מהלב"
+              className="h-10 md:h-12 w-auto object-contain"
             />
-            <p className="text-xs text-[#C88F96] font-medium hidden md:block mt-0.5">
+            <p className="text-[13px] text-[#7E3F55] font-medium hidden md:block mt-0.5">
               המרחב שלך לצמיחה, רוגע ובריאות אמיתית
             </p>
           </div>
@@ -149,11 +151,11 @@ function Header({
             {isAuthenticated ? (
               <div className="flex flex-col items-end">
                 <div className="flex items-center gap-2">
-                  <p className="text-lg font-bold text-[#3E3935] truncate max-w-[160px]" title={userName}>
+                  <p className="text-lg font-bold text-[#2B2724] truncate max-w-[160px]" title={userName}>
                     שלום {userName}
                   </p>
                   {isVip && (
-                    <span className="bg-gradient-to-r from-[#C88F96] to-[#9E626C] text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-sm flex items-center gap-1">
+                    <span className="bg-gradient-to-r from-[#A0627A] to-[#7E3F55] text-white text-[13px] font-bold px-2.5 py-0.5 rounded-full shadow-sm flex items-center gap-1">
                       <Crown size={12} /> VIP
                     </span>
                   )}
@@ -162,7 +164,7 @@ function Header({
                   href={`${pricingConfig.whatsappBaseUrl}?text=${encodeURIComponent('היי רבקה, יש לי רעיון להדרכה חדשה:')}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-[#9E626C] font-bold hover:underline flex items-center gap-1 mt-0.5"
+                  className="text-sm text-[#7E3F55] font-bold hover:underline flex items-center gap-1 mt-0.5"
                 >
                   <Lightbulb size={14} /> יש לי רעיון להדרכה
                 </a>
@@ -170,19 +172,19 @@ function Header({
             ) : (
               <button
                 onClick={onGoLogin}
-                className="text-sm font-bold text-[#C88F96] hover:underline mt-2"
+                className="text-[15px] font-bold text-[#7E3F55] hover:underline mt-2"
               >
                 התחברי למרחב
               </button>
             )}
           </div>
           <div
-            className="relative h-10 w-10 rounded-full bg-[#E8EEE5] flex items-center justify-center text-[#3E3935] cursor-pointer hover:bg-[#3E3935] hover:text-[#C88F96] transition-colors"
+            className="relative h-11 w-11 rounded-full bg-[#F4E9ED] flex items-center justify-center text-[#2B2724] cursor-pointer hover:bg-[#6A3447] hover:text-white transition-colors"
             onClick={() => (!isAuthenticated ? onGoLogin() : onGoProfile())}
           >
             <User size={18} />
             {isAuthenticated && isVip && (
-              <div className="absolute -top-1 -right-1 bg-gradient-to-r from-[#C88F96] to-[#9E626C] w-4 h-4 rounded-full flex items-center justify-center shadow-sm border border-white md:hidden">
+              <div className="absolute -top-1 -right-1 bg-gradient-to-r from-[#A0627A] to-[#7E3F55] w-4 h-4 rounded-full flex items-center justify-center shadow-sm border border-white md:hidden">
                 <Crown size={10} className="text-white" />
               </div>
             )}
@@ -201,21 +203,21 @@ function BottomNav({ activeView, isAuthenticated, isKeyboardOpen, onGoHome, onGo
     >
       <button
         onClick={onGoHome}
-        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'home' ? 'text-[#3E3935]' : 'text-[#716861] hover:text-[#3E3935]'}`}
+        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'home' ? 'text-[#7E3F55] shadow-[inset_0_3px_0_#7E3F55]' : 'text-[#6B625C] hover:text-[#7E3F55]'}`}
       >
         <Library size={26} />
         <span className="text-[14px] mt-1 font-bold">בית</span>
       </button>
       <button
         onClick={onGoLibrary}
-        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'library' ? 'text-[#3E3935]' : 'text-[#716861] hover:text-[#3E3935]'}`}
+        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'library' ? 'text-[#7E3F55] shadow-[inset_0_3px_0_#7E3F55]' : 'text-[#6B625C] hover:text-[#7E3F55]'}`}
       >
         <Search size={26} />
         <span className="text-[14px] mt-1 font-bold">כל ההדרכות</span>
       </button>
       <button
         onClick={() => (!isAuthenticated ? onGoLogin() : onGoProfile())}
-        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'profile' ? 'text-[#3E3935]' : 'text-[#716861] hover:text-[#3E3935]'}`}
+        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'profile' ? 'text-[#7E3F55] shadow-[inset_0_3px_0_#7E3F55]' : 'text-[#6B625C] hover:text-[#7E3F55]'}`}
       >
         <User size={26} />
         <span className="text-[14px] mt-1 font-bold">האזור שלי</span>
@@ -224,7 +226,7 @@ function BottomNav({ activeView, isAuthenticated, isKeyboardOpen, onGoHome, onGo
         href={`${pricingConfig.whatsappBaseUrl}?text=${encodeURIComponent('היי רבקה, אני צריכה עזרה באתר המועדון')}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex flex-col items-center justify-center w-full h-full pt-2 pb-1 text-[#716861] hover:text-[#3E3935]"
+        className="flex flex-col items-center justify-center w-full h-full pt-2 pb-1 text-[#6B625C] hover:text-[#7E3F55]"
       >
         <MessageCircle size={26} />
         <span className="text-[14px] mt-1 font-bold">עזרה</span>
@@ -537,7 +539,7 @@ export default function App() {
 
   if (view === 'register') {
     return (
-      <div dir="rtl" className="min-h-screen font-sans bg-[#FAF7F2] flex flex-col">
+      <div dir="rtl" className="min-h-screen font-sans bg-[#FFFFFF] flex flex-col">
         <LeadCaptureScreen
           onRegister={handleRegisterLead}
           onCancel={handleBackToHome}
@@ -551,7 +553,7 @@ export default function App() {
 
   if (view === 'login') {
     return (
-      <div dir="rtl" className="min-h-screen font-sans bg-[#FAF7F2] flex flex-col">
+      <div dir="rtl" className="min-h-screen font-sans bg-[#FFFFFF] flex flex-col">
         <LoginScreen
           onLogin={handleLoginSubmit}
           onCancel={handleBackToHome}
@@ -598,7 +600,7 @@ export default function App() {
 
   if (view === 'trialWelcome' && pendingTutorial) {
     return (
-      <div dir="rtl" className="min-h-screen font-sans bg-[#FAF7F2] flex flex-col">
+      <div dir="rtl" className="min-h-screen font-sans bg-[#FFFFFF] flex flex-col">
         <TrialWelcomeScreen
           tutorial={pendingTutorial}
           tutorialsData={tutorialsData}
@@ -612,7 +614,7 @@ export default function App() {
 
   if (view === 'trialTrackMap') {
     return (
-      <div dir="rtl" className="min-h-screen font-sans bg-[#FAF7F2] text-[#3E3935] flex flex-col">
+      <div dir="rtl" className="min-h-screen font-sans bg-[#FFFFFF] text-[#2B2724] flex flex-col">
         <Header showBack {...headerProps} />
         <TrialTrackMapScreen
           tutorialsData={tutorialsData}
@@ -625,7 +627,7 @@ export default function App() {
 
   if (view === 'profile') {
     return (
-      <div dir="rtl" className="min-h-screen font-sans bg-[#FAF7F2] text-[#3E3935] flex flex-col">
+      <div dir="rtl" className="min-h-screen font-sans bg-[#FFFFFF] text-[#2B2724] flex flex-col">
         {(viewerState === 'visitor' || viewerState === 'trial') && <VisitorTopBar onLogin={goLogin} />}
         <Header showBack {...headerProps} />
         <ProfilePage
@@ -647,19 +649,19 @@ export default function App() {
 
   if (view === 'library') {
     return (
-      <div dir="rtl" className="min-h-screen font-sans bg-[#FAF7F2] text-[#3E3935] flex flex-col">
+      <div dir="rtl" className="min-h-screen font-sans bg-[#FFFFFF] text-[#2B2724] flex flex-col">
         {(viewerState === 'visitor' || viewerState === 'trial') && <VisitorTopBar onLogin={goLogin} />}
         <Header showBack {...headerProps} />
         <div className="bg-white/80 backdrop-blur-md border-b border-gray-100 py-3 sticky top-0 md:top-20 z-40 shadow-sm">
           <div className="max-w-xl mx-auto px-4 sm:px-6">
-            <div className="flex items-center bg-[#FAF7F2] rounded-full px-4 py-2.5 border border-gray-200 focus-within:border-[#C88F96] focus-within:bg-white focus-within:shadow-md transition-all">
+            <div className="flex items-center bg-[#FFFFFF] rounded-full px-4 py-2.5 border border-gray-200 focus-within:border-[#A0627A] focus-within:bg-white focus-within:shadow-md transition-all">
               <Search size={18} className="text-gray-400" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="חפשי הדרכה או נושא שמעניין אותך..."
-                className="bg-transparent border-none outline-none mr-3 w-full text-sm text-[#3E3935] placeholder-gray-400"
+                className="bg-transparent border-none outline-none mr-3 w-full text-sm text-[#2B2724] placeholder-gray-400"
               />
               {searchQuery && (
                 <button onClick={() => setSearchQuery('')} className="text-gray-400 hover:text-gray-600">
@@ -685,7 +687,7 @@ export default function App() {
   }
 
   return (
-    <div dir="rtl" className="flex-1 font-sans bg-[#FAF7F2] text-[#3E3935] flex flex-col">
+    <div dir="rtl" className="flex-1 font-sans bg-[#FFFFFF] text-[#2B2724] flex flex-col">
       {(viewerState === 'trial' || (viewerState === 'visitor' && hasChosenExplore)) && view !== 'tutorial' && (
         <VisitorTopBar onLogin={goLogin} />
       )}
@@ -707,14 +709,15 @@ export default function App() {
       )}
 
       {view === 'home' && viewerState === 'inactive' && (
-        <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
-          <h2 className="text-2xl font-bold text-[#3E3935] mb-3">המנוי שלך אינו פעיל כרגע</h2>
-          <p className="text-[#716861] mb-6 max-w-md">אפשר לחדש את החברות במועדון ולחזור לגישה מלאה לכל ההדרכות.</p>
+        <div className="flex-1 flex flex-col items-center justify-center p-6 text-center bg-[#F4E9ED]">
+          <img src="/img/club/rivka.jpg" alt="רבקה הולצברג" width="880" height="1100" className="w-24 h-24 rounded-full object-cover object-[center_20%] ring-4 ring-white mb-5" />
+          <h2 className="text-[28px] font-bold text-[#1F4A3A] mb-3">המנוי שלך אינו פעיל כרגע</h2>
+          <p className="text-[#5E5954] text-[18px] mb-6 max-w-md">אפשר לחדש את החברות במועדון ולחזור לגישה מלאה לכל ההדרכות.</p>
           <a
             href={pricingConfig.membershipCheckoutUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white px-7 py-3 rounded-full font-bold shadow-[0_12px_28px_rgba(158,98,108,0.25)]"
+            className="bg-[#7E3F55] text-white px-7 py-3 rounded-full font-bold shadow-[0_4px_0_rgba(0,0,0,0.18)]"
           >
             לחידוש החברות
           </a>

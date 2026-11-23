@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 html, body {
-  font-family: "Segoe UI", Arial, sans-serif;
-  background-color: #FAF7F2;
+  font-family: 'Rubik', "Segoe UI", Arial, sans-serif;
+  background-color: #FFFFFF;
   margin: 0;
   padding: 0;
   -webkit-tap-highlight-color: transparent;

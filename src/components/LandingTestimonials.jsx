@@ -8,18 +8,18 @@ export default function LandingTestimonials() {
   if (TESTIMONIALS.length === 0) return null
 
   return (
-    <section className="visitor-landing bg-white py-20 md:py-28 border-y border-[#3E3935]/8">
+    <section className="visitor-landing bg-white py-20 md:py-28 border-y border-[#6A3447]/8">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-14">
-          <h2 className="text-[clamp(1.7rem,3.6vw,2.6rem)] font-extrabold text-[#3E3935] leading-[1.3]">
+          <h2 className="text-[clamp(1.7rem,3.6vw,2.6rem)] font-extrabold text-[#1F4A3A] leading-[1.3]">
             ומה קורה כשמתחילים ללכת בדרך?
           </h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {TESTIMONIALS.map((t, i) => (
-            <div key={i} className="bg-[#FAF7F2] rounded-2xl p-6 border border-[#3E3935]/6">
-              <p className="text-[#3E3935] leading-[1.8] mb-4">{t.quote}</p>
-              <p className="text-[#9E626C] font-bold text-sm">{t.author}</p>
+            <div key={i} className="bg-[#FFFFFF] rounded-2xl p-6 border border-[#6A3447]/6">
+              <p className="text-[#2B2724] leading-[1.8] mb-4">{t.quote}</p>
+              <p className="text-[#7E3F55] font-bold text-sm">{t.author}</p>
             </div>
           ))}
         </div>

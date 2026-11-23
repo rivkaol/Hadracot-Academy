@@ -77,10 +77,10 @@ export default function MemberDashboard({
     <div className="flex-1 pb-[110px] md:pb-8">
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10">
         <header className="mb-8">
-          <h2 className="text-[32px] md:text-[40px] font-bold text-[#3E3935] leading-tight">
+          <h2 className="text-[32px] md:text-[40px] font-bold text-[#1F4A3A] leading-tight">
             {isFirstEver ? `ברוכה הבאה, ${userName}` : `שלום ${userName}`}
           </h2>
-          <p className="text-[19px] text-[#5E5650] mt-2 max-w-lg leading-relaxed">
+          <p className="text-[19px] text-[#5E5954] mt-2 max-w-lg leading-relaxed">
             {isFirstEver
               ? 'כאן מחכות לך כל ההדרכות, מסודרות בסדרות. מתחילות מהכפתור למטה.'
               : 'טוב שחזרת. אפשר להמשיך בדיוק מהמקום שעצרת.'}
@@ -106,7 +106,7 @@ export default function MemberDashboard({
             Icon={Sparkles}
             title="נפש ושינוי מבפנים"
             subtitle={`${series.length} סדרות · ${seriesCount} הדרכות`}
-            accent="#9E626C"
+            accent="#7E3F55"
             onClick={() => jumpTo('series')}
           />
           {health.tutorials.length > 0 && (
@@ -115,15 +115,15 @@ export default function MemberDashboard({
               Icon={Leaf}
               title="גוף ובריאות"
               subtitle={`${health.tutorials.length} הדרכות`}
-              accent="#4F6249"
+              accent="#173A2D"
               onClick={() => jumpTo('health')}
             />
           )}
         </nav>
 
         <section id="series" className="mb-14 scroll-mt-28">
-          <h3 className="text-[28px] md:text-[34px] font-bold text-[#3E3935] mb-2">נפש ושינוי מבפנים</h3>
-          <p className="text-[19px] text-[#5E5650] leading-relaxed mb-6 max-w-xl">
+          <h3 className="text-[28px] md:text-[34px] font-bold text-[#1F4A3A] mb-2">נפש ושינוי מבפנים</h3>
+          <p className="text-[19px] text-[#5E5954] leading-relaxed mb-6 max-w-xl">
             כל סדרה בנויה חלק אחרי חלק. מומלץ לצפות לפי הסדר, ותמיד אפשר לחזור לכל חלק.
           </p>
           <div className="flex flex-col gap-8">
@@ -141,8 +141,8 @@ export default function MemberDashboard({
 
         {health.tutorials.length > 0 && (
           <section id="health" className="mb-14 scroll-mt-28">
-            <h3 className="text-[28px] md:text-[34px] font-bold text-[#3E3935] mb-2">גוף ובריאות</h3>
-            <p className="text-[19px] text-[#5E5650] leading-relaxed mb-6 max-w-xl">
+            <h3 className="text-[28px] md:text-[34px] font-bold text-[#1F4A3A] mb-2">גוף ובריאות</h3>
+            <p className="text-[19px] text-[#5E5954] leading-relaxed mb-6 max-w-xl">
               הדרכות שעומדות כל אחת בפני עצמה. אפשר לבחור לפי מה שמעניין אותך עכשיו.
             </p>
             <SeriesShelf
