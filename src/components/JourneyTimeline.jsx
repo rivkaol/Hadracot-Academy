@@ -73,7 +73,7 @@ export default function JourneyTimeline({
                     </p>
                   </div>
                   {isCurrent && (
-                    <span className="shrink-0 text-[10px] font-bold text-white bg-[#7E3F55] px-2.5 py-1 rounded-full">
+                    <span className="shrink-0 text-[13px] font-bold text-white bg-[#7E3F55] px-2.5 py-1 rounded-full">
                       את כאן
                     </span>
                   )}

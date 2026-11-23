@@ -21,7 +21,7 @@ export default function IntroOfferCard({ variant = 'full', email, onJoin, onStar
         onClick={handleClick}
         className="inline-flex items-center gap-2 text-sm bg-white/70 border border-[#A0627A]/30 rounded-full px-4 py-2 text-[#7E3F55] font-bold hover:bg-white transition-colors"
       >
-        <span className="bg-[#1F4A3A] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0">חברות חודשית</span>
+        <span className="bg-[#1F4A3A] text-white text-[13px] font-bold px-2 py-0.5 rounded-full shrink-0">חברות חודשית</span>
         {pricingConfig.membershipPriceLabel} · ביטול בכל עת
       </a>
     )
@@ -30,8 +30,6 @@ export default function IntroOfferCard({ variant = 'full', email, onJoin, onStar
   return (
     <section className="visitor-landing max-w-3xl mx-auto px-4 sm:px-6 py-6">
       <div className="relative overflow-hidden rounded-[2rem] bg-[#6A3447] p-8 sm:p-14 text-center shadow-[0_30px_70px_rgba(43,39,36,0.35)]">
-        <div className="absolute -top-24 -left-24 w-72 h-72 bg-[#1F4A3A]/25 rounded-full blur-3xl" />
-        <div className="absolute -bottom-24 -right-24 w-72 h-72 bg-[#A0627A]/20 rounded-full blur-3xl" />
         <div className="relative">
           <span className="inline-block text-xs font-bold text-[#F4ECE5] bg-white/10 px-4 py-1.5 rounded-full mb-6 tracking-wide">
             חברות חודשית

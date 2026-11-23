@@ -52,8 +52,9 @@ export default function TutorialsHub({
     <div className="flex-1">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-[100px] md:py-12">
         <div className="mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-[#1F4A3A] mb-1.5">כל ההדרכות</h2>
-          <p className="text-[#6B625C]">רוצה לחזור להדרכה מסוימת? כאן תמצאי את הכול במקום אחד.</p>
+          <p className="inline-flex items-center gap-3 text-[15px] font-medium text-[#7E3F55] mb-2"><span aria-hidden="true" className="w-8 h-px bg-[#7E3F55]/60" />הספרייה שלך</p>
+          <h2 className="text-[30px] md:text-[40px] font-bold text-[#1F4A3A] mb-1.5">כל ההדרכות</h2>
+          <p className="text-[#6B625C] text-[18px]">רוצה לחזור להדרכה מסוימת? כאן תמצאי את הכול במקום אחד.</p>
         </div>
 
         <div className="flex overflow-x-auto hide-scrollbar border-b border-gray-200 mb-10 pb-1">
@@ -63,10 +64,10 @@ export default function TutorialsHub({
                 <button
                   key={tabId}
                   onClick={() => setActiveTab(tabId)}
-                  className={`pb-3 text-base md:text-lg font-bold transition-all relative ${activeTab === tabId ? 'text-[#2B2724]' : 'text-[#6B625C] hover:text-[#2B2724]'}`}
+                  className={`pb-3 text-base md:text-lg font-bold transition-all relative ${activeTab === tabId ? 'text-[#1F4A3A]' : 'text-[#6B625C] hover:text-[#1F4A3A]'}`}
                 >
                   {label}
-                  {activeTab === tabId && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#6A3447] rounded-t-full"></span>}
+                  {activeTab === tabId && <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#7E3F55] rounded-t-full"></span>}
                 </button>
               )
             })}
@@ -81,7 +82,7 @@ export default function TutorialsHub({
               href={`${pricingConfig.whatsappBaseUrl}?text=${encodeURIComponent('היי רבקה, חיפשתי הדרכה על "' + searchQuery + '" ואשמח אם תוכלי להכין כזו!')}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-[#A0627A] font-bold bg-[#A0627A]/10 hover:bg-[#A0627A]/20 px-5 py-2.5 rounded-xl transition-colors shadow-sm"
+              className="inline-flex items-center gap-2 bg-[#7E3F55] text-white font-bold px-6 py-3 rounded-full shadow-[0_4px_0_rgba(0,0,0,0.18)] hover:-translate-y-0.5 transition-transform"
             >
               <Lightbulb size={18} />
               לא מצאת? כתבי לי כאן
@@ -98,7 +99,7 @@ export default function TutorialsHub({
                   <div className="flex items-start gap-4 mb-8 relative">
                     <div className="flex flex-col">
                       <h3 className="text-2xl md:text-3xl font-bold text-[#1F4A3A] leading-tight tracking-tight">{category.title}</h3>
-                      <div className={`h-1 w-16 bg-gradient-to-l ${category.tab === 'body' ? 'from-[#1F4A3A]' : 'from-[#A0627A]'} to-transparent mt-3 rounded-full`}></div>
+                      <div className={`h-1 w-16 mt-3 rounded-full ${category.tab === 'body' ? 'bg-[#1F4A3A]' : 'bg-[#C99AAB]'}`}></div>
                     </div>
                   </div>
                 )}
@@ -113,7 +114,7 @@ export default function TutorialsHub({
                       <div
                         key={tutorial.id}
                         onClick={() => onSelectTutorial(tutorial)}
-                        className={`group bg-white rounded-2xl shadow-[0_20px_50px_rgba(31,74,58,0.1)] transition-all duration-500 flex flex-col cursor-pointer overflow-hidden ${cardTheme.borderClass} hover:shadow-[0_20px_50px_rgba(31,74,58,0.2)] hover:-translate-y-1 relative`}
+                        className={`group bg-white rounded-2xl shadow-[0_14px_36px_rgba(106,52,71,0.08)] transition-all duration-500 flex flex-col cursor-pointer overflow-hidden ${cardTheme.borderClass} hover:shadow-[0_20px_44px_rgba(106,52,71,0.16)] hover:-translate-y-1 relative`}
                       >
                         <div className="aspect-[16/9] relative flex items-center justify-center overflow-hidden bg-gray-50">
                           {tutorial.imageUrl ? (
@@ -128,8 +129,8 @@ export default function TutorialsHub({
                           {isLocked && tutorial.imageUrl && <div className="absolute inset-0 bg-black/10"></div>}
                           {isLocked ? (
                             <div className="absolute inset-0 flex items-center justify-center z-20">
-                              <div className="w-16 h-16 bg-white/95 rounded-full flex items-center justify-center shadow-[0_4px_20px_rgba(212,175,55,0.3)]">
-                                <Lock size={28} className="text-[#A0627A]" />
+                              <div className="w-16 h-16 bg-white/95 rounded-full flex items-center justify-center shadow-[0_4px_20px_rgba(106,52,71,0.25)]">
+                                <Lock size={28} className="text-[#7E3F55]" />
                               </div>
                             </div>
                           ) : (
@@ -145,7 +146,7 @@ export default function TutorialsHub({
                           <div>
                             <StepBadge tutorial={tutorial} totalSteps={totalSteps} size="sm" showLabel={false} className={isLocked ? 'opacity-50' : ''} />
                             {tutorial.duration && (
-                              <p className="text-xs text-gray-400 font-medium mt-1.5 flex items-center gap-1">
+                              <p className="text-[14px] text-[#6B625C] font-medium mt-1.5 flex items-center gap-1">
                                 <Clock size={12} /> {tutorial.duration}
                               </p>
                             )}

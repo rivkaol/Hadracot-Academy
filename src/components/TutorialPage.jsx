@@ -251,7 +251,7 @@ export default function TutorialPage({
     }
   }
 
-  const vimeoSrc = `https://player.vimeo.com/video/${tutorial.vimeoId?.toString().trim() || '76979871'}?${tutorial.vimeoHash ? `h=${tutorial.vimeoHash.toString().trim()}&` : ''}color=9E626C&title=0&byline=0&portrait=0&badge=0&dnt=1&playsinline=1`
+  const vimeoSrc = `https://player.vimeo.com/video/${tutorial.vimeoId?.toString().trim() || '76979871'}?${tutorial.vimeoHash ? `h=${tutorial.vimeoHash.toString().trim()}&` : ''}color=7E3F55&title=0&byline=0&portrait=0&badge=0&dnt=1&playsinline=1`
 
   return (
     <div className="flex-1 pb-[100px] md:pb-8">
@@ -281,27 +281,27 @@ export default function TutorialPage({
 
               {!hasAccess && gateOpen && (
                 // במובייל: מסך מלא וממורכז (כדי שהכפתור לא ייחתך); במחשב: בתוך הווידאו כמו קודם
-                <div className="fixed inset-0 z-[60] lg:absolute lg:z-30 flex items-center justify-center text-center px-6 py-8 overflow-y-auto" dir="rtl" style={{ background: 'rgba(43,39,36,0.96)' }}>
+                <div className="fixed inset-0 z-[60] lg:absolute lg:z-30 flex items-center justify-center text-center px-6 py-8 overflow-y-auto" dir="rtl" style={{ background: 'rgba(106,52,71,0.97)' }}>
                   <div className="max-w-lg w-full my-auto">
-                    <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#7E3F55] text-white mb-4 sm:mb-5 shadow-lg mx-auto">
+                    <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#F8F3EC] text-[#6A3447] mb-4 sm:mb-5 shadow-lg mx-auto">
                       <Crown size={28} />
                     </div>
                     <h2 className="text-2xl md:text-3xl font-bold text-[#FFFFFF] mb-3">רק התחלנו.</h2>
-                    <p className="text-[#E9E0DB] text-base md:text-lg leading-[1.7] mb-2 max-w-md mx-auto">
+                    <p className="text-[#F4E9ED] text-base md:text-lg leading-[1.7] mb-2 max-w-md mx-auto">
                       מה שראית עכשיו הוא הצעד הראשון. בתוך המועדון מחכה לך הדרך המלאה — כדי שלא תישארי רק עם השראה,
                       אלא תוכלי להמשיך משיעור לשיעור ולבנות שינוי אמיתי.
                     </p>
                     <button
                       onClick={() => onShowTrackMap && onShowTrackMap()}
-                      className="mt-5 inline-flex items-center justify-center gap-2 bg-[#7E3F55] text-white font-bold text-base md:text-lg px-8 py-4 rounded-full shadow-[0_12px_28px_rgba(126,63,85,0.35)] hover:-translate-y-0.5 transition-all"
+                      className="mt-5 inline-flex items-center justify-center gap-2 bg-[#F8F3EC] text-[#6A3447] font-bold text-base md:text-lg px-8 py-4 rounded-full shadow-[0_4px_0_rgba(0,0,0,0.25)] hover:-translate-y-0.5 transition-all"
                     >
                       אני רוצה להמשיך במסע
                     </button>
-                    <p className="text-[#B8ADA6] text-sm mt-3">כשתצטרפי, המסלול המלא ייפתח לך ותוכלי להמשיך מכאן.</p>
+                    <p className="text-[#E9D3DB] text-sm mt-3">כשתצטרפי, המסלול המלא ייפתח לך ותוכלי להמשיך מכאן.</p>
                     <div className="mt-5">
                       <button
                         onClick={() => onLoginRequest && onLoginRequest()}
-                        className="text-[#E9E0DB] text-sm font-medium hover:text-white underline underline-offset-4 transition-colors"
+                        className="text-[#F4E9ED] text-sm font-medium hover:text-white underline underline-offset-4 transition-colors"
                       >
                         כבר חברה במועדון? התחברי כאן
                       </button>
@@ -317,7 +317,7 @@ export default function TutorialPage({
               <div className="flex flex-col items-center justify-center gap-4 border-b border-gray-200 pb-8 w-full max-w-lg mx-auto">
                 <button
                   onClick={handleCompleteLesson}
-                  className={`flex items-center justify-center gap-2 text-lg font-bold px-8 py-4 rounded-full transition-all duration-300 w-full shadow-sm ${isCompleted ? 'bg-[#1F4A3A] text-white hover:bg-opacity-80' : 'bg-[#EEF3EF] text-[#2B2724] hover:bg-[#6A3447] hover:text-white'}`}
+                  className={`flex items-center justify-center gap-2 text-lg font-bold px-8 py-4 rounded-full transition-all duration-300 w-full shadow-sm ${isCompleted ? 'bg-[#1F4A3A] text-white hover:bg-opacity-90' : 'bg-[#F4E9ED] text-[#6A3447] border border-[#E9D3DB] hover:bg-[#6A3447] hover:text-white'}`}
                 >
                   <CheckCircle size={24} />
                   {isCompleted ? 'סימנתי שצפיתי ✓' : 'סיימתי לצפות בחלק הזה'}
@@ -326,10 +326,10 @@ export default function TutorialPage({
                 {nextTutorial && (
                   <button
                     onClick={onNext}
-                    className="flex items-center justify-between gap-3 text-right bg-[#7E3F55] text-white px-6 py-4 rounded-[1.25rem] w-full shadow-[0_4px_0_rgba(0,0,0,0.18)] hover:-translate-y-0.5 transition-all"
+                    className="flex items-center justify-between gap-3 text-right bg-[#6A3447] text-white px-6 py-5 rounded-[1.25rem] w-full shadow-[0_16px_32px_rgba(106,52,71,0.25)] hover:-translate-y-0.5 transition-all"
                   >
                     <span className="min-w-0">
-                      <span className="block text-base font-medium opacity-90">
+                      <span className="flex items-center gap-2 text-base font-medium text-[#E9D3DB]"><span aria-hidden="true" className="w-6 h-px bg-[#D9BD86]" />
                         {nextInfo.isNewSeries ? `לסדרה הבאה: סדרה ${nextInfo.shelf.number}` : 'לחלק הבא'}
                       </span>
                       <span className="block text-lg font-bold leading-snug">{nextTutorial.title}</span>
@@ -349,16 +349,16 @@ export default function TutorialPage({
                 <button
                   key={id}
                   onClick={() => setActiveTab(id)}
-                  className={`pb-3 text-base font-medium transition-all relative flex items-center gap-2 whitespace-nowrap ${activeTab === id ? 'text-[#2B2724]' : 'text-gray-500 hover:text-[#2B2724]'}`}
+                  className={`pb-3 text-base font-medium transition-all relative flex items-center gap-2 whitespace-nowrap ${activeTab === id ? 'text-[#1F4A3A] font-bold' : 'text-[#6B625C] hover:text-[#1F4A3A]'}`}
                 >
                   <Icon size={18} />
                   {label}
-                  {activeTab === id && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#6A3447] rounded-t-full"></span>}
+                  {activeTab === id && <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#7E3F55] rounded-t-full"></span>}
                 </button>
               ))}
             </div>
 
-            <div className="bg-white rounded-[2rem] p-6 md:p-8 border border-gray-100 shadow-sm mb-12">
+            <div className="bg-white rounded-[1.5rem] p-6 md:p-8 border border-gray-100 border-t-4 border-t-[#E9D3DB] shadow-[0_10px_30px_rgba(106,52,71,0.06)] mb-12">
               {activeTab === 'about' && (
                 <div className="text-[#6B625C] leading-[1.8] text-right">
                   <p className="mb-4">תיאור ההדרכה: {tutorial.title}.</p>
@@ -395,7 +395,7 @@ export default function TutorialPage({
                           <CheckCircle size={14} /> נשמר בהצלחה
                         </span>
                       ) : (
-                        <span className="text-[10px] text-gray-400 px-2 font-medium">הסיכום נשמר אוטומטית</span>
+                        <span className="text-[13px] text-gray-500 px-2 font-medium">הסיכום נשמר אוטומטית</span>
                       )}
                     </div>
                   </div>
@@ -459,7 +459,7 @@ export default function TutorialPage({
                             <FileText size={20} />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-bold text-[#2B2724] group-hover:text-[#A0627A] transition-colors truncate">{file.title || 'קובץ מצורף להורדה'}</h4>
+                            <h4 className="font-bold text-[#2B2724] group-hover:text-[#7E3F55] transition-colors truncate">{file.title || 'קובץ מצורף להורדה'}</h4>
                             <p className="text-sm text-gray-500 mt-0.5">לחצי כאן לפתיחה והורדה</p>
                           </div>
                           <Download size={20} className="text-gray-400 group-hover:text-[#A0627A] shrink-0" />
@@ -476,7 +476,7 @@ export default function TutorialPage({
           {shelfInfo && onSelectTutorial && (
             <aside className="w-full lg:w-[380px] shrink-0">
               <div className="lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto rounded-[1.5rem]">
-                <p className="flex items-center gap-2 text-lg font-bold text-[#2B2724] mb-3">
+                <p className="flex items-center gap-2 text-lg font-bold text-[#1F4A3A] mb-3">
                   <Sparkles size={20} className="text-[#A0627A]" />
                   {shelfInfo.isSeries ? 'כל החלקים בסדרה' : 'עוד הדרכות במדף הזה'}
                 </p>

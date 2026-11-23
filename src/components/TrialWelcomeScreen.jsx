@@ -29,14 +29,14 @@ function TeaserCard({ kicker, accent, title, hook, imageUrl }) {
       <div className="aspect-[4/3] relative bg-[#2B2724]/5">
         {imageUrl && <img src={imageUrl} alt="" className="absolute inset-0 w-full h-full object-cover" />}
         <span
-          className="absolute top-2.5 right-2.5 text-[10px] font-bold text-white px-2.5 py-1 rounded-full shadow-sm"
+          className="absolute top-2.5 right-2.5 text-[13px] font-bold text-white px-2.5 py-1 rounded-full shadow-sm"
           style={{ backgroundColor: `${accent}D9` }}
         >
           לחברות המועדון
         </span>
       </div>
       <div className="p-4">
-        <p className="text-[11px] font-bold mb-1.5" style={{ color: accent }}>
+        <p className="text-[13px] font-bold mb-1.5" style={{ color: accent }}>
           {kicker}
         </p>
         <p className="font-bold text-[#2B2724] text-sm leading-snug mb-1.5">{title}</p>
@@ -95,7 +95,7 @@ export default function TrialWelcomeScreen({ tutorial, tutorialsData, onStart, o
           {STAGE_META.map((s, i) => (
             <div key={s.n} className="flex items-center">
               <span
-                className={`text-[11px] font-bold px-2.5 py-1 rounded-full whitespace-nowrap ${
+                className={`text-[13px] font-bold px-2.5 py-1 rounded-full whitespace-nowrap ${
                   s.n === 1 ? 'bg-[#7E3F55] text-white' : 'bg-white text-gray-400 border border-gray-200'
                 }`}
               >

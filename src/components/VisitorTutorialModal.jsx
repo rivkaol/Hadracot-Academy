@@ -53,13 +53,13 @@ export default function VisitorTutorialModal({ tutorial, categoryTitle, onClose,
             <p>{tutorial.description || 'הדרכה שמעמיקה בנושא הזה ונותנת לך עוד צעד ברור בתוך הדרך שלך במועדון.'}</p>
           </div>
 
-          <div className="rounded-[1.45rem] bg-[#FFFFFF] border border-[#6A3447]/7 p-5 sm:p-6 mb-6 text-right">
+          <div className="rounded-[1.45rem] bg-[#F4E9ED] p-5 sm:p-6 mb-6 text-right">
             <h3 className="font-extrabold text-lg mb-2">כחברת מועדון ההדרכה הזו מחכה לך במלואה</h3>
             <p className="text-sm text-[#6B625C] leading-relaxed">יחד איתה נפתח לך כל המסלול, ההדרכות הנוספות, המפגשים החיים והקהילה — הכול במקום אחד.</p>
           </div>
 
-          <a href={pricingConfig.membershipCheckoutUrl} target="_blank" rel="noopener noreferrer" onClick={join} className="w-full min-h-[60px] rounded-full bg-gradient-to-br from-[#A0627A] to-[#6A3447] text-white font-extrabold text-lg shadow-[0_14px_32px_rgba(106,52,71,.28)] flex items-center justify-center text-center px-5 hover:-translate-y-0.5 transition-transform">להצטרף למועדון</a>
-          <p className="text-center text-xs text-[#8D837D] mt-2.5">{pricingConfig.membershipPriceLabel} · אפשר לבטל בכל עת</p>
+          <a href={pricingConfig.membershipCheckoutUrl} target="_blank" rel="noopener noreferrer" onClick={join} className="w-full min-h-[60px] rounded-full bg-[#7E3F55] text-white font-extrabold text-lg shadow-[0_4px_0_rgba(0,0,0,0.18)] flex items-center justify-center text-center px-5 hover:-translate-y-0.5 transition-transform">להצטרף למועדון</a>
+          <p className="text-center text-[14px] text-[#6B625C] mt-2.5">{pricingConfig.membershipPriceLabel} · אפשר לבטל בכל עת</p>
 
           <button onClick={trial} className="mt-5 w-full inline-flex items-center justify-center gap-2 text-[#7E3F55] font-extrabold text-sm py-2 hover:underline"><PlayCircle size={18} /> רוצה גם להרגיש איך רבקה מלמדת? אפשר לצפות ב־5 דקות</button>
         </div>

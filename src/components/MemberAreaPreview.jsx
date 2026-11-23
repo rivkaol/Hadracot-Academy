@@ -66,7 +66,7 @@ export default function MemberAreaPreview({ tutorialsData }) {
                   צעד {t.recommendedOrder} — {t.title}
                 </span>
                 {isCurrent && (
-                  <span className="shrink-0 text-[10px] font-bold text-white bg-[#7E3F55] px-2 py-0.5 rounded-full mr-auto">
+                  <span className="shrink-0 text-[13px] font-bold text-white bg-[#7E3F55] px-2 py-0.5 rounded-full mr-auto">
                     את כאן
                   </span>
                 )}

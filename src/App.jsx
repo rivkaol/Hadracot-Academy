@@ -32,7 +32,7 @@ const MEMBER_NAV_ITEMS = [
 ]
 // כפתורי התפריט העליון לחברה: כפתורים ממשיים עם אייקון ורקע — לא טקסט חופשי שלא נקלט כלחיץ
 const NAV_PILL = 'flex items-center gap-2 text-lg font-bold px-5 py-2.5 rounded-full border transition-colors'
-const NAV_PILL_IDLE = 'bg-[#FFFFFF] text-[#2B2724] border-[#ECE6E1] hover:bg-[#F3ECE3] hover:border-[#A0627A]'
+const NAV_PILL_IDLE = 'bg-[#FFFFFF] text-[#2B2724] border-[#ECE6E1] hover:bg-[#F4E9ED] hover:border-[#C99AAB]'
 const NAV_PILL_ACTIVE = 'bg-[#6A3447] text-white border-[#6A3447]'
 
 // פס עליון סטיקי מעל הכול, למי שעדיין לא חברה — לעולם לא חבוי בתפריט.
@@ -40,7 +40,7 @@ function VisitorTopBar({ onLogin }) {
   return (
     <div className="bg-[#6A3447] text-white text-center py-2.5 px-4 text-sm font-medium sticky top-0 z-[60]">
       כבר חברת מועדון?{' '}
-      <button onClick={onLogin} className="underline font-bold hover:text-[#A0627A] transition-colors">
+      <button onClick={onLogin} className="underline font-bold hover:text-[#E9D3DB] transition-colors">
         התחברי כאן
       </button>
     </div>
@@ -69,7 +69,7 @@ function Header({
   // לחברה: התפריט תופס את כל הצד, והשורה החיוורת באמצע יורדת (הלוגו לא קיים בשרת ממילא)
   const wideNav = isMember && !showBack
   return (
-    <header className="bg-white md:sticky md:top-0 z-50 border-b border-gray-100 shadow-sm">
+    <header className="bg-white md:sticky md:top-0 z-50 border-b border-[#F4E9ED] shadow-[0_4px_20px_rgba(106,52,71,0.05)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between relative">
         <div className={`${wideNav ? 'flex-1' : 'w-1/3'} flex items-center gap-3`}>
           {showBack ? (
@@ -82,6 +82,9 @@ function Header({
             </button>
           ) : isMember ? (
             <nav className="hidden lg:flex items-center gap-3">
+              <button onClick={onGoHome} aria-label="דף הבית" className="shrink-0 ml-2">
+                <img src="/img/club/logo.png" alt="" className="h-11 w-auto" />
+              </button>
               {MEMBER_NAV_ITEMS.map(({ label, key, Icon }) => (
                 <button
                   key={key}
@@ -130,15 +133,14 @@ function Header({
           ) : null}
         </div>
 
-        <div className={`${wideNav ? 'hidden' : 'w-1/3 flex'} justify-center`}>
+        <div className={`${wideNav ? 'w-1/3 flex lg:hidden' : 'w-1/3 flex'} justify-center`}>
           <div className="cursor-pointer flex flex-col items-center" onClick={onGoHome}>
             <img
-              src="/logo.jpg.png"
-              alt="לוגו המרחב של רבקה"
-              className="h-8 md:h-10 w-auto mb-1 object-contain"
-              onError={(e) => { e.target.style.display = 'none' }}
+              src="/img/club/logo.png"
+              alt="רבקה הולצברג, בריאות שבאה מהלב"
+              className="h-10 md:h-12 w-auto object-contain"
             />
-            <p className="text-xs text-[#A0627A] font-medium hidden md:block mt-0.5">
+            <p className="text-[13px] text-[#7E3F55] font-medium hidden md:block mt-0.5">
               המרחב שלך לצמיחה, רוגע ובריאות אמיתית
             </p>
           </div>
@@ -153,7 +155,7 @@ function Header({
                     שלום {userName}
                   </p>
                   {isVip && (
-                    <span className="bg-gradient-to-r from-[#A0627A] to-[#7E3F55] text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-sm flex items-center gap-1">
+                    <span className="bg-gradient-to-r from-[#A0627A] to-[#7E3F55] text-white text-[13px] font-bold px-2.5 py-0.5 rounded-full shadow-sm flex items-center gap-1">
                       <Crown size={12} /> VIP
                     </span>
                   )}
@@ -170,14 +172,14 @@ function Header({
             ) : (
               <button
                 onClick={onGoLogin}
-                className="text-sm font-bold text-[#A0627A] hover:underline mt-2"
+                className="text-[15px] font-bold text-[#7E3F55] hover:underline mt-2"
               >
                 התחברי למרחב
               </button>
             )}
           </div>
           <div
-            className="relative h-10 w-10 rounded-full bg-[#EEF3EF] flex items-center justify-center text-[#2B2724] cursor-pointer hover:bg-[#6A3447] hover:text-white transition-colors"
+            className="relative h-11 w-11 rounded-full bg-[#F4E9ED] flex items-center justify-center text-[#2B2724] cursor-pointer hover:bg-[#6A3447] hover:text-white transition-colors"
             onClick={() => (!isAuthenticated ? onGoLogin() : onGoProfile())}
           >
             <User size={18} />
@@ -201,21 +203,21 @@ function BottomNav({ activeView, isAuthenticated, isKeyboardOpen, onGoHome, onGo
     >
       <button
         onClick={onGoHome}
-        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'home' ? 'text-[#2B2724]' : 'text-[#6B625C] hover:text-[#2B2724]'}`}
+        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'home' ? 'text-[#7E3F55] shadow-[inset_0_3px_0_#7E3F55]' : 'text-[#6B625C] hover:text-[#7E3F55]'}`}
       >
         <Library size={26} />
         <span className="text-[14px] mt-1 font-bold">בית</span>
       </button>
       <button
         onClick={onGoLibrary}
-        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'library' ? 'text-[#2B2724]' : 'text-[#6B625C] hover:text-[#2B2724]'}`}
+        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'library' ? 'text-[#7E3F55] shadow-[inset_0_3px_0_#7E3F55]' : 'text-[#6B625C] hover:text-[#7E3F55]'}`}
       >
         <Search size={26} />
         <span className="text-[14px] mt-1 font-bold">כל ההדרכות</span>
       </button>
       <button
         onClick={() => (!isAuthenticated ? onGoLogin() : onGoProfile())}
-        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'profile' ? 'text-[#2B2724]' : 'text-[#6B625C] hover:text-[#2B2724]'}`}
+        className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'profile' ? 'text-[#7E3F55] shadow-[inset_0_3px_0_#7E3F55]' : 'text-[#6B625C] hover:text-[#7E3F55]'}`}
       >
         <User size={26} />
         <span className="text-[14px] mt-1 font-bold">האזור שלי</span>
@@ -224,7 +226,7 @@ function BottomNav({ activeView, isAuthenticated, isKeyboardOpen, onGoHome, onGo
         href={`${pricingConfig.whatsappBaseUrl}?text=${encodeURIComponent('היי רבקה, אני צריכה עזרה באתר המועדון')}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex flex-col items-center justify-center w-full h-full pt-2 pb-1 text-[#6B625C] hover:text-[#2B2724]"
+        className="flex flex-col items-center justify-center w-full h-full pt-2 pb-1 text-[#6B625C] hover:text-[#7E3F55]"
       >
         <MessageCircle size={26} />
         <span className="text-[14px] mt-1 font-bold">עזרה</span>
@@ -707,9 +709,10 @@ export default function App() {
       )}
 
       {view === 'home' && viewerState === 'inactive' && (
-        <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
-          <h2 className="text-2xl font-bold text-[#1F4A3A] mb-3">המנוי שלך אינו פעיל כרגע</h2>
-          <p className="text-[#6B625C] mb-6 max-w-md">אפשר לחדש את החברות במועדון ולחזור לגישה מלאה לכל ההדרכות.</p>
+        <div className="flex-1 flex flex-col items-center justify-center p-6 text-center bg-[#F4E9ED]">
+          <img src="/img/club/rivka.jpg" alt="רבקה הולצברג" width="880" height="1100" className="w-24 h-24 rounded-full object-cover object-[center_20%] ring-4 ring-white mb-5" />
+          <h2 className="text-[28px] font-bold text-[#1F4A3A] mb-3">המנוי שלך אינו פעיל כרגע</h2>
+          <p className="text-[#5E5954] text-[18px] mb-6 max-w-md">אפשר לחדש את החברות במועדון ולחזור לגישה מלאה לכל ההדרכות.</p>
           <a
             href={pricingConfig.membershipCheckoutUrl}
             target="_blank"

@@ -8,7 +8,6 @@ import {
   MessageCircle,
   PlayCircle,
   Route,
-  Sparkles,
 } from 'lucide-react'
 import { flattenTutorials, getTrackTutorials, groupByStage } from '../lib/catalogHelpers'
 import { STAGE_META } from '../lib/stageMeta'
@@ -41,7 +40,7 @@ function LessonCard({ tutorial, totalSteps, onOpen, compact = false }) {
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-[#2B2724]/55 via-transparent to-transparent" />
         {tutorial.recommendedOrder != null && (
-          <span className="absolute top-3 right-3 bg-white/95 text-[#7E3F55] rounded-full px-3 py-1 text-[12px] font-bold shadow-sm">
+          <span className="absolute top-3 right-3 bg-white/95 text-[#7E3F55] rounded-full px-3 py-1 text-[13px] font-bold shadow-sm">
             צעד {tutorial.recommendedOrder}{totalSteps ? ` מתוך ${totalSteps}` : ''}
           </span>
         )}
@@ -53,7 +52,7 @@ function LessonCard({ tutorial, totalSteps, onOpen, compact = false }) {
         )}
         <div className="flex items-center justify-between gap-3">
           <span className="text-[13px] font-bold text-[#7E3F55] inline-flex items-center gap-1">להכיר את ההדרכה <ArrowLeft size={14} /></span>
-          {durationLabel(tutorial.duration) && <span className="text-[12px] text-[#9A918B]">{durationLabel(tutorial.duration)}</span>}
+          {durationLabel(tutorial.duration) && <span className="text-[13px] text-[#9A918B]">{durationLabel(tutorial.duration)}</span>}
         </div>
       </div>
     </button>
@@ -67,11 +66,11 @@ function InsideClubPreview({ track, onOpen }) {
 
   return (
     <div className="relative max-w-[980px] mx-auto">
-      <div className="absolute -inset-3 md:-inset-5 bg-[#F4E9ED]/55 rounded-[2.5rem] rotate-1" />
+      <div className="absolute -inset-3 md:-inset-5 bg-[#F4E9ED] rounded-[2.5rem]" />
       <div className="relative bg-[#FFFFFF] rounded-[2.15rem] border border-white shadow-[0_28px_70px_rgba(43,39,36,.16)] overflow-hidden">
         <div className="px-5 md:px-8 py-5 bg-white border-b border-[#ECE6E1] flex items-center justify-between gap-4">
           <div className="text-right">
-            <p className="text-[12px] font-bold text-[#7E3F55] mb-1">המסלול שלי</p>
+            <p className="text-[13px] font-bold text-[#7E3F55] mb-1">המסלול שלי</p>
             <h3 className="text-[22px] md:text-[28px] font-bold text-[#1F4A3A]">בכל כניסה מחכה לך הצעד הבא</h3>
           </div>
           <div className="hidden sm:flex items-center gap-2 bg-[#EEF3EF] text-[#1F4A3A] rounded-full px-4 py-2 text-[13px] font-bold">
@@ -91,7 +90,7 @@ function InsideClubPreview({ track, onOpen }) {
                 <div className="absolute inset-0 bg-gradient-to-br from-[#EEF3EF] to-[#F4E9ED]" />
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-[#2B2724]/80 via-[#2B2724]/10 to-transparent" />
-              <div className="absolute top-4 right-4 bg-[#F4E9ED] text-[#7E3F55] rounded-full px-4 py-2 text-[12px] font-bold">הצעד הראשון שלך</div>
+              <div className="absolute top-4 right-4 bg-[#F4E9ED] text-[#7E3F55] rounded-full px-4 py-2 text-[13px] font-bold">הצעד הראשון שלך</div>
               <div className="absolute inset-x-0 bottom-0 p-6 md:p-8 text-white">
                 <p className="text-[13px] font-bold text-white/80 mb-2">צעד 1 מתוך {track.length}</p>
                 <h4 className="text-[27px] md:text-[34px] font-bold leading-tight mb-3">{first.title}</h4>
@@ -104,20 +103,20 @@ function InsideClubPreview({ track, onOpen }) {
               <div className="bg-white rounded-[1.45rem] p-5 border border-[#ECE6E1] shadow-sm">
                 <div className="flex items-center justify-between gap-3 mb-3">
                   <div>
-                    <p className="text-[12px] text-[#7E3F55] font-bold">ההתקדמות שלך</p>
+                    <p className="text-[13px] text-[#7E3F55] font-bold">ההתקדמות שלך</p>
                     <p className="text-[20px] font-bold mt-1">הדרך כבר מסודרת עבורך</p>
                   </div>
                   <div className="w-12 h-12 rounded-full bg-[#EEF3EF] text-[#1F4A3A] flex items-center justify-center"><Route size={21} /></div>
                 </div>
                 <div className="h-2.5 bg-[#F1ECE7] rounded-full overflow-hidden"><div className="h-full w-[9%] rounded-full bg-[#A0627A]" /></div>
-                <p className="text-[12px] text-[#8D837D] mt-2">מתחילות בצעד הראשון ומתקדמות בקצב שלך</p>
+                <p className="text-[13px] text-[#8D837D] mt-2">מתחילות בצעד הראשון ומתקדמות בקצב שלך</p>
               </div>
 
               {next.map((tutorial) => (
                 <button key={tutorial.id} onClick={() => onOpen(tutorial)} className="bg-white rounded-[1.35rem] border border-[#ECE6E1] p-3 flex items-center gap-3 text-right hover:border-[#A0627A]/35 hover:shadow-sm transition-all">
                   {tutorial.imageUrl ? <img src={tutorial.imageUrl} alt="" className="w-16 h-16 rounded-xl object-cover shrink-0" /> : <div className="w-16 h-16 rounded-xl bg-[#F4E9ED] shrink-0" />}
                   <div className="min-w-0 flex-1">
-                    <p className="text-[11px] font-bold text-[#7E3F55]">צעד {tutorial.recommendedOrder}</p>
+                    <p className="text-[13px] font-bold text-[#7E3F55]">צעד {tutorial.recommendedOrder}</p>
                     <p className="text-[15px] font-bold leading-snug mt-1">{tutorial.title}</p>
                   </div>
                   <ArrowLeft size={15} className="text-[#A0627A] shrink-0" />
@@ -156,14 +155,13 @@ export default function VisitorShowroom({ tutorialsData, onStartTrial, onLogin }
       className="visitor-showroom bg-[#FFFFFF] text-[#2B2724] overflow-hidden"
       style={{ fontFamily: '"Rubik", Arial, "Segoe UI", sans-serif' }}
     >
-      <section className="relative pt-12 md:pt-16 pb-16 md:pb-20 border-b border-[#ECE6E1]">
-        <div className="absolute -top-44 -right-48 w-[34rem] h-[34rem] rounded-full bg-[#A0627A]/12 blur-3xl pointer-events-none" />
-        <div className="absolute top-32 -left-52 w-[32rem] h-[32rem] rounded-full bg-[#A8B5A2]/14 blur-3xl pointer-events-none" />
+      <section className="relative pt-12 md:pt-16 pb-16 md:pb-20 bg-[#6A3447] text-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <span className="inline-flex items-center gap-2 bg-[#F4E9ED] text-[#7E3F55] rounded-full px-4 py-2 text-[13px] font-bold mb-5"><Sparkles size={15} /> ברוכה הבאה למועדון בריאות שבאה מהלב</span>
-            <h1 className="text-[clamp(2.25rem,5vw,4.55rem)] font-bold leading-[1.1] tracking-[-0.025em] mb-6">מסלול שמלווה אותך מצעד ראשון<br className="hidden md:block" /> לשינוי שהופך לחלק מהחיים.</h1>
-            <p className="text-[17px] md:text-[21px] text-[#6B625C] leading-[1.85] max-w-3xl mx-auto mb-8">בכל כניסה את יודעת איפה את נמצאת, מה הצעד הבא שלך, ואילו כלים מחכים לך בדרך — יחד עם מפגשים חיים, הדרכות העשרה וקהילה.</p>
+            <img src="/img/club/rivka.jpg" alt="רבקה הולצברג" width="880" height="1100" className="w-24 h-24 md:w-28 md:h-28 mx-auto mb-5 rounded-full object-cover object-[center_20%] ring-4 ring-[#D9BD86]/60" />
+            <p className="inline-flex items-center gap-3 text-[15px] font-medium text-[#E9D3DB] mb-5"><span aria-hidden="true" className="w-8 h-px bg-[#D9BD86]" />ברוכה הבאה למועדון בריאות שבאה מהלב<span aria-hidden="true" className="w-8 h-px bg-[#D9BD86]" /></p>
+            <h1 className="text-[clamp(2.25rem,5vw,4.55rem)] font-bold leading-[1.1] tracking-[-0.025em] mb-6 text-white">מסלול שמלווה אותך מצעד ראשון<br className="hidden md:block" /> לשינוי שהופך לחלק מהחיים.</h1>
+            <p className="text-[18px] md:text-[21px] text-[#F8F3EC]/85 leading-[1.85] max-w-3xl mx-auto mb-8">בכל כניסה את יודעת איפה את נמצאת, מה הצעד הבא שלך, ואילו כלים מחכים לך בדרך — יחד עם מפגשים חיים, הדרכות העשרה וקהילה.</p>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl mx-auto mb-8">
               {[
@@ -172,21 +170,21 @@ export default function VisitorShowroom({ tutorialsData, onStartTrial, onLogin }
                 ['2 מפגשים', 'חיים בכל חודש'],
                 ['קהילה', 'שממשיכה איתך בדרך'],
               ].map(([value, label]) => (
-                <div key={value + label} className="bg-white rounded-[1.25rem] border border-[#ECE6E1] p-4 shadow-[0_8px_22px_rgba(43,39,36,.05)]">
-                  <p className="font-bold text-[19px] md:text-[22px]">{value}</p>
-                  <p className="text-[12px] md:text-[13px] text-[#6B625C] mt-1">{label}</p>
+                <div key={value + label} className="bg-white/10 rounded-[1.25rem] border border-white/20 p-4">
+                  <p className="font-bold text-[20px] md:text-[22px] text-white">{value}</p>
+                  <p className="text-[14px] text-[#E9D3DB] mt-1">{label}</p>
                 </div>
               ))}
             </div>
 
-            <div className="max-w-[560px] mx-auto bg-white rounded-[1.6rem] border border-white shadow-[0_18px_50px_rgba(43,39,36,.11)] p-5 md:p-6">
+            <div className="max-w-[560px] mx-auto bg-white text-[#2B2724] rounded-[1.6rem] border-t-[6px] border-[#D9BD86] shadow-[0_24px_50px_rgba(0,0,0,.25)] p-5 md:p-6">
               <p className="text-[13px] font-bold text-[#7E3F55] mb-2">חברות חודשית · ביטול בכל עת</p>
               <div className="flex items-end justify-center gap-3 mb-4">
                 <p className="text-[64px] leading-none font-bold text-[#6A3447]">{pricingConfig.membershipPrice}<span className="text-[22px]"> ₪</span></p>
                 <div className="text-right pb-1"><p className="text-[13px] text-[#6B625C]">לחודש</p></div>
               </div>
-              <a href={pricingConfig.membershipCheckoutUrl} target="_blank" rel="noopener noreferrer" onClick={() => checkoutClick('showroom_hero')} className="w-full min-h-[58px] rounded-full bg-gradient-to-br from-[#A0627A] to-[#6A3447] text-white font-bold text-[18px] flex items-center justify-center shadow-[0_14px_32px_rgba(106,52,71,.25)]">אני רוצה להתחיל את המסלול</a>
-              <p className="text-[11px] text-[#8D837D] mt-3">גישה מיידית · אפשר לבטל בכל עת</p>
+              <a href={pricingConfig.membershipCheckoutUrl} target="_blank" rel="noopener noreferrer" onClick={() => checkoutClick('showroom_hero')} className="w-full min-h-[58px] rounded-full bg-[#7E3F55] text-white font-bold text-[18px] flex items-center justify-center shadow-[0_4px_0_rgba(0,0,0,0.18)] hover:-translate-y-0.5 transition-transform">אני רוצה להתחיל את המסלול</a>
+              <p className="text-[13px] text-[#6B625C] mt-3">גישה מיידית · אפשר לבטל בכל עת</p>
             </div>
           </div>
         </div>
@@ -217,14 +215,14 @@ export default function VisitorShowroom({ tutorialsData, onStartTrial, onLogin }
               return (
                 <article key={meta.n} className="bg-white rounded-[2rem] border border-[#ECE6E1] shadow-[0_14px_36px_rgba(43,39,36,.06)] overflow-hidden">
                   <div className="grid grid-cols-1 md:grid-cols-[260px_1fr]">
-                    <div className={`${stageIndex % 2 === 0 ? 'bg-[#F4E5E6]' : 'bg-[#EEF3EF]'} p-7 md:p-8 flex flex-col justify-between min-h-[220px]`}>
+                    <div className="bg-[#F4E9ED] p-7 md:p-8 flex flex-col justify-between min-h-[220px] border-r-[6px]" style={{ borderColor: ['#E9D3DB', '#C99AAB', '#A0627A', '#6A3447'][stageIndex % 4] }}>
                       <div>
-                        <p className="text-[72px] leading-none font-bold text-white/70 mb-4">0{stageIndex + 1}</p>
-                        <p className="text-[12px] font-bold text-[#7E3F55] mb-2">שלב {stageIndex + 1}</p>
-                        <h3 className="text-[30px] font-bold leading-tight mb-3">{meta.title}</h3>
+                        <p className="text-[72px] leading-none font-bold mb-4" style={{ color: ['#E9D3DB', '#C99AAB', '#A0627A', '#6A3447'][stageIndex % 4] }}>0{stageIndex + 1}</p>
+                        <p className="text-[14px] font-bold text-[#7E3F55] mb-2">שלב {stageIndex + 1}</p>
+                        <h3 className="text-[30px] font-bold leading-tight mb-3 text-[#1F4A3A]">{meta.title}</h3>
                         <p className="text-[15px] text-[#6B625C] leading-[1.75]">{meta.question}</p>
                       </div>
-                      <div className="mt-5 inline-flex items-center gap-2 text-[12px] font-bold text-[#1F4A3A]"><Route size={14} /> {items.length} צעדים בשלב הזה</div>
+                      <div className="mt-5 inline-flex items-center gap-2 text-[14px] font-bold text-[#1F4A3A]"><Route size={14} /> {items.length} צעדים בשלב הזה</div>
                     </div>
 
                     <div className="p-5 md:p-7">
@@ -287,21 +285,21 @@ export default function VisitorShowroom({ tutorialsData, onStartTrial, onLogin }
         </div>
       </section>
 
-      <section className="py-18 md:py-24 bg-white">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16 md:py-20 text-center">
-          <span className="inline-flex items-center gap-2 bg-[#F4E9ED] text-[#7E3F55] rounded-full px-4 py-2 text-[13px] font-bold mb-5"><Heart size={15} /> הדרך שלך יכולה להתחיל כבר היום</span>
-          <h2 className="text-[clamp(2rem,4vw,3.45rem)] font-bold leading-[1.2] mb-5">כל מה שראית כאן נפתח לך יחד.</h2>
-          <p className="text-[#6B625C] text-[17px] md:text-[19px] leading-[1.85] mb-8 max-w-2xl mx-auto">המסלול המלא, ההדרכות הנוספות, המפגשים החיים והקהילה — במרחב אחד שמלווה אותך לאורך הדרך.</p>
+      <section className="bg-[#6A3447] text-white">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16 md:py-24 text-center">
+          <p className="inline-flex items-center gap-3 text-[15px] font-medium text-[#E9D3DB] mb-5"><Heart size={16} className="text-[#D9BD86]" /> הדרך שלך יכולה להתחיל כבר היום</p>
+          <h2 className="text-[clamp(2rem,4vw,3.45rem)] font-bold leading-[1.2] mb-5 text-white">כל מה שראית כאן נפתח לך יחד.</h2>
+          <p className="text-[#F8F3EC]/85 text-[18px] md:text-[19px] leading-[1.85] mb-8 max-w-2xl mx-auto">המסלול המלא, ההדרכות הנוספות, המפגשים החיים והקהילה — במרחב אחד שמלווה אותך לאורך הדרך.</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mx-auto text-right mb-8">
             {[`${track.length || 12} צעדים במסלול`, `${extras.length} הדרכות העשרה`, '2 הדרכות חיות בכל חודש', 'כל ההקלטות באזור שלך', 'גישה מיידית', 'אפשר לבטל בכל עת'].map((item) => (
-              <div key={item} className="flex gap-2 items-start text-[14px] font-bold"><Check size={17} className="text-[#1F4A3A] shrink-0 mt-0.5" /><span>{item}</span></div>
+              <div key={item} className="flex gap-2 items-start text-[16px] font-bold text-white"><Check size={18} className="text-[#D9BD86] shrink-0 mt-0.5" /><span>{item}</span></div>
             ))}
           </div>
 
-          <a href={pricingConfig.membershipCheckoutUrl} target="_blank" rel="noopener noreferrer" onClick={() => checkoutClick('showroom_final')} className="w-full max-w-lg mx-auto min-h-[64px] rounded-full bg-gradient-to-br from-[#A0627A] to-[#6A3447] text-white font-bold text-[19px] flex items-center justify-center shadow-[0_15px_35px_rgba(106,52,71,.28)]">אני רוצה להצטרף למועדון</a>
-          <p className="text-[11px] text-[#8D837D] mt-3">{pricingConfig.membershipPriceLabel} · אפשר לבטל בכל עת</p>
-          <button onClick={onLogin} className="mt-6 text-[13px] font-bold text-[#6B625C] hover:text-[#7E3F55] hover:underline">כבר חברת מועדון? כניסה לאזור שלך</button>
+          <a href={pricingConfig.membershipCheckoutUrl} target="_blank" rel="noopener noreferrer" onClick={() => checkoutClick('showroom_final')} className="w-full max-w-lg mx-auto min-h-[64px] rounded-full bg-[#F8F3EC] text-[#6A3447] font-bold text-[19px] flex items-center justify-center shadow-[0_4px_0_rgba(0,0,0,0.25)] hover:-translate-y-0.5 transition-transform">אני רוצה להצטרף למועדון</a>
+          <p className="text-[14px] text-[#E9D3DB] mt-3">{pricingConfig.membershipPriceLabel} · אפשר לבטל בכל עת</p>
+          <button onClick={onLogin} className="mt-6 text-[15px] font-bold text-[#F4E9ED] hover:text-white underline underline-offset-4">כבר חברת מועדון? כניסה לאזור שלך</button>
         </div>
       </section>
 
