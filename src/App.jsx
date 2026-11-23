@@ -241,7 +241,8 @@ export default function App() {
   const [nextTutorial, setNextTutorial] = useState(null)
   // האם מבקרת לא-מזוהה כבר בחרה "אני עדיין לא חברה" בשער הכניסה — אם לא,
   // מוצג ClubGateway ולא ה-Landing השיווקי. נשאר true לאורך הביקור, לא נשאל שוב בכל ניווט.
-  const [hasChosenExplore, setHasChosenExplore] = useState(false)
+  // השער שולח מבקרות ל-/join, ולכן נשאר false; ה-Showroom שבתוך האפליקציה נשאר רק לטעימה (viewerState==='trial').
+  const [hasChosenExplore] = useState(false)
 
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [userEmail, setUserEmail] = useState('')
@@ -694,7 +695,12 @@ export default function App() {
       <Header showBack={view === 'tutorial'} {...headerProps} />
 
       {view === 'home' && viewerState === 'visitor' && !hasChosenExplore && (
-        <ClubGateway onGoLogin={goLogin} onExploreClub={() => setHasChosenExplore(true)} />
+        <ClubGateway
+          onGoLogin={goLogin}
+          // "אני עדיין לא חברה" → דף ההצטרפות /join (החלטה של רבקה, 23.11.2026: דף מכירה אחד למועדון).
+          // src=club-app כדי לראות במדידה של /join כמה מגיעות מהשער.
+          onExploreClub={() => window.location.assign('/join?src=club-app')}
+        />
       )}
 
       {view === 'home' && (
