@@ -241,7 +241,7 @@ export default function TutorialPage({
     setCompletedTutorials(newArr)
 
     if (next) {
-      confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#3E3935', '#C88F96', '#687B63', '#C88F96'], disableForReducedMotion: true })
+      confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#2B2724', '#A0627A', '#1F4A3A', '#A0627A'], disableForReducedMotion: true })
     }
 
     if (userEmail) {
@@ -283,17 +283,17 @@ export default function TutorialPage({
                 // במובייל: מסך מלא וממורכז (כדי שהכפתור לא ייחתך); במחשב: בתוך הווידאו כמו קודם
                 <div className="fixed inset-0 z-[60] lg:absolute lg:z-30 flex items-center justify-center text-center px-6 py-8 overflow-y-auto" dir="rtl" style={{ background: 'rgba(43,39,36,0.96)' }}>
                   <div className="max-w-lg w-full my-auto">
-                    <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white mb-4 sm:mb-5 shadow-lg mx-auto">
+                    <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-[#A0627A] to-[#7E3F55] text-white mb-4 sm:mb-5 shadow-lg mx-auto">
                       <Crown size={28} />
                     </div>
-                    <h2 className="text-2xl md:text-3xl font-bold text-[#FFFDF9] mb-3">רק התחלנו.</h2>
+                    <h2 className="text-2xl md:text-3xl font-bold text-[#FFFFFF] mb-3">רק התחלנו.</h2>
                     <p className="text-[#E9E0DB] text-base md:text-lg leading-[1.7] mb-2 max-w-md mx-auto">
                       מה שראית עכשיו הוא הצעד הראשון. בתוך המועדון מחכה לך הדרך המלאה — כדי שלא תישארי רק עם השראה,
                       אלא תוכלי להמשיך משיעור לשיעור ולבנות שינוי אמיתי.
                     </p>
                     <button
                       onClick={() => onShowTrackMap && onShowTrackMap()}
-                      className="mt-5 inline-flex items-center justify-center gap-2 bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white font-bold text-base md:text-lg px-8 py-4 rounded-full shadow-[0_12px_28px_rgba(158,98,108,0.35)] hover:-translate-y-0.5 transition-all"
+                      className="mt-5 inline-flex items-center justify-center gap-2 bg-gradient-to-br from-[#A0627A] to-[#7E3F55] text-white font-bold text-base md:text-lg px-8 py-4 rounded-full shadow-[0_12px_28px_rgba(126,63,85,0.35)] hover:-translate-y-0.5 transition-all"
                     >
                       אני רוצה להמשיך במסע
                     </button>
@@ -317,7 +317,7 @@ export default function TutorialPage({
               <div className="flex flex-col items-center justify-center gap-4 border-b border-gray-200 pb-8 w-full max-w-lg mx-auto">
                 <button
                   onClick={handleCompleteLesson}
-                  className={`flex items-center justify-center gap-2 text-lg font-bold px-8 py-4 rounded-full transition-all duration-300 w-full shadow-sm ${isCompleted ? 'bg-[#687B63] text-white hover:bg-opacity-80' : 'bg-[#E8EEE5] text-[#3E3935] hover:bg-[#3E3935] hover:text-white'}`}
+                  className={`flex items-center justify-center gap-2 text-lg font-bold px-8 py-4 rounded-full transition-all duration-300 w-full shadow-sm ${isCompleted ? 'bg-[#1F4A3A] text-white hover:bg-opacity-80' : 'bg-[#EEF3EF] text-[#2B2724] hover:bg-[#6A3447] hover:text-white'}`}
                 >
                   <CheckCircle size={24} />
                   {isCompleted ? 'סימנתי שצפיתי ✓' : 'סיימתי לצפות בחלק הזה'}
@@ -326,7 +326,7 @@ export default function TutorialPage({
                 {nextTutorial && (
                   <button
                     onClick={onNext}
-                    className="flex items-center justify-between gap-3 text-right bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white px-6 py-4 rounded-[1.25rem] w-full shadow-[0_12px_28px_rgba(158,98,108,0.25)] hover:-translate-y-0.5 transition-all"
+                    className="flex items-center justify-between gap-3 text-right bg-gradient-to-br from-[#A0627A] to-[#7E3F55] text-white px-6 py-4 rounded-[1.25rem] w-full shadow-[0_12px_28px_rgba(126,63,85,0.25)] hover:-translate-y-0.5 transition-all"
                   >
                     <span className="min-w-0">
                       <span className="block text-base font-medium opacity-90">
@@ -349,23 +349,23 @@ export default function TutorialPage({
                 <button
                   key={id}
                   onClick={() => setActiveTab(id)}
-                  className={`pb-3 text-base font-medium transition-all relative flex items-center gap-2 whitespace-nowrap ${activeTab === id ? 'text-[#3E3935]' : 'text-gray-500 hover:text-[#3E3935]'}`}
+                  className={`pb-3 text-base font-medium transition-all relative flex items-center gap-2 whitespace-nowrap ${activeTab === id ? 'text-[#2B2724]' : 'text-gray-500 hover:text-[#2B2724]'}`}
                 >
                   <Icon size={18} />
                   {label}
-                  {activeTab === id && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#3E3935] rounded-t-full"></span>}
+                  {activeTab === id && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#6A3447] rounded-t-full"></span>}
                 </button>
               ))}
             </div>
 
             <div className="bg-white rounded-[2rem] p-6 md:p-8 border border-gray-100 shadow-sm mb-12">
               {activeTab === 'about' && (
-                <div className="text-[#716861] leading-[1.8] text-right">
+                <div className="text-[#6B625C] leading-[1.8] text-right">
                   <p className="mb-4">תיאור ההדרכה: {tutorial.title}.</p>
-                  <h3 className="text-xl font-bold text-[#3E3935] mt-8 mb-4">נקודות מרכזיות:</h3>
+                  <h3 className="text-xl font-bold text-[#1F4A3A] mt-8 mb-4">נקודות מרכזיות:</h3>
                   <ul className="space-y-3 list-none p-0">
-                    <li className="flex items-start gap-3"><div className="w-1.5 h-1.5 rounded-full bg-[#C88F96] mt-3 shrink-0"></div><span>הבנת העקרונות הבסיסיים של הנושא.</span></li>
-                    <li className="flex items-start gap-3"><div className="w-1.5 h-1.5 rounded-full bg-[#C88F96] mt-3 shrink-0"></div><span>כלים פרקטיים ליישום מיידי.</span></li>
+                    <li className="flex items-start gap-3"><div className="w-1.5 h-1.5 rounded-full bg-[#A0627A] mt-3 shrink-0"></div><span>הבנת העקרונות הבסיסיים של הנושא.</span></li>
+                    <li className="flex items-start gap-3"><div className="w-1.5 h-1.5 rounded-full bg-[#A0627A] mt-3 shrink-0"></div><span>כלים פרקטיים ליישום מיידי.</span></li>
                   </ul>
                 </div>
               )}
@@ -374,8 +374,8 @@ export default function TutorialPage({
                 <div>
                   <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-2">
                     <div>
-                      <h3 className="text-xl font-bold text-[#3E3935]">הסיכום האישי שלך</h3>
-                      <p className="text-[#716861] mt-1 max-w-xl leading-[1.8]">זה המקום שלך לעצור רגע ולכתוב תובנות מההדרכה.</p>
+                      <h3 className="text-xl font-bold text-[#1F4A3A]">הסיכום האישי שלך</h3>
+                      <p className="text-[#6B625C] mt-1 max-w-xl leading-[1.8]">זה המקום שלך לעצור רגע ולכתוב תובנות מההדרכה.</p>
                     </div>
                   </div>
                   <div className="relative">
@@ -383,7 +383,7 @@ export default function TutorialPage({
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
                       placeholder="התחילי לכתוב כאן..."
-                      className="w-full min-h-[250px] p-6 bg-[#FAF7F2] border border-gray-200 rounded-2xl focus:border-[#C88F96] focus:ring-1 focus:ring-[#C88F96] outline-none resize-y text-[#716861] leading-[1.8] shadow-inner transition-all placeholder:text-gray-400 pb-16"
+                      className="w-full min-h-[250px] p-6 bg-[#FFFFFF] border border-gray-200 rounded-2xl focus:border-[#A0627A] focus:ring-1 focus:ring-[#A0627A] outline-none resize-y text-[#6B625C] leading-[1.8] shadow-inner transition-all placeholder:text-gray-400 pb-16"
                     />
                     <div className="absolute bottom-4 left-4 flex items-center z-10">
                       {isSavingAuto ? (
@@ -402,7 +402,7 @@ export default function TutorialPage({
                   <div className="mt-4 flex items-center justify-end">
                     <button
                       onClick={handleSaveNotes}
-                      className="bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white px-6 py-2.5 rounded-full font-bold flex items-center gap-2 transition-all shadow-[0_12px_28px_rgba(158,98,108,0.25)] hover:shadow-md hover:-translate-y-0.5"
+                      className="bg-gradient-to-br from-[#A0627A] to-[#7E3F55] text-white px-6 py-2.5 rounded-full font-bold flex items-center gap-2 transition-all shadow-[0_12px_28px_rgba(126,63,85,0.25)] hover:shadow-md hover:-translate-y-0.5"
                     >
                       <Save size={18} /> שמירה
                     </button>
@@ -412,8 +412,8 @@ export default function TutorialPage({
 
               {activeTab === 'resources' && tutorial.files && tutorial.files.length > 0 && (
                 <div>
-                  <h3 className="text-xl font-bold text-[#3E3935] mb-2">חומרים נלווים להדרכה</h3>
-                  <p className="text-[#716861] mb-6 leading-[1.8]">כאן ריכזתי עבורך את כל מה שצריך להשלים את הלמידה.</p>
+                  <h3 className="text-xl font-bold text-[#1F4A3A] mb-2">חומרים נלווים להדרכה</h3>
+                  <p className="text-[#6B625C] mb-6 leading-[1.8]">כאן ריכזתי עבורך את כל מה שצריך להשלים את הלמידה.</p>
                   <div className="space-y-3">
                     {tutorial.files.map((file, i) =>
                       IMAGE_FILE_RE.test(file.url) ? (
@@ -429,11 +429,11 @@ export default function TutorialPage({
                               src={file.url}
                               alt={file.title || 'תמונה נלווית להדרכה'}
                               loading="lazy"
-                              className="w-full max-h-[480px] object-contain bg-[#FAF7F2]"
+                              className="w-full max-h-[480px] object-contain bg-[#FFFFFF]"
                             />
                           </a>
                           <div className="flex items-center justify-between gap-3 p-3 border-t border-gray-100">
-                            <span className="text-sm font-bold text-[#3E3935] truncate">
+                            <span className="text-sm font-bold text-[#2B2724] truncate">
                               {file.title || 'תמונה נלווית להדרכה'}
                             </span>
                             <a
@@ -441,7 +441,7 @@ export default function TutorialPage({
                               download
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="flex items-center gap-1.5 text-sm font-bold text-[#9E626C] hover:text-white hover:bg-[#9E626C] border border-[#C88F96]/40 px-3 py-1.5 rounded-full transition-colors shrink-0"
+                              className="flex items-center gap-1.5 text-sm font-bold text-[#7E3F55] hover:text-white hover:bg-[#7E3F55] border border-[#A0627A]/40 px-3 py-1.5 rounded-full transition-colors shrink-0"
                             >
                               <Download size={16} /> שמירת התמונה
                             </a>
@@ -453,16 +453,16 @@ export default function TutorialPage({
                           href={file.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center p-4 border border-gray-100 rounded-2xl hover:bg-gray-50 hover:border-[#C88F96]/30 transition-all cursor-pointer group"
+                          className="flex items-center p-4 border border-gray-100 rounded-2xl hover:bg-gray-50 hover:border-[#A0627A]/30 transition-all cursor-pointer group"
                         >
-                          <div className="w-12 h-12 bg-[#FAF7F2] rounded-full flex items-center justify-center text-[#3E3935] group-hover:bg-[#3E3935] group-hover:text-white transition-colors ml-4 shrink-0">
+                          <div className="w-12 h-12 bg-[#FFFFFF] rounded-full flex items-center justify-center text-[#2B2724] group-hover:bg-[#6A3447] group-hover:text-white transition-colors ml-4 shrink-0">
                             <FileText size={20} />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-bold text-[#3E3935] group-hover:text-[#C88F96] transition-colors truncate">{file.title || 'קובץ מצורף להורדה'}</h4>
+                            <h4 className="font-bold text-[#2B2724] group-hover:text-[#A0627A] transition-colors truncate">{file.title || 'קובץ מצורף להורדה'}</h4>
                             <p className="text-sm text-gray-500 mt-0.5">לחצי כאן לפתיחה והורדה</p>
                           </div>
-                          <Download size={20} className="text-gray-400 group-hover:text-[#C88F96] shrink-0" />
+                          <Download size={20} className="text-gray-400 group-hover:text-[#A0627A] shrink-0" />
                         </a>
                       )
                     )}
@@ -476,8 +476,8 @@ export default function TutorialPage({
           {shelfInfo && onSelectTutorial && (
             <aside className="w-full lg:w-[380px] shrink-0">
               <div className="lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto rounded-[1.5rem]">
-                <p className="flex items-center gap-2 text-lg font-bold text-[#3E3935] mb-3">
-                  <Sparkles size={20} className="text-[#C88F96]" />
+                <p className="flex items-center gap-2 text-lg font-bold text-[#2B2724] mb-3">
+                  <Sparkles size={20} className="text-[#A0627A]" />
                   {shelfInfo.isSeries ? 'כל החלקים בסדרה' : 'עוד הדרכות במדף הזה'}
                 </p>
                 <SeriesShelf

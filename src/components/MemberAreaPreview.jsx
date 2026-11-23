@@ -16,36 +16,36 @@ export default function MemberAreaPreview({ tutorialsData }) {
   return (
     <section className="visitor-landing max-w-2xl mx-auto px-4 sm:px-6 py-16 md:py-20">
       <div className="text-center mb-8">
-        <span className="inline-block text-xs font-bold text-[#9E626C] bg-[#C88F96]/10 px-3 py-1 rounded-full mb-4">
+        <span className="inline-block text-xs font-bold text-[#7E3F55] bg-[#A0627A]/10 px-3 py-1 rounded-full mb-4">
           ככה נראה האזור של חברת מועדון
         </span>
-        <h2 className="text-[clamp(1.6rem,3.2vw,2.2rem)] font-extrabold text-[#3E3935] leading-[1.4]">
+        <h2 className="text-[clamp(1.6rem,3.2vw,2.2rem)] font-extrabold text-[#1F4A3A] leading-[1.4]">
           ואחרי שנכנסת —
           <br />
           כבר לא צריך לחפש.
         </h2>
-        <p className="text-[#716861] mt-4 leading-[1.8]">בכל כניסה המועדון מחזיר אותך למקום שבו את נמצאת עכשיו.</p>
+        <p className="text-[#6B625C] mt-4 leading-[1.8]">בכל כניסה המועדון מחזיר אותך למקום שבו את נמצאת עכשיו.</p>
       </div>
 
-      <div className="bg-white rounded-[2rem] border border-gray-100 shadow-[0_20px_50px_rgba(148,163,136,0.12)] p-6 md:p-8 select-none" aria-hidden="true">
+      <div className="bg-white rounded-[2rem] border border-gray-100 shadow-[0_20px_50px_rgba(31,74,58,0.12)] p-6 md:p-8 select-none" aria-hidden="true">
         <div className="flex flex-col md:flex-row items-center gap-6 mb-8">
-          <div className="w-full md:w-1/3 aspect-video bg-[#3E3935]/5 rounded-2xl relative overflow-hidden flex items-center justify-center shrink-0">
+          <div className="w-full md:w-1/3 aspect-video bg-[#2B2724]/5 rounded-2xl relative overflow-hidden flex items-center justify-center shrink-0">
             {current.imageUrl ? (
               <img src={current.imageUrl} alt="" className="absolute inset-0 w-full h-full object-cover" />
             ) : (
-              <div className="absolute inset-0 bg-gradient-to-tr from-[#3E3935]/10 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-[#2B2724]/10 to-transparent" />
             )}
             <div className="w-12 h-12 bg-white/95 rounded-full flex items-center justify-center shadow-lg z-10">
-              <PlayCircle size={24} className="text-[#3E3935]" />
+              <PlayCircle size={24} className="text-[#2B2724]" />
             </div>
           </div>
           <div className="flex-1 text-center md:text-right">
-            <p className="text-sm font-bold text-[#9E626C] mb-2">ממשיכות מהמקום שבו עצרת?</p>
-            <p className="text-xs font-bold text-[#9E626C] mb-1 tracking-wide">
+            <p className="text-sm font-bold text-[#7E3F55] mb-2">ממשיכות מהמקום שבו עצרת?</p>
+            <p className="text-xs font-bold text-[#7E3F55] mb-1 tracking-wide">
               צעד {current.recommendedOrder} מתוך {track.length}
             </p>
-            <h3 className="font-bold text-[#3E3935] text-lg leading-tight mb-4">{current.title}</h3>
-            <span className="inline-flex items-center gap-2 bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white px-6 py-2.5 rounded-full font-bold text-sm cursor-default opacity-90">
+            <h3 className="font-bold text-[#1F4A3A] text-lg leading-tight mb-4">{current.title}</h3>
+            <span className="inline-flex items-center gap-2 bg-gradient-to-br from-[#A0627A] to-[#7E3F55] text-white px-6 py-2.5 rounded-full font-bold text-sm cursor-default opacity-90">
               המשיכי לצפות
             </span>
           </div>
@@ -58,15 +58,15 @@ export default function MemberAreaPreview({ tutorialsData }) {
             return (
               <div key={t.id} className="flex items-center gap-3 text-sm">
                 {isDone ? (
-                  <CheckCircle size={16} className="text-[#687B63] shrink-0" />
+                  <CheckCircle size={16} className="text-[#1F4A3A] shrink-0" />
                 ) : (
-                  <Circle size={14} className={isCurrent ? 'text-[#C88F96]' : 'text-gray-300 shrink-0'} />
+                  <Circle size={14} className={isCurrent ? 'text-[#A0627A]' : 'text-gray-300 shrink-0'} />
                 )}
-                <span className={`truncate ${isCurrent ? 'font-bold text-[#3E3935]' : isDone ? 'text-gray-400' : 'text-gray-400'}`}>
+                <span className={`truncate ${isCurrent ? 'font-bold text-[#2B2724]' : isDone ? 'text-gray-400' : 'text-gray-400'}`}>
                   צעד {t.recommendedOrder} — {t.title}
                 </span>
                 {isCurrent && (
-                  <span className="shrink-0 text-[10px] font-bold text-white bg-gradient-to-br from-[#C88F96] to-[#9E626C] px-2 py-0.5 rounded-full mr-auto">
+                  <span className="shrink-0 text-[10px] font-bold text-white bg-gradient-to-br from-[#A0627A] to-[#7E3F55] px-2 py-0.5 rounded-full mr-auto">
                     את כאן
                   </span>
                 )}

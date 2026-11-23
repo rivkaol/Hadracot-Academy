@@ -40,10 +40,10 @@ export default function MemberJourneyMap({
   return (
     <div className="relative max-w-[1200px] mx-auto">
       {!hasStages && (
-        <div className="relative mb-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm font-bold text-[#9E626C]">
+        <div className="relative mb-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm font-bold text-[#7E3F55]">
           {PRINCIPLES.map((p, i) => (
             <span key={p} className="flex items-center gap-3">
-              {i > 0 && <span className="text-[#C88F96]/40">·</span>}
+              {i > 0 && <span className="text-[#A0627A]/40">·</span>}
               {p}
             </span>
           ))}
@@ -55,14 +55,14 @@ export default function MemberJourneyMap({
           <div key={stageKey} className="space-y-6 md:space-y-8">
             {stageKey !== 'unassigned' && (
               <div className="relative text-center py-2">
-                <span className="block text-6xl md:text-7xl font-black text-[#E8EEE5] leading-none select-none">
+                <span className="block text-6xl md:text-7xl font-black text-[#EEF3EF] leading-none select-none">
                   {String(stageKey).padStart(2, '0')}
                 </span>
-                <span className="block -mt-8 md:-mt-9 text-lg md:text-xl font-bold text-[#3E3935]">
+                <span className="block -mt-8 md:-mt-9 text-lg md:text-xl font-bold text-[#2B2724]">
                   {STAGE_LABELS[stageKey] || `שלב ${stageKey}`}
                 </span>
                 {STAGE_SUBTEXT[stageKey] && (
-                  <span className="block text-sm text-[#716861] mt-1">{STAGE_SUBTEXT[stageKey]}</span>
+                  <span className="block text-sm text-[#6B625C] mt-1">{STAGE_SUBTEXT[stageKey]}</span>
                 )}
               </div>
             )}

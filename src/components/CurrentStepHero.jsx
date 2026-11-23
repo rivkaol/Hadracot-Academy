@@ -17,10 +17,10 @@ export default function CurrentStepHero({
 }) {
   if (trackFullyCompleted) {
     return (
-      <section className="mb-10 bg-white rounded-[1.75rem] md:rounded-[2rem] p-8 md:p-10 border border-gray-100 shadow-[0_20px_50px_rgba(148,163,136,0.12)] text-center">
-        <Route size={34} className="text-[#C88F96] mx-auto mb-4" />
-        <h3 className="text-[24px] md:text-[28px] font-bold text-[#3E3935] mb-2">השלמת את מסלול היסוד</h3>
-        <p className="text-[17px] text-[#716861] mb-6 max-w-md mx-auto">
+      <section className="mb-10 bg-white rounded-[1.75rem] md:rounded-[2rem] p-8 md:p-10 border border-gray-100 shadow-[0_20px_50px_rgba(31,74,58,0.12)] text-center">
+        <Route size={34} className="text-[#A0627A] mx-auto mb-4" />
+        <h3 className="text-[24px] md:text-[28px] font-bold text-[#1F4A3A] mb-2">השלמת את מסלול היסוד</h3>
+        <p className="text-[17px] text-[#6B625C] mb-6 max-w-md mx-auto">
           עברת את כל הצעדים.
           <br />
           עכשיו המסלול הזה נשאר שלך — כדי לחזור אליו בכל פעם שתרצי.
@@ -29,7 +29,7 @@ export default function CurrentStepHero({
           {onGoLibrary && (
             <button
               onClick={onGoLibrary}
-              className="bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white px-7 py-3 rounded-full font-bold inline-flex items-center gap-2 shadow-[0_12px_28px_rgba(158,98,108,0.25)] hover:-translate-y-0.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C88F96] focus-visible:ring-offset-2"
+              className="bg-gradient-to-br from-[#A0627A] to-[#7E3F55] text-white px-7 py-3 rounded-full font-bold inline-flex items-center gap-2 shadow-[0_12px_28px_rgba(126,63,85,0.25)] hover:-translate-y-0.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A0627A] focus-visible:ring-offset-2"
             >
               לספריית ההדרכות
               <ChevronLeft size={18} />
@@ -38,7 +38,7 @@ export default function CurrentStepHero({
           {firstTrackTutorial && (
             <button
               onClick={() => onSelectTutorial(firstTrackTutorial)}
-              className="text-[#9E626C] font-bold px-7 py-3 rounded-full hover:bg-[#FAF7F2] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C88F96] focus-visible:ring-offset-2"
+              className="text-[#7E3F55] font-bold px-7 py-3 rounded-full hover:bg-[#FFFFFF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A0627A] focus-visible:ring-offset-2"
             >
               לעבור שוב על המסלול
             </button>
@@ -53,7 +53,7 @@ export default function CurrentStepHero({
   const ctaLabel = isContinuing ? 'ממשיכה לצפות' : isFirstEver ? 'מתחילה את הצעד הראשון' : 'לצעד הבא'
 
   return (
-    <section className="mb-10 bg-white rounded-[1.75rem] md:rounded-[2rem] overflow-hidden border border-gray-100 shadow-[0_20px_50px_rgba(148,163,136,0.12)]">
+    <section className="mb-10 bg-white rounded-[1.75rem] md:rounded-[2rem] overflow-hidden border border-gray-100 shadow-[0_20px_50px_rgba(31,74,58,0.12)]">
       <div className="flex flex-col md:flex-row">
         <div
           onClick={() => onSelectTutorial(currentTutorial)}
@@ -74,12 +74,12 @@ export default function CurrentStepHero({
               className="absolute inset-0 w-full h-full object-cover"
             />
           ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-[#E8EEE5] to-[#FAF7F2]" />
+            <div className="absolute inset-0 bg-gradient-to-br from-[#EEF3EF] to-[#FFFFFF]" />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="w-16 h-16 bg-white/95 rounded-full flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-              <PlayCircle size={30} className="text-[#3E3935]" />
+              <PlayCircle size={30} className="text-[#2B2724]" />
             </div>
           </div>
         </div>
@@ -88,7 +88,7 @@ export default function CurrentStepHero({
           <StepBadge tutorial={currentTutorial} totalSteps={totalSteps} size="lg" />
           <button
             onClick={() => onSelectTutorial(currentTutorial)}
-            className="mt-6 w-full md:w-fit self-center md:self-auto bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white px-7 py-3.5 rounded-full font-bold inline-flex items-center justify-center gap-2 shadow-[0_12px_28px_rgba(158,98,108,0.25)] hover:-translate-y-0.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C88F96] focus-visible:ring-offset-2"
+            className="mt-6 w-full md:w-fit self-center md:self-auto bg-gradient-to-br from-[#A0627A] to-[#7E3F55] text-white px-7 py-3.5 rounded-full font-bold inline-flex items-center justify-center gap-2 shadow-[0_12px_28px_rgba(126,63,85,0.25)] hover:-translate-y-0.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A0627A] focus-visible:ring-offset-2"
           >
             {ctaLabel}
             <ChevronLeft size={18} />

@@ -8,14 +8,14 @@ export default function JourneyProgressHeader({ completedCount, totalSteps, trac
   return (
     <section className="mb-8">
       <div className="flex items-center justify-between mb-2.5 flex-wrap gap-1">
-        <p className="text-sm font-bold text-[#9E626C]">ההתקדמות שלי</p>
-        <p className="text-sm font-bold text-[#3E3935]">
+        <p className="text-sm font-bold text-[#7E3F55]">ההתקדמות שלי</p>
+        <p className="text-sm font-bold text-[#2B2724]">
           {completedCount} מתוך {totalSteps} צעדים הושלמו
         </p>
       </div>
-      <div className="relative w-full h-2.5 rounded-full bg-[#E8EEE5] overflow-hidden">
+      <div className="relative w-full h-2.5 rounded-full bg-[#EEF3EF] overflow-hidden">
         <div
-          className="absolute inset-y-0 right-0 rounded-full bg-gradient-to-l from-[#9E626C] to-[#C88F96] transition-all duration-500"
+          className="absolute inset-y-0 right-0 rounded-full bg-gradient-to-l from-[#7E3F55] to-[#A0627A] transition-all duration-500"
           style={{ width: `${pct}%` }}
         />
       </div>

@@ -11,17 +11,17 @@ export default function StepBadge({ tutorial, totalSteps, size = 'base', showLab
   return (
     <div className={className}>
       {series && (
-        <div className={`text-base font-bold mb-1.5 ${series.isHealth ? 'text-[#4F6249]' : 'text-[#9E626C]'}`}>
+        <div className={`text-base font-bold mb-1.5 ${series.isHealth ? 'text-[#173A2D]' : 'text-[#7E3F55]'}`}>
           {series.shelfTitle}
           {series.partLabel && <span className="font-medium"> · {series.partLabel}</span>}
         </div>
       )}
       {hasStep && (
-        <div className="text-base font-bold text-[#9E626C] mb-1.5">
+        <div className="text-base font-bold text-[#7E3F55] mb-1.5">
           צעד {tutorial.recommendedOrder} מתוך {totalSteps}
         </div>
       )}
-      <h3 className={`font-bold text-[#3E3935] leading-tight ${sizeClass}`}>{tutorial?.title}</h3>
+      <h3 className={`font-bold text-[#1F4A3A] leading-tight ${sizeClass}`}>{tutorial?.title}</h3>
     </div>
   )
 }

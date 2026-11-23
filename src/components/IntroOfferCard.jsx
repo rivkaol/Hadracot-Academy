@@ -19,9 +19,9 @@ export default function IntroOfferCard({ variant = 'full', email, onJoin, onStar
         target="_blank"
         rel="noopener noreferrer"
         onClick={handleClick}
-        className="inline-flex items-center gap-2 text-sm bg-white/70 border border-[#C88F96]/30 rounded-full px-4 py-2 text-[#9E626C] font-bold hover:bg-white transition-colors"
+        className="inline-flex items-center gap-2 text-sm bg-white/70 border border-[#A0627A]/30 rounded-full px-4 py-2 text-[#7E3F55] font-bold hover:bg-white transition-colors"
       >
-        <span className="bg-[#687B63] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0">חברות חודשית</span>
+        <span className="bg-[#1F4A3A] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0">חברות חודשית</span>
         {pricingConfig.membershipPriceLabel} · ביטול בכל עת
       </a>
     )
@@ -29,9 +29,9 @@ export default function IntroOfferCard({ variant = 'full', email, onJoin, onStar
 
   return (
     <section className="visitor-landing max-w-3xl mx-auto px-4 sm:px-6 py-6">
-      <div className="relative overflow-hidden rounded-[2rem] bg-[#3E3935] p-8 sm:p-14 text-center shadow-[0_30px_70px_rgba(63,58,54,0.35)]">
-        <div className="absolute -top-24 -left-24 w-72 h-72 bg-[#687B63]/25 rounded-full blur-3xl" />
-        <div className="absolute -bottom-24 -right-24 w-72 h-72 bg-[#C88F96]/20 rounded-full blur-3xl" />
+      <div className="relative overflow-hidden rounded-[2rem] bg-[#6A3447] p-8 sm:p-14 text-center shadow-[0_30px_70px_rgba(43,39,36,0.35)]">
+        <div className="absolute -top-24 -left-24 w-72 h-72 bg-[#1F4A3A]/25 rounded-full blur-3xl" />
+        <div className="absolute -bottom-24 -right-24 w-72 h-72 bg-[#A0627A]/20 rounded-full blur-3xl" />
         <div className="relative">
           <span className="inline-block text-xs font-bold text-[#F4ECE5] bg-white/10 px-4 py-1.5 rounded-full mb-6 tracking-wide">
             חברות חודשית
@@ -56,7 +56,7 @@ export default function IntroOfferCard({ variant = 'full', email, onJoin, onStar
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleClick}
-            className="inline-flex items-center justify-center gap-2 bg-white text-[#3E3935] px-8 py-4 rounded-full font-bold text-lg shadow-[0_14px_32px_rgba(0,0,0,0.25)] hover:-translate-y-0.5 transition-all"
+            className="inline-flex items-center justify-center gap-2 bg-white text-[#2B2724] px-8 py-4 rounded-full font-bold text-lg shadow-[0_14px_32px_rgba(0,0,0,0.25)] hover:-translate-y-0.5 transition-all"
           >
             אני רוצה להיכנס למועדון
             <ChevronLeft size={20} />

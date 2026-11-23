@@ -9,31 +9,31 @@ export default function RivkaAboutSection({ onStartTrial }) {
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-[0.85fr_1fr] gap-10 lg:gap-16 items-center">
           <div className="mx-auto lg:mx-0 w-full max-w-sm">
-            <div className="rounded-[2.5rem] overflow-hidden shadow-[0_28px_60px_rgba(74,61,54,0.18)] border-8 border-[#FAF7F2]">
+            <div className="rounded-[2.5rem] overflow-hidden shadow-[0_28px_60px_rgba(43,39,36,0.18)] border-8 border-[#FFFFFF]">
               <img src={RIVKA_PHOTO_URL} alt="רבקה הולצברג" className="w-full aspect-[4/5] object-cover" />
             </div>
           </div>
 
           <div className="text-center lg:text-right">
-            <span className="inline-block text-sm font-bold text-[#9E626C] bg-[#C88F96]/10 px-4 py-1.5 rounded-full mb-5">
+            <span className="inline-block text-sm font-bold text-[#7E3F55] bg-[#A0627A]/10 px-4 py-1.5 rounded-full mb-5">
               נעים מאוד, אני רבקה
             </span>
-            <h2 className="text-[clamp(1.7rem,3.4vw,2.5rem)] font-extrabold text-[#3E3935] leading-[1.35] mb-6">
+            <h2 className="text-[clamp(1.7rem,3.4vw,2.5rem)] font-extrabold text-[#1F4A3A] leading-[1.35] mb-6">
               רציתי ליצור מקום שלא נעלמים ממנו אחרי שבוע.
             </h2>
-            <p className="text-[#716861] text-lg leading-[1.9] mb-4">
+            <p className="text-[#6B625C] text-lg leading-[1.9] mb-4">
               אני לא רוצה שתיכנסי לעוד מקום
               <br />
               שתפתחי פעם אחת ותשכחי ממנו.
             </p>
-            <p className="text-[#716861] text-lg leading-[1.9] mb-4">
+            <p className="text-[#6B625C] text-lg leading-[1.9] mb-4">
               רציתי ליצור מקום שאפשר לחזור אליו.
               <br />
               גם אחרי יום שבו הכול הלך בדיוק כמו שרצית.
               <br />
               וגם אחרי שבוע שבו שום דבר לא הסתדר.
             </p>
-            <p className="text-[#3E3935] font-bold text-lg leading-[1.9] mb-8">
+            <p className="text-[#2B2724] font-bold text-lg leading-[1.9] mb-8">
               מקום שמחזיר אותך בעדינות לשאלה:
               <br />
               מה הצעד הבא שלי עכשיו?
@@ -42,7 +42,7 @@ export default function RivkaAboutSection({ onStartTrial }) {
             {onStartTrial && (
               <button
                 onClick={onStartTrial}
-                className="inline-flex items-center gap-2 text-[#9E626C] font-bold hover:underline"
+                className="inline-flex items-center gap-2 text-[#7E3F55] font-bold hover:underline"
               >
                 להתחיל איתי
                 <ChevronLeft size={18} />

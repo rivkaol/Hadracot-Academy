@@ -12,12 +12,12 @@ import { pricingConfig } from '../pricing'
 const TEASER_COPY = {
   'personal-growth': {
     kicker: 'תודעה והרגלים',
-    accent: '#9E626C',
+    accent: '#7E3F55',
     hook: 'ומה קורה כשאת יודעת בדיוק מה את רוצה — אבל שוב אין לך זמן לעצמך?',
   },
   health: {
     kicker: 'בריאות ואורח חיים',
-    accent: '#687B63',
+    accent: '#1F4A3A',
     hook: 'כי שינוי אמיתי לא נשאר רק בראש. הוא פוגש גם את הגוף ואת החיים עצמם.',
   },
 }
@@ -26,7 +26,7 @@ function TeaserCard({ kicker, accent, title, hook, imageUrl }) {
   if (!title) return null
   return (
     <div className="relative bg-white rounded-[1.5rem] border border-gray-100 shadow-sm overflow-hidden text-right">
-      <div className="aspect-[4/3] relative bg-[#3E3935]/5">
+      <div className="aspect-[4/3] relative bg-[#2B2724]/5">
         {imageUrl && <img src={imageUrl} alt="" className="absolute inset-0 w-full h-full object-cover" />}
         <span
           className="absolute top-2.5 right-2.5 text-[10px] font-bold text-white px-2.5 py-1 rounded-full shadow-sm"
@@ -39,8 +39,8 @@ function TeaserCard({ kicker, accent, title, hook, imageUrl }) {
         <p className="text-[11px] font-bold mb-1.5" style={{ color: accent }}>
           {kicker}
         </p>
-        <p className="font-bold text-[#3E3935] text-sm leading-snug mb-1.5">{title}</p>
-        <p className="text-xs text-[#716861] leading-[1.6]">{hook}</p>
+        <p className="font-bold text-[#2B2724] text-sm leading-snug mb-1.5">{title}</p>
+        <p className="text-xs text-[#6B625C] leading-[1.6]">{hook}</p>
       </div>
     </div>
   )
@@ -67,7 +67,7 @@ export default function TrialWelcomeScreen({ tutorial, tutorialsData, onStart, o
     healthTeaser && { ...TEASER_COPY.health, title: healthTeaser.title, imageUrl: healthTeaser.imageUrl },
     moreTeaser && {
       kicker: 'עוד מתוך המועדון',
-      accent: '#3E3935',
+      accent: '#2B2724',
       title: moreTeaser.title,
       imageUrl: moreTeaser.imageUrl,
       hook: pricingConfig.nextLiveSession
@@ -77,15 +77,15 @@ export default function TrialWelcomeScreen({ tutorial, tutorialsData, onStart, o
   ].filter(Boolean)
 
   return (
-    <div className="flex-1 flex flex-col items-center p-4 bg-[#FAF7F2] pb-14">
+    <div className="flex-1 flex flex-col items-center p-4 bg-[#FFFFFF] pb-14">
       <div className="w-full max-w-lg text-center">
-        <p className="text-xs font-bold text-[#9E626C] tracking-wide mb-2">
+        <p className="text-xs font-bold text-[#7E3F55] tracking-wide mb-2">
           הטעימה שלך
           {tutorial?.recommendedOrder && totalSteps ? ` · צעד ${tutorial.recommendedOrder} מתוך ${totalSteps}` : ''}
         </p>
-        <h1 className="text-2xl md:text-3xl font-bold text-[#3E3935] mb-2">ברוכה הבאה</h1>
-        <p className="text-lg font-bold text-[#9E626C] mb-1">זה הצעד הראשון שלך.</p>
-        <p className="text-[#716861] mb-6 leading-[1.8]">
+        <h1 className="text-2xl md:text-3xl font-bold text-[#1F4A3A] mb-2">ברוכה הבאה</h1>
+        <p className="text-lg font-bold text-[#7E3F55] mb-1">זה הצעד הראשון שלך.</p>
+        <p className="text-[#6B625C] mb-6 leading-[1.8]">
           אל תנסי לראות הכול.
           <br />
           מתחילים מכאן.
@@ -96,7 +96,7 @@ export default function TrialWelcomeScreen({ tutorial, tutorialsData, onStart, o
             <div key={s.n} className="flex items-center">
               <span
                 className={`text-[11px] font-bold px-2.5 py-1 rounded-full whitespace-nowrap ${
-                  s.n === 1 ? 'bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white' : 'bg-white text-gray-400 border border-gray-200'
+                  s.n === 1 ? 'bg-gradient-to-br from-[#A0627A] to-[#7E3F55] text-white' : 'bg-white text-gray-400 border border-gray-200'
                 }`}
               >
                 {s.title}
@@ -107,20 +107,20 @@ export default function TrialWelcomeScreen({ tutorial, tutorialsData, onStart, o
         </div>
 
         <div className="bg-white rounded-[2rem] p-6 border border-gray-100 shadow-sm">
-          <div className="aspect-video bg-[#3E3935]/5 rounded-2xl relative overflow-hidden mb-5">
+          <div className="aspect-video bg-[#2B2724]/5 rounded-2xl relative overflow-hidden mb-5">
             {tutorial?.imageUrl && (
               <img src={tutorial.imageUrl} alt={tutorial.title} className="absolute inset-0 w-full h-full object-cover" />
             )}
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-14 h-14 bg-white/95 rounded-full flex items-center justify-center shadow-lg">
-                <PlayCircle size={28} className="text-[#3E3935]" />
+                <PlayCircle size={28} className="text-[#2B2724]" />
               </div>
             </div>
           </div>
-          <h2 className="text-xl font-bold text-[#3E3935] mb-6">{tutorial?.title}</h2>
+          <h2 className="text-xl font-bold text-[#1F4A3A] mb-6">{tutorial?.title}</h2>
           <button
             onClick={onStart}
-            className="w-full bg-gradient-to-br from-[#C88F96] to-[#9E626C] text-white py-3.5 rounded-2xl font-bold text-lg shadow-[0_12px_28px_rgba(158,98,108,0.25)] inline-flex items-center justify-center gap-2"
+            className="w-full bg-gradient-to-br from-[#A0627A] to-[#7E3F55] text-white py-3.5 rounded-2xl font-bold text-lg shadow-[0_12px_28px_rgba(126,63,85,0.25)] inline-flex items-center justify-center gap-2"
           >
             מתחילה לצפות
             <ChevronLeft size={20} />
@@ -130,7 +130,7 @@ export default function TrialWelcomeScreen({ tutorial, tutorialsData, onStart, o
 
       {teasers.length > 0 && (
         <div className="w-full max-w-3xl mt-12 text-center">
-          <p className="text-[#716861] font-medium mb-6">וזו רק דלת אחת לתוך המועדון...</p>
+          <p className="text-[#6B625C] font-medium mb-6">וזו רק דלת אחת לתוך המועדון...</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             {teasers.map((t, i) => (
@@ -138,7 +138,7 @@ export default function TrialWelcomeScreen({ tutorial, tutorialsData, onStart, o
             ))}
           </div>
 
-          <div className="flex items-center justify-center gap-2 text-[#9E626C] mb-3">
+          <div className="flex items-center justify-center gap-2 text-[#7E3F55] mb-3">
             <Sparkles size={16} />
             <p className="font-bold text-sm">וזה רק חלק קטן ממה שמחכה לך בפנים.</p>
           </div>
@@ -146,7 +146,7 @@ export default function TrialWelcomeScreen({ tutorial, tutorialsData, onStart, o
           {onShowTrackMap && (
             <button
               onClick={onShowTrackMap}
-              className="text-[#3E3935] font-bold underline underline-offset-4 hover:text-[#9E626C] transition-colors inline-flex items-center gap-1.5"
+              className="text-[#2B2724] font-bold underline underline-offset-4 hover:text-[#7E3F55] transition-colors inline-flex items-center gap-1.5"
             >
               לראות את כל הדרך
               <ChevronDown size={16} />

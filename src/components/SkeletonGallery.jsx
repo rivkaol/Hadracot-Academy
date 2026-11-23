@@ -1,6 +1,6 @@
 export default function SkeletonGallery() {
   return (
-    <div dir="rtl" className="flex-1 font-sans bg-[#FAF7F2] text-[#3E3935]">
+    <div dir="rtl" className="flex-1 font-sans bg-[#FFFFFF] text-[#2B2724]">
       <header className="bg-white sticky top-0 z-50 border-b border-gray-100 shadow-sm h-20 flex items-center px-4 sm:px-8">
         <div className="skeleton-shimmer h-10 w-48 rounded-md"></div>
       </header>
