@@ -10,6 +10,20 @@ export function flattenTutorials(tutorialsData) {
   return all
 }
 
+// "כמה חדשה ההדרכה" — לסידור "הכי חדשות" ב"כל ההדרכות".
+// לפי מספר הסרטון ב-Vimeo, שעולה תמיד עם זמן ההעלאה (נבדק מול הגיליון 24.11.2026:
+// "עוגנים", ההדרכה האחרונה, הכי גבוה). כך הסידור עובד לבד, בלי לתחזק תאריכים בגיליון.
+// הדרכה בלי סרטון אמיתי (ברירת המחדל) יורדת לסוף.
+const DEFAULT_VIMEO_ID = '76979871'
+export function newnessKey(tutorial) {
+  const vimeo = String(tutorial?.vimeoId || '').trim()
+  return vimeo && vimeo !== DEFAULT_VIMEO_ID ? Number(vimeo) || 0 : 0
+}
+
+export function sortNewestFirst(tutorials) {
+  return [...(tutorials || [])].sort((a, b) => newnessKey(b) - newnessKey(a))
+}
+
 // הדרכות המסלול הראשי (עם recommendedOrder), ממוינות.
 export function getTrackTutorials(tutorialsData) {
   return flattenTutorials(tutorialsData)

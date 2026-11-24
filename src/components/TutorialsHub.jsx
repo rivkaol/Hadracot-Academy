@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
-import { Lock, PlayCircle, CheckCircle, Search, Lightbulb, Clock } from 'lucide-react'
+import { Lock, PlayCircle, CheckCircle, Search, Lightbulb, Clock, Layers, Sparkles } from 'lucide-react'
 import { themeConfig } from '../constants'
-import { getTrackTutorials } from '../lib/catalogHelpers'
+import { getTrackTutorials, sortNewestFirst } from '../lib/catalogHelpers'
 import { buildShelves } from '../lib/series'
 import StepBadge from './StepBadge'
 import { pricingConfig } from '../pricing'
@@ -19,6 +19,15 @@ export default function TutorialsHub({
   isClubMember,
 }) {
   const [activeTab, setActiveTab] = useState('all')
+  // סידור: 'series' (ברירת מחדל, לפי סדרות) או 'newest' (רשימה אחת מהחדשה לישנה).
+  // הבחירה נזכרת במכשיר, כדי שמי שאוהבת "הכי חדשות" לא תצטרך לבחור שוב בכל כניסה.
+  const [sortMode, setSortModeState] = useState(() => {
+    try { return localStorage.getItem('library_sort') === 'newest' ? 'newest' : 'series' } catch { return 'series' }
+  })
+  const setSortMode = (mode) => {
+    setSortModeState(mode)
+    try { localStorage.setItem('library_sort', mode) } catch { /* מכשיר בלי אחסון — הבחירה רק לביקור הזה */ }
+  }
 
   const totalSteps = useMemo(() => getTrackTutorials(tutorialsData).length, [tutorialsData])
 
@@ -33,12 +42,21 @@ export default function TutorialsHub({
     ].filter((g) => g.tutorials.length)
   }, [tutorialsData])
 
+  // "הכי חדשות": כל ההדרכות מכל המדפים ברשימה אחת. tab נשמר לכל הדרכה, כדי שהלשוניות
+  // (נפש / גוף) ימשיכו לסנן גם בסידור הזה.
+  const newestGroup = useMemo(() => {
+    const items = groups.flatMap((g) => g.tutorials.map((t) => ({ ...t, _tab: g.tab })))
+    return { id: 'newest', tab: null, title: 'מהחדשה לישנה', tutorials: sortNewestFirst(items) }
+  }, [groups])
+
   const visibleData = useMemo(() => {
-    return groups
+    const source = sortMode === 'newest' ? [newestGroup] : groups
+    return source
       .map((category) => {
-        if (activeTab !== 'all' && activeTab !== category.tab) return null
+        if (category.tab && activeTab !== 'all' && activeTab !== category.tab) return null
         const query = (searchQuery || '').toLowerCase()
         const filtered = category.tutorials.filter((t) => {
+          if (!category.tab && activeTab !== 'all' && t._tab !== activeTab) return false
           const title = (t?.title || '').toLowerCase()
           const desc = (t?.description || '').toLowerCase()
           return title.includes(query) || desc.includes(query)
@@ -46,7 +64,7 @@ export default function TutorialsHub({
         return filtered.length === 0 ? null : { ...category, tutorials: filtered }
       })
       .filter(Boolean)
-  }, [groups, activeTab, searchQuery])
+  }, [groups, newestGroup, sortMode, activeTab, searchQuery])
 
   return (
     <div className="flex-1">
@@ -55,6 +73,28 @@ export default function TutorialsHub({
           <p className="inline-flex items-center gap-3 text-[15px] font-medium text-[#7E3F55] mb-2"><span aria-hidden="true" className="w-8 h-px bg-[#7E3F55]/60" />הספרייה שלך</p>
           <h2 className="text-[30px] md:text-[40px] font-bold text-[#1F4A3A] mb-1.5">כל ההדרכות</h2>
           <p className="text-[#6B625C] text-[18px]">רוצה לחזור להדרכה מסוימת? כאן תמצאי את הכול במקום אחד.</p>
+        </div>
+
+        <div className="flex items-center gap-3 mb-6" role="group" aria-label="סידור ההדרכות">
+          <span className="text-[16px] font-medium text-[#5E5954]">סידור:</span>
+          {[
+            ['series', 'לפי סדרות', Layers],
+            ['newest', 'הכי חדשות', Sparkles],
+          ].map(([mode, label, Icon]) => (
+            <button
+              key={mode}
+              onClick={() => setSortMode(mode)}
+              aria-pressed={sortMode === mode}
+              className={`inline-flex items-center gap-2 text-[16px] font-bold px-4 py-2.5 rounded-full border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A0627A] focus-visible:ring-offset-2 ${
+                sortMode === mode
+                  ? 'bg-[#6A3447] text-white border-[#6A3447]'
+                  : 'bg-white text-[#2B2724] border-[#ECE6E1] hover:bg-[#F4E9ED] hover:border-[#C99AAB]'
+              }`}
+            >
+              <Icon size={18} aria-hidden="true" />
+              {label}
+            </button>
+          ))}
         </div>
 
         <div className="flex overflow-x-auto hide-scrollbar border-b border-gray-200 mb-10 pb-1">
@@ -104,7 +144,9 @@ export default function TutorialsHub({
                   </div>
                 )}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                  {category.tutorials.map((tutorial) => {
+                  {category.tutorials.map((tutorial, index) => {
+                    // בסידור "הכי חדשות" שתי הראשונות מקבלות תווית "חדשה" (רק כשאין חיפוש ואין סינון)
+                    const isNewest = category.id === 'newest' && !searchQuery && activeTab === 'all' && index < 2
                     const isLocked = isAuthenticated && !isClubMember && !accessibleTutorialIds.includes(tutorial.id)
                     const isCompleted = isAuthenticated && completedTutorials.includes(tutorial.id)
                     const isContinuing = isAuthenticated && !isCompleted && lastWatchedTutorial?.id === tutorial.id
@@ -117,6 +159,11 @@ export default function TutorialsHub({
                         className={`group bg-white rounded-2xl shadow-[0_14px_36px_rgba(106,52,71,0.08)] transition-all duration-500 flex flex-col cursor-pointer overflow-hidden ${cardTheme.borderClass} hover:shadow-[0_20px_44px_rgba(106,52,71,0.16)] hover:-translate-y-1 relative`}
                       >
                         <div className="aspect-[16/9] relative flex items-center justify-center overflow-hidden bg-gray-50">
+                          {isNewest && (
+                            <span className="absolute top-3 right-3 z-30 bg-[#6A3447] text-white text-[14px] font-bold px-3 py-1 rounded-full shadow">
+                              חדשה
+                            </span>
+                          )}
                           {tutorial.imageUrl ? (
                             <img
                               src={tutorial.imageUrl}
