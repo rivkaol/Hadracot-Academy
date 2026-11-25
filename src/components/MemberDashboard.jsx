@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
-import { Sparkles, Leaf, ChevronDown } from 'lucide-react'
-import { getTrackTutorials, findTutorialById } from '../lib/catalogHelpers'
-import { buildShelves, DOOR_COVERS } from '../lib/series'
+import { LayoutGrid, ChevronLeft } from 'lucide-react'
+import { getTrackTutorials } from '../lib/catalogHelpers'
+import { findShelfOf } from '../lib/series'
 import { pricingConfig } from '../pricing'
 import CurrentStepHero from './CurrentStepHero'
 import SeriesShelf from './SeriesShelf'
@@ -9,39 +9,11 @@ import UpcomingLiveSession from './UpcomingLiveSession'
 import CommunityCard from './CommunityCard'
 
 // דף הבית לחברה/VIP בלבד (לא רוכשת בודדת — לה יש אזור נפרד, ראו App.jsx).
-// שום תוכן מכירתי — לא כאן. הסדר במסך:
+// שום תוכן מכירתי — לא כאן. מסך קצר, "מה עכשיו" בלבד (החלטה של רבקה, 25.11.2026):
 // 1. "המשך צפייה" (או "הצעד הראשון שלך" לחדשה לגמרי)
-// 2. שתי דלתות: נפש / גוף — קפיצה למדף המתאים
-// 3. הסדרות, כל סדרה מדף משלה (src/lib/series.js)
-// 4. מדף הבריאות, בירוק
-// "דלת" עם תמונה גדולה — נפש או גוף. לחיצה קופצת למדף המתאים במסך.
-function DoorCard({ image, Icon, title, subtitle, accent, onClick }) {
-  return (
-    <button
-      onClick={onClick}
-      className="group relative block w-full h-52 md:h-64 rounded-[1.75rem] overflow-hidden text-right shadow-[0_14px_36px_rgba(0,0,0,0.12)] focus-visible:outline-none focus-visible:ring-4"
-      style={{ '--tw-ring-color': accent, background: accent }}
-    >
-      {image && (
-        <img src={image} alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-      )}
-      <span className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
-      <span className="absolute bottom-0 inset-x-0 p-5 md:p-6 flex items-end gap-3 text-white">
-        <span className="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shrink-0" style={{ color: accent }}>
-          <Icon size={26} />
-        </span>
-        <span className="flex-1">
-          <span className="block text-[26px] md:text-[30px] font-bold leading-tight drop-shadow">{title}</span>
-          <span className="block text-lg mt-0.5 opacity-95">{subtitle}</span>
-        </span>
-        <span className="w-11 h-11 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center shrink-0">
-          <ChevronDown size={26} aria-hidden="true" />
-        </span>
-      </span>
-    </button>
-  )
-}
-
+// 2. הסדרה שהיא נמצאת בה, עם ההתקדמות שלה
+// 3. כפתור גדול "לכל ההדרכות". הרשימה המלאה נמצאת רק שם (ClubLibrary), לא כאן.
+// 4. שיעור חי וקבוצה
 export default function MemberDashboard({
   tutorialsData,
   userName,
@@ -51,7 +23,6 @@ export default function MemberDashboard({
   onGoLibrary,
 }) {
   const track = useMemo(() => getTrackTutorials(tutorialsData), [tutorialsData])
-  const { series, health, other } = useMemo(() => buildShelves(tutorialsData), [tutorialsData])
   const totalSteps = track.length
   const trackIds = useMemo(() => new Set(track.map((t) => t.id)), [track])
 
@@ -67,11 +38,14 @@ export default function MemberDashboard({
   const isContinuing = !!lastWatchedIncomplete
   const isFirstEver = !lastWatchedTutorial
 
-  const seriesCount = series.reduce((n, s) => n + s.tutorials.length, 0)
   const nextLiveSession = pricingConfig.nextLiveSession
 
-  const jumpTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  const coverOf = (id) => findTutorialById(tutorialsData, id)?.imageUrl || null
+  // הסדרה של הצעד הנוכחי. כשהמסלול הושלם כולו, אין "סדרה נוכחית" ולא מציגים אותה.
+  const currentShelf = useMemo(() => {
+    if (trackFullyCompleted || !currentTutorial) return null
+    const found = findShelfOf(tutorialsData, currentTutorial.id)
+    return found && found.isSeries ? found.shelf : null
+  }, [tutorialsData, currentTutorial, trackFullyCompleted])
 
   return (
     <div className="flex-1 pb-[110px] md:pb-8">
@@ -100,66 +74,31 @@ export default function MemberDashboard({
           />
         )}
 
-        <nav aria-label="מה בא לך לראות" className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-12">
-          <DoorCard
-            image={coverOf(DOOR_COVERS.mind)}
-            Icon={Sparkles}
-            title="נפש ושינוי מבפנים"
-            subtitle={`${series.length} סדרות · ${seriesCount} הדרכות`}
-            accent="#7E3F55"
-            onClick={() => jumpTo('series')}
-          />
-          {health.tutorials.length > 0 && (
-            <DoorCard
-              image={coverOf(DOOR_COVERS.body)}
-              Icon={Leaf}
-              title="גוף ובריאות"
-              subtitle={`${health.tutorials.length} הדרכות`}
-              accent="#173A2D"
-              onClick={() => jumpTo('health')}
-            />
-          )}
-        </nav>
-
-        <section id="series" className="mb-14 scroll-mt-28">
-          <h3 className="text-[28px] md:text-[34px] font-bold text-[#1F4A3A] mb-2">נפש ושינוי מבפנים</h3>
-          <p className="text-[19px] text-[#5E5954] leading-relaxed mb-6 max-w-xl">
-            כל סדרה בנויה חלק אחרי חלק. מומלץ לצפות לפי הסדר, ותמיד אפשר לחזור לכל חלק.
-          </p>
-          <div className="flex flex-col gap-8">
-            {series.map((shelf) => (
-              <SeriesShelf
-                key={shelf.id}
-                shelf={shelf}
-                completedTutorials={completedTutorials}
-                currentTutorialId={trackFullyCompleted ? null : currentTutorial?.id}
-                onSelectTutorial={onSelectTutorial}
-              />
-            ))}
-          </div>
-        </section>
-
-        {health.tutorials.length > 0 && (
-          <section id="health" className="mb-14 scroll-mt-28">
-            <h3 className="text-[28px] md:text-[34px] font-bold text-[#1F4A3A] mb-2">גוף ובריאות</h3>
-            <p className="text-[19px] text-[#5E5954] leading-relaxed mb-6 max-w-xl">
-              הדרכות שעומדות כל אחת בפני עצמה. אפשר לבחור לפי מה שמעניין אותך עכשיו.
-            </p>
+        {currentShelf && (
+          <section aria-labelledby="my-series" className="mb-10">
+            <h3 id="my-series" className="text-[26px] md:text-[32px] font-bold text-[#1F4A3A] mb-4">הסדרה שלך</h3>
             <SeriesShelf
-              shelf={health}
-              tone="health"
-              showHeader={false}
+              shelf={currentShelf}
               completedTutorials={completedTutorials}
+              currentTutorialId={currentTutorial?.id}
               onSelectTutorial={onSelectTutorial}
             />
           </section>
         )}
 
-        {other.tutorials.length > 0 && (
-          <section className="mb-14">
-            <SeriesShelf shelf={other} completedTutorials={completedTutorials} onSelectTutorial={onSelectTutorial} />
-          </section>
-        )}
+        <button
+          onClick={onGoLibrary}
+          className="w-full flex items-center gap-4 bg-[#1F4A3A] hover:bg-[#173A2D] text-white rounded-[1.5rem] p-5 md:p-6 text-right shadow-[0_4px_0_rgba(0,0,0,0.25)] mb-12 transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#A0627A]"
+        >
+          <span className="w-12 h-12 rounded-full bg-white/15 flex items-center justify-center shrink-0">
+            <LayoutGrid size={26} aria-hidden="true" />
+          </span>
+          <span className="flex-1">
+            <span className="block text-[22px] md:text-[26px] font-bold leading-tight">לכל ההדרכות</span>
+            <span className="block text-[17px] text-white/90 mt-0.5">נפש ושינוי מבפנים · גוף ובריאות</span>
+          </span>
+          <ChevronLeft size={28} aria-hidden="true" className="shrink-0" />
+        </button>
 
         {nextLiveSession && <UpcomingLiveSession session={nextLiveSession} />}
 
