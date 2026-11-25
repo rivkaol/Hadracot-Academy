@@ -7,6 +7,7 @@ import { findTutorialById, getTrackTutorials } from './lib/catalogHelpers'
 import { getNextInShelf } from './lib/series'
 
 import SkeletonGallery from './components/SkeletonGallery'
+import ClubLibrary from './components/ClubLibrary'
 import LoginScreen from './components/LoginScreen'
 import LeadCaptureScreen from './components/LeadCaptureScreen'
 import AdminPage from './components/AdminPage'
@@ -262,6 +263,10 @@ export default function App() {
   const [pendingTutorial, setPendingTutorial] = useState(null)
   const [prefillEmail, setPrefillEmail] = useState('') // מייל מוכן מראש בהתחברות (מנויה שזוהתה)
   const [searchQuery, setSearchQuery] = useState('')
+  // "כל ההדרכות" לחברה: הנושא הפתוח (null / 'mind' / 'body'), ומאיפה נכנסה להדרכה,
+  // כדי ש"חזרה" מדף הדרכה תחזיר לאותה רשימה ולא תמיד לבית.
+  const [libraryTopic, setLibraryTopic] = useState(null)
+  const [returnView, setReturnView] = useState('home')
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
 
   const [lead, setLead] = useState(null) // ליד אנונימית שנרשמה לטעימה
@@ -443,6 +448,7 @@ export default function App() {
   }
 
   const handleSelectTutorial = (tutorial) => {
+    if (view === 'home' || view === 'library') setReturnView(view)
     const hasAccess = hasFullAccess || accessibleTutorialIds.includes(tutorial.id)
 
     // חברה/VIP עם גישה → צפייה מלאה
@@ -530,6 +536,23 @@ export default function App() {
     window.scrollTo(0, 0)
   }
 
+  // "חזרה" אחת לכל המסכים: מדף הדרכה חוזרים לרשימה שממנה נכנסו,
+  // ומנושא פתוח ב"כל ההדרכות" חוזרים לבחירת הנושאים.
+  const handleBack = () => {
+    if (view === 'tutorial' && returnView === 'library') {
+      setView('library')
+      setSelectedTutorial(null)
+      window.scrollTo(0, 0)
+      return
+    }
+    if (view === 'library' && libraryTopic && !searchQuery) {
+      setLibraryTopic(null)
+      window.scrollTo(0, 0)
+      return
+    }
+    handleBackToHome()
+  }
+
   const handleNextTutorial = () => {
     if (nextTutorial) handleSelectTutorial(nextTutorial.tutorial)
   }
@@ -575,7 +598,16 @@ export default function App() {
   const showBottomNav = viewerState === 'member' || viewerState === 'vip' || viewerState === 'purchaser'
   const goLogin = () => setView('login')
   const goProfile = () => setView('profile')
-  const goLibrary = () => setView('library')
+  const goLibrary = () => {
+    setView('library')
+    setLibraryTopic(null)
+    setSearchQuery('')
+    window.scrollTo(0, 0)
+  }
+  const selectLibraryTopic = (topic) => {
+    setLibraryTopic(topic)
+    window.scrollTo(0, 0)
+  }
   const headerProps = {
     activeView: view,
     viewerState,
@@ -583,7 +615,7 @@ export default function App() {
     isAuthenticated,
     isVip,
     userName,
-    onBack: handleBackToHome,
+    onBack: handleBack,
     onLogout: handleLogout,
     onGoHome: handleBackToHome,
     onGoLogin: goLogin,
@@ -661,8 +693,9 @@ export default function App() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="חפשי הדרכה או נושא שמעניין אותך..."
-                className="bg-transparent border-none outline-none mr-3 w-full text-sm text-[#2B2724] placeholder-gray-400"
+                placeholder="חיפוש הדרכה לפי מילה"
+                aria-label="חיפוש הדרכה"
+                className="bg-transparent border-none outline-none mr-3 w-full text-[17px] text-[#2B2724] placeholder-[#6B625C]"
               />
               {searchQuery && (
                 <button onClick={() => setSearchQuery('')} className="text-gray-500 hover:text-gray-600">
@@ -672,6 +705,17 @@ export default function App() {
             </div>
           </div>
         </div>
+        {hasFullAccess ? (
+          <ClubLibrary
+            tutorialsData={tutorialsData}
+            topic={libraryTopic}
+            onSelectTopic={selectLibraryTopic}
+            searchQuery={searchQuery}
+            completedTutorials={completedTutorials}
+            currentTutorialId={lastWatchedTutorial?.id}
+            onSelectTutorial={handleSelectTutorial}
+          />
+        ) : (
         <TutorialsHub
           tutorialsData={tutorialsData}
           onSelectTutorial={handleSelectTutorial}
@@ -682,6 +726,7 @@ export default function App() {
           lastWatchedTutorial={lastWatchedTutorial}
           isClubMember={hasFullAccess}
         />
+        )}
         {showBottomNav && <BottomNav activeView="library" {...bottomNavProps} />}
       </div>
     )
@@ -760,7 +805,7 @@ export default function App() {
         <TutorialPage
           tutorial={selectedTutorial}
           tutorialsData={tutorialsData}
-          onBack={handleBackToHome}
+          onBack={handleBack}
           onNext={handleNextTutorial}
           nextInfo={nextTutorial}
           onSelectTutorial={handleSelectTutorial}
