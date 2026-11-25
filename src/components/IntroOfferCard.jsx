@@ -21,7 +21,7 @@ export default function IntroOfferCard({ variant = 'full', email, onJoin, onStar
         onClick={handleClick}
         className="inline-flex items-center gap-2 text-sm bg-white/70 border border-[#A0627A]/30 rounded-full px-4 py-2 text-[#7E3F55] font-bold hover:bg-white transition-colors"
       >
-        <span className="bg-[#1F4A3A] text-white text-[13px] font-bold px-2 py-0.5 rounded-full shrink-0">חברות חודשית</span>
+        <span className="bg-[#1F4A3A] text-white text-[15px] font-bold px-2 py-0.5 rounded-full shrink-0">חברות חודשית</span>
         {pricingConfig.membershipPriceLabel} · ביטול בכל עת
       </a>
     )
@@ -43,7 +43,7 @@ export default function IntroOfferCard({ variant = 'full', email, onJoin, onStar
           </div>
           <p className="text-sm font-bold text-[#E8D6BA] mb-7">לחודש</p>
 
-          <p className="text-white/70 leading-[1.9] mb-9 max-w-sm mx-auto">
+          <p className="text-white/90 leading-[1.9] mb-9 max-w-sm mx-auto">
             כל הדרכות המועדון, 2 שיעורים חדשים בכל חודש וקבוצת המועדון.
             <br />
             ללא התחייבות. אפשר לבטל בכל עת.
@@ -64,7 +64,7 @@ export default function IntroOfferCard({ variant = 'full', email, onJoin, onStar
             <div className="mt-5">
               <button
                 onClick={onStartTrial}
-                className="text-sm font-bold text-white/70 hover:text-white underline underline-offset-4 transition-colors"
+                className="text-sm font-bold text-white/90 hover:text-white underline underline-offset-4 transition-colors"
               >
                 עוד לא בטוחה? תני לי 5 דקות
               </button>

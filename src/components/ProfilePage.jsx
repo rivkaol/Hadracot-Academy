@@ -54,12 +54,12 @@ export default function ProfilePage({ userEmail, userPassword, userName, complet
             <div className="flex flex-col md:flex-row md:items-center gap-3 mb-2 justify-center md:justify-start">
               <h3 className="text-2xl font-bold text-[#1F4A3A]">{userName}</h3>
               {isVip ? (
-                <span className="bg-gradient-to-r from-[#A0627A] to-[#7E3F55] text-white text-[13px] font-bold px-3 py-1 rounded-full shadow-sm inline-flex items-center gap-1 justify-center w-max mx-auto md:mx-0">
+                <span className="bg-gradient-to-r from-[#A0627A] to-[#7E3F55] text-white text-[15px] font-bold px-3 py-1 rounded-full shadow-sm inline-flex items-center gap-1 justify-center w-max mx-auto md:mx-0">
                   <Crown size={12} /> VIP
                 </span>
               ) : (
                 viewerState && (
-                  <span className="bg-[#F4E9ED] text-[#6A3447] text-[13px] font-bold px-3 py-1 rounded-full inline-flex items-center gap-1 justify-center w-max mx-auto md:mx-0">
+                  <span className="bg-[#F4E9ED] text-[#6A3447] text-[15px] font-bold px-3 py-1 rounded-full inline-flex items-center gap-1 justify-center w-max mx-auto md:mx-0">
                     {MEMBERSHIP_LABELS[viewerState] || ''}
                   </span>
                 )
@@ -135,7 +135,7 @@ export default function ProfilePage({ userEmail, userPassword, userName, complet
                   <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 gap-4">
                     <div>
                       <h4 className="font-bold text-[#2B2724] text-lg mb-1">{tut.title}</h4>
-                      <p className="text-[13px] text-[#7E3F55] font-medium flex items-center gap-1">
+                      <p className="text-[15px] text-[#7E3F55] font-medium flex items-center gap-1">
                         <CheckCircle size={12} /> נשמר בהצלחה
                       </p>
                     </div>
@@ -159,7 +159,7 @@ export default function ProfilePage({ userEmail, userPassword, userName, complet
           <div className="text-center pb-4">
             <button
               onClick={onLogout}
-              className="inline-flex items-center gap-2 text-gray-400 hover:text-red-500 text-sm font-medium transition-colors"
+              className="inline-flex items-center gap-2 text-gray-500 hover:text-red-500 text-sm font-medium transition-colors"
             >
               <LogOut size={16} /> יציאה מהחשבון
             </button>

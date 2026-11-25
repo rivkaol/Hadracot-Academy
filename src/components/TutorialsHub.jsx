@@ -160,7 +160,7 @@ export default function TutorialsHub({
                       >
                         <div className="aspect-[16/9] relative flex items-center justify-center overflow-hidden bg-gray-50">
                           {isNewest && (
-                            <span className="absolute top-3 right-3 z-30 bg-[#6A3447] text-white text-[14px] font-bold px-3 py-1 rounded-full shadow">
+                            <span className="absolute top-3 right-3 z-30 bg-[#6A3447] text-white text-[16px] font-bold px-3 py-1 rounded-full shadow">
                               חדשה
                             </span>
                           )}
@@ -193,7 +193,7 @@ export default function TutorialsHub({
                           <div>
                             <StepBadge tutorial={tutorial} totalSteps={totalSteps} size="sm" showLabel={false} className={isLocked ? 'opacity-50' : ''} />
                             {tutorial.duration && (
-                              <p className="text-[14px] text-[#6B625C] font-medium mt-1.5 flex items-center gap-1">
+                              <p className="text-[16px] text-[#6B625C] font-medium mt-1.5 flex items-center gap-1">
                                 <Clock size={12} /> {tutorial.duration}
                               </p>
                             )}

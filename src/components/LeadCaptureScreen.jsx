@@ -65,7 +65,7 @@ export default function LeadCaptureScreen({ onRegister, onCancel, onLoginRequest
       <div className="w-full max-w-md bg-white p-8 sm:p-10 rounded-lg border-t-[6px] border-[#7E3F55] shadow-[0_2px_4px_rgba(106,52,71,0.05),0_30px_60px_rgba(106,52,71,0.14)] text-center relative">
         <button
           onClick={onCancel}
-          className="absolute top-6 left-6 text-gray-400 hover:text-[#2B2724] transition-colors z-20"
+          className="absolute top-6 left-6 text-gray-500 hover:text-[#2B2724] transition-colors z-20"
         >
           <ChevronRight size={24} />
         </button>
@@ -131,7 +131,7 @@ export default function LeadCaptureScreen({ onRegister, onCancel, onLoginRequest
                             onMouseDown={(e) => { e.preventDefault(); setEmail(s); setShowSuggest(false) }}
                             className="w-full text-left px-4 py-2.5 text-sm text-[#2B2724] hover:bg-[#FFFFFF] transition-colors flex items-center gap-2"
                           >
-                            <Mail size={14} className="text-gray-400 shrink-0" />
+                            <Mail size={14} className="text-gray-500 shrink-0" />
                             <span className="truncate">{s}</span>
                           </button>
                         </li>
@@ -179,11 +179,11 @@ function Field({ icon: Icon, placeholder, type = 'text', value, onChange, onBlur
           onBlur={onBlur}
           onFocus={onFocus}
           placeholder={placeholder}
-          className={`w-full p-4 pr-12 pl-10 bg-[#FFFFFF] border rounded-2xl outline-none focus:ring-2 transition-all text-[#2B2724] placeholder:text-gray-400 ${invalid ? 'border-red-300 focus:ring-red-200' : 'border-gray-200 focus:ring-[#A0627A]'}`}
+          className={`w-full p-4 pr-12 pl-10 bg-[#FFFFFF] border rounded-2xl outline-none focus:ring-2 transition-all text-[#2B2724] placeholder:text-gray-500 ${invalid ? 'border-red-300 focus:ring-red-200' : 'border-gray-200 focus:ring-[#A0627A]'}`}
           disabled={disabled}
         />
         <div className="absolute right-4 top-1/2 -translate-y-1/2">
-          <Icon size={20} className={invalid ? 'text-red-400' : 'text-gray-400'} />
+          <Icon size={20} className={invalid ? 'text-red-400' : 'text-gray-500'} />
         </div>
         {valid && !invalid && (
           <div className="absolute left-4 top-1/2 -translate-y-1/2">

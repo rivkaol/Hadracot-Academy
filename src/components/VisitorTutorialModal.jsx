@@ -59,7 +59,7 @@ export default function VisitorTutorialModal({ tutorial, categoryTitle, onClose,
           </div>
 
           <a href={pricingConfig.membershipCheckoutUrl} target="_blank" rel="noopener noreferrer" onClick={join} className="w-full min-h-[60px] rounded-full bg-[#7E3F55] text-white font-extrabold text-lg shadow-[0_4px_0_rgba(0,0,0,0.18)] flex items-center justify-center text-center px-5 hover:-translate-y-0.5 transition-transform">להצטרף למועדון</a>
-          <p className="text-center text-[14px] text-[#6B625C] mt-2.5">{pricingConfig.membershipPriceLabel} · אפשר לבטל בכל עת</p>
+          <p className="text-center text-[16px] text-[#6B625C] mt-2.5">{pricingConfig.membershipPriceLabel} · אפשר לבטל בכל עת</p>
 
           <button onClick={trial} className="mt-5 w-full inline-flex items-center justify-center gap-2 text-[#7E3F55] font-extrabold text-sm py-2 hover:underline"><PlayCircle size={18} /> רוצה גם להרגיש איך רבקה מלמדת? אפשר לצפות ב־5 דקות</button>
         </div>

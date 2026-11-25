@@ -96,7 +96,7 @@ export default function SeriesShelf({
                   )}
                 </div>
 
-                <ChevronLeft size={28} className={c('hidden sm:block text-[#9E9188] shrink-0', 'md:hidden')} aria-hidden="true" />
+                <ChevronLeft size={28} className={c('hidden sm:block text-[#6B625C] shrink-0', 'md:hidden')} aria-hidden="true" />
               </button>
             </li>
           )

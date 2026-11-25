@@ -19,7 +19,7 @@ export default function JourneyProgressHeader({ completedCount, totalSteps, trac
           style={{ width: `${pct}%` }}
         />
       </div>
-      <p className="text-sm text-[#9E9188] mt-2">
+      <p className="text-sm text-[#6B625C] mt-2">
         {trackFullyCompleted ? 'המסלול הושלם — והדרך ממשיכה.' : 'עוד צעד אחד בכל פעם.'}
       </p>
     </section>

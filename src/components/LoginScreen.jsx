@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { ChevronRight, Mail, KeyRound, Loader, Sparkles } from 'lucide-react'
+import { ChevronRight, Mail, KeyRound, Loader, Sparkles, MessageCircle } from 'lucide-react'
 import { pricingConfig } from '../pricing'
 
 export default function LoginScreen({ onLogin, onCancel, isLoading, error, pendingTutorial, clearError, prefillEmail, knownMember }) {
   const [emailInput, setEmailInput] = useState(prefillEmail || '')
   const [passwordInput, setPasswordInput] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -22,16 +23,18 @@ export default function LoginScreen({ onLogin, onCancel, isLoading, error, pendi
     pendingTutorial?.landingPageUrl ||
     `${pricingConfig.whatsappBaseUrl}?text=${encodeURIComponent('היי רבקה, אשמח לקבל פרטים ולינק רכישה להדרכה: ' + (pendingTutorial?.title || ''))}`
 
+  const helpUrl = `${pricingConfig.whatsappBaseUrl}?text=${encodeURIComponent('היי רבקה, אני לא מצליחה להיכנס למועדון')}`
+
   return (
     // "הלב": רקע ורוד-שזיף רך, כרטיס לבן עם פס שזיף עליון ותמונה של רבקה. הטופס עצמו נשאר ישר ונקי.
     <div className="flex-1 flex flex-col items-center justify-center p-4 bg-[#F4E9ED] pb-10">
       <div className="w-full max-w-md bg-white p-8 sm:p-10 rounded-lg border-t-[6px] border-[#7E3F55] shadow-[0_2px_4px_rgba(106,52,71,0.05),0_30px_60px_rgba(106,52,71,0.14)] text-center relative">
         <button
           onClick={onCancel}
-          aria-label="חזרה"
-          className="absolute top-6 left-6 text-gray-400 hover:text-[#2B2724] transition-colors z-20"
+          className="absolute top-4 right-4 flex items-center gap-1 text-[#2B2724] font-bold text-base bg-[#F4E9ED] hover:bg-[#E9D3DB] px-4 py-2.5 rounded-full transition-colors z-20"
         >
-          <ChevronRight size={24} />
+          <ChevronRight size={22} aria-hidden="true" />
+          חזרה
         </button>
 
         <div className="relative z-10 mt-2">
@@ -50,24 +53,28 @@ export default function LoginScreen({ onLogin, onCancel, isLoading, error, pendi
               התחברי עם הסיסמה שלך (מספר הטלפון) כדי להיכנס לצפייה מלאה.
             </div>
           ) : (
-            <p className="text-[#6B625C] mb-6 font-medium leading-[1.8]">התחברי כדי לגשת להדרכות שרכשת</p>
+            <p className="text-[#4A433E] text-[17px] mb-6 font-medium leading-[1.8]">
+              {pendingTutorial ? 'התחברי כדי לגשת להדרכות שרכשת' : 'היכנסי עם המייל ומספר הטלפון שלך'}
+            </p>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5 text-right">
             <div>
-              <label className="block text-sm font-bold text-[#2B2724] mb-2 px-1">כתובת מייל</label>
+              <label htmlFor="login-email" className="block text-base font-bold text-[#2B2724] mb-2 px-1">כתובת מייל</label>
               <div className="relative">
                 <input
+                  id="login-email"
                   type="email"
+                  autoComplete="email"
                   value={emailInput}
                   onChange={(e) => setEmailInput(e.target.value)}
                   placeholder="name@example.com"
-                  className="w-full p-4 pr-12 bg-[#FFFFFF] border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#A0627A] transition-all text-[#6B625C]"
+                  className="w-full p-4 pr-12 bg-[#FFFFFF] border border-gray-300 rounded-2xl outline-none focus:ring-2 focus:ring-[#A0627A] transition-all text-[#2B2724] text-[17px]"
                   required
                   disabled={isLoading}
                 />
                 <div className="absolute right-4 top-1/2 -translate-y-1/2">
-                  <Mail size={20} className="text-gray-400" />
+                  <Mail size={20} className="text-gray-500" />
                 </div>
               </div>
               <div className="flex gap-2 mt-2 justify-start px-1" dir="ltr">
@@ -76,7 +83,7 @@ export default function LoginScreen({ onLogin, onCancel, isLoading, error, pendi
                     key={domain}
                     type="button"
                     onClick={() => handleEmailAppend(domain)}
-                    className="text-[13px] font-medium bg-gray-100 hover:bg-[#A0627A]/20 hover:text-[#7E3F55] text-gray-500 px-2.5 py-1.5 rounded-lg transition-colors"
+                    className="text-[15px] font-medium bg-gray-100 hover:bg-[#A0627A]/20 hover:text-[#7E3F55] text-[#4A433E] px-3.5 py-2.5 rounded-lg transition-colors"
                   >
                     {domain}
                   </button>
@@ -85,32 +92,45 @@ export default function LoginScreen({ onLogin, onCancel, isLoading, error, pendi
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-[#2B2724] mb-2 px-1">סיסמה</label>
+              <label htmlFor="login-password" className="block text-base font-bold text-[#2B2724] mb-1 px-1">סיסמה</label>
+              <p id="login-password-hint" className="text-[15px] text-[#4A433E] mb-2 px-1">הסיסמה היא מספר הטלפון שלך</p>
               <div className="relative">
                 <input
-                  type="password"
+                  id="login-password"
+                  type={showPassword ? 'text' : 'password'}
+                  inputMode="tel"
+                  autoComplete="current-password"
+                  aria-describedby="login-password-hint"
                   value={passwordInput}
                   onChange={(e) => setPasswordInput(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full p-4 pr-12 bg-[#FFFFFF] border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#A0627A] transition-all text-[#6B625C]"
+                  placeholder="05XXXXXXXX"
+                  className="w-full p-4 pr-12 pl-20 bg-[#FFFFFF] border border-gray-300 rounded-2xl outline-none focus:ring-2 focus:ring-[#A0627A] transition-all text-[#2B2724] text-[17px]"
                   required
                   disabled={isLoading}
                 />
                 <div className="absolute right-4 top-1/2 -translate-y-1/2">
-                  <KeyRound size={20} className="text-gray-400" />
+                  <KeyRound size={20} className="text-gray-500" />
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  aria-pressed={showPassword}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 text-[15px] font-bold text-[#7E3F55] px-3 py-2 rounded-lg hover:bg-[#F4E9ED]"
+                >
+                  {showPassword ? 'הסתרה' : 'הצגה'}
+                </button>
               </div>
             </div>
 
             {error && (
-              <div className="bg-red-50 text-red-600 text-sm font-medium p-3 rounded-xl border border-red-100 text-center mt-2">
+              <div role="alert" className="bg-red-50 text-red-700 text-base font-medium p-3 rounded-xl border border-red-100 text-center mt-2">
                 {error}
               </div>
             )}
 
             <button
               type="submit"
-              disabled={isLoading || !emailInput.trim() || !passwordInput.trim()}
+              disabled={isLoading}
               className="w-full bg-[#7E3F55] hover:-translate-y-0.5 disabled:bg-gray-300 disabled:shadow-none disabled:cursor-not-allowed text-white py-4 rounded-full font-bold text-lg shadow-[0_4px_0_rgba(0,0,0,0.18)] transition-all flex items-center justify-center gap-2 mt-4"
             >
               {isLoading ? (
@@ -123,16 +143,28 @@ export default function LoginScreen({ onLogin, onCancel, isLoading, error, pendi
             </button>
           </form>
 
-          <div className="mt-8 pt-6 border-t border-gray-100 text-center">
-            <p className="text-[#6B625C] text-base mb-3 font-bold">עדיין לא רכשת את ההדרכה?</p>
+          <a
+            href={helpUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-5 inline-flex items-center justify-center gap-2 w-full text-[#1F4A3A] font-bold text-base underline underline-offset-4 py-2"
+          >
+            <MessageCircle size={20} aria-hidden="true" />
+            לא מצליחה להיכנס? כתבי לי בוואטסאפ
+          </a>
+
+          <div className="mt-6 pt-6 border-t border-gray-100 text-center">
+            <p className="text-[#4A433E] text-base mb-3 font-bold">
+              {pendingTutorial ? 'עדיין לא רכשת את ההדרכה?' : 'עדיין לא חברה במועדון?'}
+            </p>
             <a
-              href={purchaseUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 bg-white text-[#7E3F55] border border-[#A0627A]/50 hover:bg-[#A0627A]/10 font-bold py-2.5 px-6 rounded-full transition-all w-full"
+              href={pendingTutorial ? purchaseUrl : '/join?src=club-login'}
+              target={pendingTutorial ? '_blank' : undefined}
+              rel={pendingTutorial ? 'noopener noreferrer' : undefined}
+              className="inline-flex items-center justify-center gap-2 bg-white text-[#7E3F55] border border-[#A0627A]/50 hover:bg-[#A0627A]/10 font-bold py-3 px-6 rounded-full transition-all w-full"
             >
-              <Sparkles size={16} />
-              לפרטים והרשמה
+              <Sparkles size={18} aria-hidden="true" />
+              {pendingTutorial ? 'לפרטים והרשמה' : 'להכיר את המועדון'}
             </a>
           </div>
         </div>
