@@ -25,7 +25,7 @@ export default function MemberJourneyStep({ tutorial, totalSteps, status, ctaLab
     ? { text: '✓ הושלם', className: 'bg-[#EEF3EF] text-[#1F4A3A]' }
     : isCurrent
       ? { text: 'את כאן', className: 'bg-[#7E3F55] text-white' }
-      : { text: 'מחכה לך בהמשך', className: 'bg-[#FFFFFF] text-[#9E9188] border border-[#ECE6E1]' }
+      : { text: 'מחכה לך בהמשך', className: 'bg-[#FFFFFF] text-[#6B625C] border border-[#ECE6E1]' }
 
   return (
     <div
@@ -82,7 +82,7 @@ export default function MemberJourneyStep({ tutorial, totalSteps, status, ctaLab
             </p>
           )}
 
-          {durationLabel && <p className="text-sm text-[#9E9188] mb-3">{durationLabel}</p>}
+          {durationLabel && <p className="text-sm text-[#6B625C] mb-3">{durationLabel}</p>}
 
           <span
             className={`mt-auto inline-flex w-fit items-center gap-1.5 text-sm font-bold ${

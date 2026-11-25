@@ -124,7 +124,7 @@ function Header({
           ) : isAuthenticated ? (
             <button
               onClick={onLogout}
-              className="text-gray-400 hover:text-red-500 transition-colors flex items-center gap-1 text-sm font-medium"
+              className="text-gray-500 hover:text-red-500 transition-colors flex items-center gap-1 text-sm font-medium"
               title="התנתקות"
             >
               <LogOut size={18} />
@@ -140,7 +140,7 @@ function Header({
               alt="רבקה הולצברג, בריאות שבאה מהלב"
               className="h-10 md:h-12 w-auto object-contain"
             />
-            <p className="text-[13px] text-[#7E3F55] font-medium hidden md:block mt-0.5">
+            <p className="text-[15px] text-[#7E3F55] font-medium hidden md:block mt-0.5">
               המרחב שלך לצמיחה, רוגע ובריאות אמיתית
             </p>
           </div>
@@ -155,7 +155,7 @@ function Header({
                     שלום {userName}
                   </p>
                   {isVip && (
-                    <span className="bg-gradient-to-r from-[#A0627A] to-[#7E3F55] text-white text-[13px] font-bold px-2.5 py-0.5 rounded-full shadow-sm flex items-center gap-1">
+                    <span className="bg-gradient-to-r from-[#A0627A] to-[#7E3F55] text-white text-[15px] font-bold px-2.5 py-0.5 rounded-full shadow-sm flex items-center gap-1">
                       <Crown size={12} /> VIP
                     </span>
                   )}
@@ -206,21 +206,21 @@ function BottomNav({ activeView, isAuthenticated, isKeyboardOpen, onGoHome, onGo
         className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'home' ? 'text-[#7E3F55] shadow-[inset_0_3px_0_#7E3F55]' : 'text-[#6B625C] hover:text-[#7E3F55]'}`}
       >
         <Library size={26} />
-        <span className="text-[14px] mt-1 font-bold">בית</span>
+        <span className="text-[16px] mt-1 font-bold">בית</span>
       </button>
       <button
         onClick={onGoLibrary}
         className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'library' ? 'text-[#7E3F55] shadow-[inset_0_3px_0_#7E3F55]' : 'text-[#6B625C] hover:text-[#7E3F55]'}`}
       >
         <Search size={26} />
-        <span className="text-[14px] mt-1 font-bold">כל ההדרכות</span>
+        <span className="text-[16px] mt-1 font-bold">כל ההדרכות</span>
       </button>
       <button
         onClick={() => (!isAuthenticated ? onGoLogin() : onGoProfile())}
         className={`flex flex-col items-center justify-center w-full h-full pt-2 pb-1 ${activeView === 'profile' ? 'text-[#7E3F55] shadow-[inset_0_3px_0_#7E3F55]' : 'text-[#6B625C] hover:text-[#7E3F55]'}`}
       >
         <User size={26} />
-        <span className="text-[14px] mt-1 font-bold">האזור שלי</span>
+        <span className="text-[16px] mt-1 font-bold">האזור שלי</span>
       </button>
       <a
         href={`${pricingConfig.whatsappBaseUrl}?text=${encodeURIComponent('היי רבקה, אני צריכה עזרה באתר המועדון')}`}
@@ -229,7 +229,7 @@ function BottomNav({ activeView, isAuthenticated, isKeyboardOpen, onGoHome, onGo
         className="flex flex-col items-center justify-center w-full h-full pt-2 pb-1 text-[#6B625C] hover:text-[#7E3F55]"
       >
         <MessageCircle size={26} />
-        <span className="text-[14px] mt-1 font-bold">עזרה</span>
+        <span className="text-[16px] mt-1 font-bold">עזרה</span>
       </a>
     </nav>
   )
@@ -656,7 +656,7 @@ export default function App() {
         <div className="bg-white/80 backdrop-blur-md border-b border-gray-100 py-3 sticky top-0 md:top-20 z-40 shadow-sm">
           <div className="max-w-xl mx-auto px-4 sm:px-6">
             <div className="flex items-center bg-[#FFFFFF] rounded-full px-4 py-2.5 border border-gray-200 focus-within:border-[#A0627A] focus-within:bg-white focus-within:shadow-md transition-all">
-              <Search size={18} className="text-gray-400" />
+              <Search size={18} className="text-gray-500" />
               <input
                 type="text"
                 value={searchQuery}
@@ -665,7 +665,7 @@ export default function App() {
                 className="bg-transparent border-none outline-none mr-3 w-full text-sm text-[#2B2724] placeholder-gray-400"
               />
               {searchQuery && (
-                <button onClick={() => setSearchQuery('')} className="text-gray-400 hover:text-gray-600">
+                <button onClick={() => setSearchQuery('')} className="text-gray-500 hover:text-gray-600">
                   ✕
                 </button>
               )}

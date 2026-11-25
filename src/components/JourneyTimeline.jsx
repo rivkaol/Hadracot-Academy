@@ -67,13 +67,13 @@ export default function JourneyTimeline({
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className={`font-bold truncate ${isLocked ? 'text-gray-400' : 'text-[#2B2724]'}`}>
+                    <p className={`font-bold truncate ${isLocked ? 'text-gray-500' : 'text-[#2B2724]'}`}>
                       {tutorial.recommendedOrder != null ? `צעד ${tutorial.recommendedOrder} — ` : ''}
                       {tutorial.title}
                     </p>
                   </div>
                   {isCurrent && (
-                    <span className="shrink-0 text-[13px] font-bold text-white bg-[#7E3F55] px-2.5 py-1 rounded-full">
+                    <span className="shrink-0 text-[15px] font-bold text-white bg-[#7E3F55] px-2.5 py-1 rounded-full">
                       את כאן
                     </span>
                   )}

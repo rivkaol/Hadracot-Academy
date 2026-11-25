@@ -383,7 +383,7 @@ export default function TutorialPage({
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
                       placeholder="התחילי לכתוב כאן..."
-                      className="w-full min-h-[250px] p-6 bg-[#FFFFFF] border border-gray-200 rounded-2xl focus:border-[#A0627A] focus:ring-1 focus:ring-[#A0627A] outline-none resize-y text-[#6B625C] leading-[1.8] shadow-inner transition-all placeholder:text-gray-400 pb-16"
+                      className="w-full min-h-[250px] p-6 bg-[#FFFFFF] border border-gray-200 rounded-2xl focus:border-[#A0627A] focus:ring-1 focus:ring-[#A0627A] outline-none resize-y text-[#6B625C] leading-[1.8] shadow-inner transition-all placeholder:text-gray-500 pb-16"
                     />
                     <div className="absolute bottom-4 left-4 flex items-center z-10">
                       {isSavingAuto ? (
@@ -395,7 +395,7 @@ export default function TutorialPage({
                           <CheckCircle size={14} /> נשמר בהצלחה
                         </span>
                       ) : (
-                        <span className="text-[13px] text-gray-500 px-2 font-medium">הסיכום נשמר אוטומטית</span>
+                        <span className="text-[15px] text-gray-500 px-2 font-medium">הסיכום נשמר אוטומטית</span>
                       )}
                     </div>
                   </div>
@@ -462,7 +462,7 @@ export default function TutorialPage({
                             <h4 className="font-bold text-[#2B2724] group-hover:text-[#7E3F55] transition-colors truncate">{file.title || 'קובץ מצורף להורדה'}</h4>
                             <p className="text-sm text-gray-500 mt-0.5">לחצי כאן לפתיחה והורדה</p>
                           </div>
-                          <Download size={20} className="text-gray-400 group-hover:text-[#A0627A] shrink-0" />
+                          <Download size={20} className="text-gray-500 group-hover:text-[#A0627A] shrink-0" />
                         </a>
                       )
                     )}

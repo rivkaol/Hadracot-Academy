@@ -10,7 +10,7 @@ export default function OnboardingOverlay({ onDismiss, onJoinCommunity }) {
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center p-4" style={{ background: 'rgba(43,39,36,0.55)' }}>
       <div className="w-full max-w-md bg-white rounded-[2rem] p-8 text-center relative shadow-2xl">
-        <button onClick={onDismiss} className="absolute top-5 left-5 text-gray-400 hover:text-[#2B2724]">
+        <button onClick={onDismiss} className="absolute top-5 left-5 text-gray-500 hover:text-[#2B2724]">
           <X size={22} />
         </button>
         <h1 className="text-2xl font-bold text-[#1F4A3A] mb-3">ברוכה הבאה. בואי נעשה לך סדר.</h1>

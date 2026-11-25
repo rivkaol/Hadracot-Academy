@@ -5,6 +5,9 @@ export default function SkeletonGallery() {
         <div className="skeleton-shimmer h-10 w-48 rounded-md"></div>
       </header>
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <p role="status" className="text-center text-[18px] font-bold text-[#6A3447] mb-6">
+          רגע, ההדרכות נטענות...
+        </p>
         <div className="skeleton-shimmer h-48 w-full rounded-[2rem] mb-12"></div>
         <div className="flex gap-4 mb-8">
           <div className="skeleton-shimmer h-8 w-24 rounded-md"></div>

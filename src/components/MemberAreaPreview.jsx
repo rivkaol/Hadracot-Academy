@@ -62,18 +62,18 @@ export default function MemberAreaPreview({ tutorialsData }) {
                 ) : (
                   <Circle size={14} className={isCurrent ? 'text-[#A0627A]' : 'text-gray-300 shrink-0'} />
                 )}
-                <span className={`truncate ${isCurrent ? 'font-bold text-[#2B2724]' : isDone ? 'text-gray-400' : 'text-gray-400'}`}>
+                <span className={`truncate ${isCurrent ? 'font-bold text-[#2B2724]' : isDone ? 'text-gray-500' : 'text-gray-500'}`}>
                   צעד {t.recommendedOrder} — {t.title}
                 </span>
                 {isCurrent && (
-                  <span className="shrink-0 text-[13px] font-bold text-white bg-[#7E3F55] px-2 py-0.5 rounded-full mr-auto">
+                  <span className="shrink-0 text-[15px] font-bold text-white bg-[#7E3F55] px-2 py-0.5 rounded-full mr-auto">
                     את כאן
                   </span>
                 )}
               </div>
             )
           })}
-          {track.length > preview.length && <p className="text-xs text-gray-400 pr-6">...וממשיך מכאן</p>}
+          {track.length > preview.length && <p className="text-xs text-gray-500 pr-6">...וממשיך מכאן</p>}
         </div>
       </div>
     </section>
