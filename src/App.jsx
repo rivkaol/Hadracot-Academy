@@ -70,8 +70,8 @@ function Header({
   // לחברה: התפריט תופס את כל הצד, והשורה החיוורת באמצע יורדת (הלוגו לא קיים בשרת ממילא)
   const wideNav = isMember && !showBack
   return (
-    <header className="bg-white md:sticky md:top-0 z-50 border-b border-[#F4E9ED] shadow-[0_4px_20px_rgba(106,52,71,0.05)]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between relative">
+    <header className="bg-white sticky top-0 z-50 border-b border-[#F4E9ED] shadow-[0_4px_20px_rgba(106,52,71,0.05)]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-20 flex items-center justify-between relative">
         <div className={`${wideNav ? 'flex-1' : 'w-1/3'} flex items-center gap-3`}>
           {showBack ? (
             <button
@@ -685,7 +685,7 @@ export default function App() {
       <div dir="rtl" className="min-h-screen font-sans bg-[#FFFFFF] text-[#2B2724] flex flex-col">
         {(viewerState === 'visitor' || viewerState === 'trial') && <VisitorTopBar onLogin={goLogin} />}
         <Header showBack {...headerProps} />
-        <div className="bg-white/80 backdrop-blur-md border-b border-gray-100 py-3 sticky top-0 md:top-20 z-40 shadow-sm">
+        <div className="bg-white/80 backdrop-blur-md border-b border-gray-100 py-3 sticky top-16 md:top-20 z-40 shadow-sm">
           <div className="max-w-xl mx-auto px-4 sm:px-6">
             <div className="flex items-center bg-[#FFFFFF] rounded-full px-4 py-2.5 border border-gray-200 focus-within:border-[#A0627A] focus-within:bg-white focus-within:shadow-md transition-all">
               <Search size={18} className="text-gray-500" />
