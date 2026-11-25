@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Sparkles, CheckCircle, ChevronLeft, BookOpen, Edit, Download, Save, Loader, FileText, Crown } from 'lucide-react'
+import { Sparkles, CheckCircle, ChevronLeft, BookOpen, Edit, Download, Loader, FileText, Crown } from 'lucide-react'
 import confetti from 'canvas-confetti'
 import Player from '@vimeo/player'
 import { apiGetNote, apiSaveNote, apiSetCompleted, apiLogProgress, apiLogMemberProgress, apiGetTrialProgress } from '../api'
@@ -19,6 +19,9 @@ function toImageDownloadUrl(url) {
   const m = url.match(/^(https?:\/\/res\.cloudinary\.com\/[^/]+\/image\/upload\/)(.*)$/)
   return m ? `${m[1]}fl_attachment/${m[2]}` : url
 }
+
+// כרטיס אחיד לכל חלק בדף ההדרכה (על ההדרכה, חומרים, מחברת)
+const SECTION_CARD = 'bg-white rounded-[1.5rem] p-5 md:p-8 border border-gray-100 border-t-4 border-t-[#E9D3DB] shadow-[0_10px_30px_rgba(106,52,71,0.06)]'
 
 export default function TutorialPage({
   tutorial,
@@ -182,7 +185,6 @@ export default function TutorialPage({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasAccess, tutorial.id, userEmail])
-  const [activeTab, setActiveTab] = useState('notes')
   const [notes, setNotes] = useState('')
   const [isSaved, setIsSaved] = useState(false)
   const [isSavingAuto, setIsSavingAuto] = useState(false)
@@ -200,7 +202,6 @@ export default function TutorialPage({
     setNotes('')
     setIsCompleted(completedTutorials.includes(tutorial.id))
     setIsSaved(false)
-    if (activeTab === 'resources' && !(tutorial.files && tutorial.files.length)) setActiveTab('notes')
 
     if (!userEmail) return
     apiGetNote(cred, tutorial.id)
@@ -219,18 +220,14 @@ export default function TutorialPage({
     setIsSavingAuto(true)
     const timer = setTimeout(() => {
       apiSaveNote(cred, tutorial.id, notes)
-        .then(() => setIsSavingAuto(false))
+        .then(() => {
+          setIsSavingAuto(false)
+          setIsSaved(true)
+        })
         .catch(() => setIsSavingAuto(false))
     }, 1500)
     return () => clearTimeout(timer)
   }, [notes, userEmail, tutorial.id])
-
-  const handleSaveNotes = async () => {
-    if (!userEmail) return
-    await apiSaveNote(cred, tutorial.id, notes)
-    setIsSaved(true)
-    setTimeout(() => setIsSaved(false), 3000)
-  }
 
   const handleCompleteLesson = async () => {
     const next = !isCompleted
@@ -340,79 +337,21 @@ export default function TutorialPage({
               </div>
             </div>
 
-            <div className="flex overflow-x-auto hide-scrollbar gap-8 border-b border-gray-200 mb-6">
-              {[
-                { id: 'about', label: 'מה תקבלי מההדרכה', Icon: BookOpen },
-                { id: 'notes', label: 'המחברת האישית שלך', Icon: Edit },
-                ...(tutorial.files && tutorial.files.length ? [{ id: 'resources', label: 'חומרים להורדה', Icon: Download }] : []),
-              ].map(({ id, label, Icon }) => (
-                <button
-                  key={id}
-                  onClick={() => setActiveTab(id)}
-                  className={`pb-3 text-base font-medium transition-all relative flex items-center gap-2 whitespace-nowrap ${activeTab === id ? 'text-[#1F4A3A] font-bold' : 'text-[#6B625C] hover:text-[#1F4A3A]'}`}
-                >
-                  <Icon size={18} />
-                  {label}
-                  {activeTab === id && <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#7E3F55] rounded-t-full"></span>}
-                </button>
-              ))}
-            </div>
-
-            <div className="bg-white rounded-[1.5rem] p-6 md:p-8 border border-gray-100 border-t-4 border-t-[#E9D3DB] shadow-[0_10px_30px_rgba(106,52,71,0.06)] mb-12">
-              {activeTab === 'about' && (
-                <div className="text-[#6B625C] leading-[1.8] text-right">
-                  <p className="mb-4">תיאור ההדרכה: {tutorial.title}.</p>
-                  <h3 className="text-xl font-bold text-[#1F4A3A] mt-8 mb-4">נקודות מרכזיות:</h3>
-                  <ul className="space-y-3 list-none p-0">
-                    <li className="flex items-start gap-3"><div className="w-1.5 h-1.5 rounded-full bg-[#A0627A] mt-3 shrink-0"></div><span>הבנת העקרונות הבסיסיים של הנושא.</span></li>
-                    <li className="flex items-start gap-3"><div className="w-1.5 h-1.5 rounded-full bg-[#A0627A] mt-3 shrink-0"></div><span>כלים פרקטיים ליישום מיידי.</span></li>
-                  </ul>
-                </div>
+            {/* במקום לשוניות: חלקים אחד מתחת לשני, כדי שבנייד שום דבר לא יוסתר בצד.
+                "על ההדרכה" מופיע רק כשיש תיאור בגיליון (בעבר היה כאן טקסט כללי זהה לכל הדרכה). */}
+            <div className="flex flex-col gap-6 mb-12">
+              {tutorial.description && (
+                <section className={SECTION_CARD}>
+                  <h3 className="text-[22px] font-bold text-[#1F4A3A] mb-3 flex items-center gap-2">
+                    <BookOpen size={22} className="text-[#7E3F55]" aria-hidden="true" /> על ההדרכה
+                  </h3>
+                  <p className="text-[#2B2724] text-[17px] leading-[1.8] whitespace-pre-line">{tutorial.description}</p>
+                </section>
               )}
 
-              {activeTab === 'notes' && (
-                <div>
-                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-2">
-                    <div>
-                      <h3 className="text-xl font-bold text-[#1F4A3A]">הסיכום האישי שלך</h3>
-                      <p className="text-[#6B625C] mt-1 max-w-xl leading-[1.8]">זה המקום שלך לעצור רגע ולכתוב תובנות מההדרכה.</p>
-                    </div>
-                  </div>
-                  <div className="relative">
-                    <textarea
-                      value={notes}
-                      onChange={(e) => setNotes(e.target.value)}
-                      placeholder="התחילי לכתוב כאן..."
-                      className="w-full min-h-[250px] p-6 bg-[#FFFFFF] border border-gray-200 rounded-2xl focus:border-[#A0627A] focus:ring-1 focus:ring-[#A0627A] outline-none resize-y text-[#6B625C] leading-[1.8] shadow-inner transition-all placeholder:text-gray-500 pb-16"
-                    />
-                    <div className="absolute bottom-4 left-4 flex items-center z-10">
-                      {isSavingAuto ? (
-                        <span className="bg-white/90 backdrop-blur-sm border border-gray-100 shadow-sm px-3 py-1.5 rounded-lg text-xs font-medium text-gray-500 flex items-center gap-1.5">
-                          <Loader size={14} className="animate-spin" /> שומר עכשיו...
-                        </span>
-                      ) : isSaved ? (
-                        <span className="bg-green-50/90 backdrop-blur-sm border border-green-100 shadow-sm px-3 py-1.5 rounded-lg text-xs font-bold text-green-600 flex items-center gap-1.5">
-                          <CheckCircle size={14} /> נשמר בהצלחה
-                        </span>
-                      ) : (
-                        <span className="text-[15px] text-gray-500 px-2 font-medium">הסיכום נשמר אוטומטית</span>
-                      )}
-                    </div>
-                  </div>
-                  <div className="mt-4 flex items-center justify-end">
-                    <button
-                      onClick={handleSaveNotes}
-                      className="bg-[#7E3F55] text-white px-6 py-2.5 rounded-full font-bold flex items-center gap-2 transition-all shadow-[0_4px_0_rgba(0,0,0,0.18)] hover:shadow-md hover:-translate-y-0.5"
-                    >
-                      <Save size={18} /> שמירה
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {activeTab === 'resources' && tutorial.files && tutorial.files.length > 0 && (
-                <div>
-                  <h3 className="text-xl font-bold text-[#1F4A3A] mb-2">חומרים נלווים להדרכה</h3>
+              {tutorial.files && tutorial.files.length > 0 && (
+                <section className={SECTION_CARD}>
+                  <h3 className="text-[22px] font-bold text-[#1F4A3A] mb-2 flex items-center gap-2"><Download size={22} className="text-[#7E3F55]" aria-hidden="true" /> חומרים להורדה</h3>
                   <p className="text-[#6B625C] mb-6 leading-[1.8]">כאן ריכזתי עבורך את כל מה שצריך להשלים את הלמידה.</p>
                   <div className="space-y-3">
                     {tutorial.files.map((file, i) =>
@@ -467,8 +406,35 @@ export default function TutorialPage({
                       )
                     )}
                   </div>
-                </div>
+                </section>
               )}
+              {userEmail && (
+                <section className={SECTION_CARD}>
+                  <div className="mb-5">
+                    <h3 className="text-[22px] font-bold text-[#1F4A3A] flex items-center gap-2"><Edit size={22} className="text-[#7E3F55]" aria-hidden="true" /> המחברת האישית שלך</h3>
+                    <p className="text-[#4A433E] text-[17px] mt-1 max-w-xl leading-[1.8]">זה המקום שלך לעצור רגע ולכתוב תובנות מההדרכה.</p>
+                  </div>
+                  <div className="relative">
+                    <textarea
+                      value={notes}
+                      onChange={(e) => setNotes(e.target.value)}
+                      placeholder="התחילי לכתוב כאן..."
+                      aria-label="המחברת האישית שלך"
+                      className="w-full min-h-[220px] p-5 bg-[#FFFFFF] border border-gray-300 rounded-2xl focus:border-[#A0627A] focus:ring-1 focus:ring-[#A0627A] outline-none resize-y text-[#2B2724] text-[17px] leading-[1.8] transition-all placeholder:text-gray-500"
+                    />
+                  </div>
+                  <p role="status" className="mt-3 text-[16px] font-medium flex items-center gap-1.5 min-h-[28px]">
+                    {isSavingAuto ? (
+                      <span className="text-[#6B625C] flex items-center gap-1.5"><Loader size={18} className="animate-spin" aria-hidden="true" /> שומרת...</span>
+                    ) : isSaved ? (
+                      <span className="text-[#173A2D] flex items-center gap-1.5"><CheckCircle size={18} aria-hidden="true" /> נשמר</span>
+                    ) : (
+                      <span className="text-[#6B625C]">כל מה שתכתבי נשמר לבד. אין צורך ללחוץ על שום כפתור.</span>
+                    )}
+                  </p>
+                </section>
+              )}
+
             </div>
           </div>
 
